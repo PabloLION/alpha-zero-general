@@ -20,38 +20,31 @@
 
 import unittest
 
-import Arena
-from MCTS import MCTS
+import numpy as np
 
+import Arena
+from connect4.Connect4Game import Connect4Game
+from connect4.keras.NNet import NNetWrapper as Connect4KerasNNet
+from dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
+from dotsandboxes.keras.NNet import NNetWrapper as DotsAndBoxesKerasNNet
+from gobang.GobangGame import GobangGame
+from gobang.keras.NNet import NNetWrapper as GobangKerasNNet
+from MCTS import MCTS
+from othello.keras.NNet import NNetWrapper as OthelloKerasNNet
 from othello.OthelloGame import OthelloGame
 from othello.OthelloPlayers import RandomPlayer
 from othello.pytorch.NNet import NNetWrapper as OthelloPytorchNNet
-from othello.keras.NNet import NNetWrapper as OthelloKerasNNet
-
-from tictactoe.TicTacToeGame import TicTacToeGame
-from tictactoe.keras.NNet import NNetWrapper as TicTacToeKerasNNet
-
-from tictactoe_3d.TicTacToeGame import TicTacToeGame as TicTacToe3DGame
-from tictactoe_3d.keras.NNet import NNetWrapper as TicTacToe3DKerasNNet
-
-from connect4.Connect4Game import Connect4Game
-from connect4.keras.NNet import NNetWrapper as Connect4KerasNNet
-
-from gobang.GobangGame import GobangGame
-from gobang.keras.NNet import NNetWrapper as GobangKerasNNet
-
-from tafl.TaflGame import TaflGame
-from tafl.pytorch.NNet import NNetWrapper as TaflPytorchNNet
-from tafl.keras.NNet import NNetWrapper as TaflKerasNNet
-
-from rts.RTSGame import RTSGame
 from rts.keras.NNet import NNetWrapper as RTSKerasNNet
-
-from dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
-from dotsandboxes.keras.NNet import NNetWrapper as DotsAndBoxesKerasNNet
-
-import numpy as np
+from rts.RTSGame import RTSGame
+from tafl.keras.NNet import NNetWrapper as TaflKerasNNet
+from tafl.pytorch.NNet import NNetWrapper as TaflPytorchNNet
+from tafl.TaflGame import TaflGame
+from tictactoe.keras.NNet import NNetWrapper as TicTacToeKerasNNet
+from tictactoe.TicTacToeGame import TicTacToeGame
+from tictactoe_3d.keras.NNet import NNetWrapper as TicTacToe3DKerasNNet
+from tictactoe_3d.TicTacToeGame import TicTacToeGame as TicTacToe3DGame
 from utils import *
+
 
 class TestAllGames(unittest.TestCase):
 
@@ -59,13 +52,13 @@ class TestAllGames(unittest.TestCase):
     def execute_game_test(game, neural_net):
         rp = RandomPlayer(game).play
 
-        args = dotdict({'numMCTSSims': 25, 'cpuct': 1.0})
+        args = dotdict({"numMCTSSims": 25, "cpuct": 1.0})
         mcts = MCTS(game, neural_net(game), args)
         n1p = lambda x: np.argmax(mcts.getActionProb(x, temp=0))
 
         arena = Arena.Arena(n1p, rp, game)
         print(arena.playGames(2, verbose=False))
-   
+
     def test_othello_pytorch(self):
         self.execute_game_test(OthelloGame(6), OthelloPytorchNNet)
 
@@ -74,10 +67,10 @@ class TestAllGames(unittest.TestCase):
 
     def test_tictactoe_keras(self):
         self.execute_game_test(TicTacToeGame(), TicTacToeKerasNNet)
-    
+
     def test_tictactoe3d_keras(self):
         self.execute_game_test(TicTacToe3DGame(3), TicTacToe3DKerasNNet)
-  
+
     def test_gobang_keras(self):
         self.execute_game_test(GobangGame(), GobangKerasNNet)
 
@@ -86,7 +79,7 @@ class TestAllGames(unittest.TestCase):
 
     def test_tafl_keras(self):
         self.execute_game_test(TaflGame(5), TaflKerasNNet)
-  
+
     def test_connect4_keras(self):
         self.execute_game_test(Connect4Game(5), Connect4KerasNNet)
 
@@ -96,5 +89,6 @@ class TestAllGames(unittest.TestCase):
     def test_dotsandboxes_keras(self):
         self.execute_game_test(DotsAndBoxesGame(3), DotsAndBoxesKerasNNet)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
