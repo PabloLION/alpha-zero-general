@@ -1,4 +1,5 @@
 import logging
+from types import Player, Game, Display
 
 from tqdm import tqdm
 
@@ -10,7 +11,7 @@ class Arena():
     An Arena class where any 2 agents can be pit against each other.
     """
 
-    def __init__(self, player1, player2, game, display=None):
+    def __init__(self, player1: Player, player2: Player, game: Game, display: Display = None):
         """
         Input:
             player 1,2: two functions that takes board as input, return action
@@ -27,7 +28,7 @@ class Arena():
         self.game = game
         self.display = display
 
-    def playGame(self, verbose=False):
+    def playGame(self, verbose: bool = False) -> int:
         """
         Executes one episode of a game.
 
@@ -78,7 +79,7 @@ class Arena():
             self.display(board)
         return curPlayer * self.game.getGameEnded(board, curPlayer)
 
-    def playGames(self, num, verbose=False):
+    def playGames(self, num: int, verbose: bool = False) -> tuple[int, int, int]:
         """
         Plays num games in which player1 starts num/2 games and player2 starts
         num/2 games.

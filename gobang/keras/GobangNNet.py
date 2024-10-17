@@ -1,6 +1,7 @@
 import sys
 sys.path.append('..')
 from utils import *
+from types import Any
 
 import argparse
 from tensorflow.keras.models import *
@@ -8,7 +9,7 @@ from tensorflow.keras.layers import *
 from tensorflow.keras.optimizers import *
 
 class GobangNNet():
-    def __init__(self, game, args):
+    def __init__(self, game: Any, args: Any):
         # game params
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()

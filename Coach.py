@@ -4,6 +4,7 @@ import sys
 from collections import deque
 from pickle import Pickler, Unpickler
 from random import shuffle
+from typing import Any, Callable
 
 import numpy as np
 from tqdm import tqdm
@@ -13,23 +14,31 @@ from MCTS import MCTS
 
 log = logging.getLogger(__name__)
 
+Player = Callable[[Any], int]
+Game = Any
+Display = Callable[[Any], None]
+Board = Any
+TrainExample = tuple[Any, int, list[float], float]
+TrainExamplesHistory = list[list[TrainExample]]
+CheckpointFile = str
+TrainExamplesFile = str
 
-class Coach():
+class Coach:
     """
     This class executes the self-play + learning. It uses the functions defined
     in Game and NeuralNet. args are specified in main.py.
     """
 
-    def __init__(self, game, nnet, args):
+    def __init__(self, game: Game, nnet: Any, args: Any):
         self.game = game
         self.nnet = nnet
         self.pnet = self.nnet.__class__(self.game)  # the competitor network
         self.args = args
         self.mcts = MCTS(self.game, self.nnet, self.args)
-        self.trainExamplesHistory = []  # history of examples from args.numItersForTrainExamplesHistory latest iterations
+        self.trainExamplesHistory: TrainExamplesHistory = []  # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skipFirstSelfPlay = False  # can be overriden in loadTrainExamples()
 
-    def executeEpisode(self):
+    def executeEpisode(self) -> list[TrainExample]:
         """
         This function executes one episode of self-play, starting with player 1.
         As the game is played, each turn is added as a training example to
@@ -45,7 +54,7 @@ class Coach():
                            pi is the MCTS informed policy vector, v is +1 if
                            the player eventually won the game, else -1.
         """
-        trainExamples = []
+        trainExamples: list[TrainExample] = []
         board = self.game.getInitBoard()
         self.curPlayer = 1
         episodeStep = 0
@@ -58,7 +67,7 @@ class Coach():
             pi = self.mcts.getActionProb(canonicalBoard, temp=temp)
             sym = self.game.getSymmetries(canonicalBoard, pi)
             for b, p in sym:
-                trainExamples.append([b, self.curPlayer, p, None])
+                trainExamples.append((b, self.curPlayer, p, None))
 
             action = np.random.choice(len(pi), p=pi)
             board, self.curPlayer = self.game.getNextState(board, self.curPlayer, action)
@@ -127,10 +136,10 @@ class Coach():
                 self.nnet.save_checkpoint(folder=self.args.checkpoint, filename=self.getCheckpointFile(i))
                 self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='best.pth.tar')
 
-    def getCheckpointFile(self, iteration):
+    def getCheckpointFile(self, iteration: int) -> CheckpointFile:
         return 'checkpoint_' + str(iteration) + '.pth.tar'
 
-    def saveTrainExamples(self, iteration):
+    def saveTrainExamples(self, iteration: int):
         folder = self.args.checkpoint
         if not os.path.exists(folder):
             os.makedirs(folder)

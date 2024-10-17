@@ -1,5 +1,6 @@
 import logging
 import math
+from types import Game, NeuralNet, Args
 
 import numpy as np
 
@@ -13,7 +14,7 @@ class MCTS():
     This class handles the MCTS tree.
     """
 
-    def __init__(self, game, nnet, args):
+    def __init__(self, game: Game, nnet: NeuralNet, args: Args):
         self.game = game
         self.nnet = nnet
         self.args = args
@@ -25,7 +26,7 @@ class MCTS():
         self.Es = {}  # stores game.getGameEnded ended for board s
         self.Vs = {}  # stores game.getValidMoves for board s
 
-    def getActionProb(self, canonicalBoard, temp=1):
+    def getActionProb(self, canonicalBoard: np.ndarray, temp: int = 1) -> list[float]:
         """
         This function performs numMCTSSims simulations of MCTS starting from
         canonicalBoard.
@@ -52,7 +53,7 @@ class MCTS():
         probs = [x / counts_sum for x in counts]
         return probs
 
-    def search(self, canonicalBoard):
+    def search(self, canonicalBoard: np.ndarray) -> float:
         """
         This function performs one iteration of MCTS. It is recursively called
         till a leaf node is found. The action chosen at each node is one that

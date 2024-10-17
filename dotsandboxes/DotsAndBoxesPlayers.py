@@ -1,11 +1,11 @@
 import numpy as np
-
+from types import Game
 
 class RandomPlayer:
-    def __init__(self, game):
+    def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, 1)
         while valids[a]!=1:
@@ -15,10 +15,10 @@ class RandomPlayer:
 
 # Will play at random, unless there's a chance to score a square
 class GreedyRandomPlayer:
-    def __init__(self, game):
+    def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         valids = self.game.getValidMoves(board, 1)
         previous_score = board[0, -1]
         for action in np.nonzero(valids)[0]:
@@ -33,10 +33,10 @@ class GreedyRandomPlayer:
 
 
 class HumanDotsAndBoxesPlayer:
-    def __init__(self, game):
+    def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         if board[2][-1] == 1:
             # We have to pass
             return self.game.getActionSize() - 1

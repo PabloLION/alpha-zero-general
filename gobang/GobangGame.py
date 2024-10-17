@@ -1,5 +1,6 @@
 from __future__ import print_function
 import sys
+from types import Board, Game
 sys.path.append('..')
 from Game import Game
 from .GobangLogic import Board
@@ -7,24 +8,24 @@ import numpy as np
 
 
 class GobangGame(Game):
-    def __init__(self, n=15, nir=5):
+    def __init__(self, n: int = 15, nir: int = 5):
         self.n = n
         self.n_in_row = nir
 
-    def getInitBoard(self):
+    def getInitBoard(self) -> np.ndarray:
         # return initial board (numpy board)
         b = Board(self.n)
         return np.array(b.pieces)
 
-    def getBoardSize(self):
+    def getBoardSize(self) -> tuple[int, int]:
         # (a,b) tuple
         return (self.n, self.n)
 
-    def getActionSize(self):
+    def getActionSize(self) -> int:
         # return number of actions
         return self.n * self.n + 1
 
-    def getNextState(self, board, player, action):
+    def getNextState(self, board: np.ndarray, player: int, action: int) -> tuple[np.ndarray, int]:
         # if player takes action on board, return next (board,player)
         # action must be a valid move
         if action == self.n * self.n:
@@ -36,7 +37,7 @@ class GobangGame(Game):
         return (b.pieces, -player)
 
     # modified
-    def getValidMoves(self, board, player):
+    def getValidMoves(self, board: np.ndarray, player: int) -> np.ndarray:
         # return a fixed size binary vector
         valids = [0] * self.getActionSize()
         b = Board(self.n)
@@ -50,7 +51,7 @@ class GobangGame(Game):
         return np.array(valids)
 
     # modified
-    def getGameEnded(self, board, player):
+    def getGameEnded(self, board: np.ndarray, player: int) -> float:
         # return 0 if not ended, 1 if player 1 won, -1 if player 1 lost
         # player = 1
         b = Board(self.n)
@@ -75,12 +76,12 @@ class GobangGame(Game):
             return 0
         return 1e-4
 
-    def getCanonicalForm(self, board, player):
+    def getCanonicalForm(self, board: np.ndarray, player: int) -> np.ndarray:
         # return state if player==1, else return -state if player==-1
         return player * board
 
     # modified
-    def getSymmetries(self, board, pi):
+    def getSymmetries(self, board: np.ndarray, pi: list[float]) -> list[tuple[np.ndarray, list[float]]]:
         # mirror, rotational
         assert(len(pi) == self.n**2 + 1)  # 1 for pass
         pi_board = np.reshape(pi[:-1], (self.n, self.n))
@@ -96,12 +97,12 @@ class GobangGame(Game):
                 l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return l
 
-    def stringRepresentation(self, board):
+    def stringRepresentation(self, board: np.ndarray) -> str:
         # 8x8 numpy array (canonical board)
         return board.tostring()
 
     @staticmethod
-    def display(board):
+    def display(board: np.ndarray) -> None:
         n = board.shape[0]
 
         for y in range(n):

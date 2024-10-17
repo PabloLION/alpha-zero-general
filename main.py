@@ -1,4 +1,5 @@
 import logging
+from types import Game, nn
 
 import coloredlogs
 
@@ -29,7 +30,7 @@ args = dotdict({
 })
 
 
-def main():
+def main() -> None:
     log.info('Loading %s...', Game.__name__)
     g = Game(6)
 

@@ -1,11 +1,11 @@
 import numpy as np
+from types import Game
 
-
-class RandomPlayer():
-    def __init__(self, game):
+class RandomPlayer:
+    def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, 1)
         while valids[a] != 1:
@@ -13,11 +13,11 @@ class RandomPlayer():
         return a
 
 
-class HumanConnect4Player():
-    def __init__(self, game):
+class HumanConnect4Player:
+    def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         valid_moves = self.game.getValidMoves(board, 1)
         print('\nMoves:', [i for (i, valid) in enumerate(valid_moves) if valid])
 
@@ -28,14 +28,14 @@ class HumanConnect4Player():
         return move
 
 
-class OneStepLookaheadConnect4Player():
+class OneStepLookaheadConnect4Player:
     """Simple player who always takes a win if presented, or blocks a loss if obvious, otherwise is random."""
-    def __init__(self, game, verbose=True):
+    def __init__(self, game: Game, verbose: bool = True):
         self.game = game
         self.player_num = 1
         self.verbose = verbose
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         valid_moves = self.game.getValidMoves(board, self.player_num)
         win_move_set = set()
         fallback_move_set = set()

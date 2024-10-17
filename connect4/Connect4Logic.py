@@ -1,5 +1,6 @@
 from collections import namedtuple
 import numpy as np
+from types import Board, WinState
 
 DEFAULT_HEIGHT = 6
 DEFAULT_WIDTH = 7
@@ -8,12 +9,12 @@ DEFAULT_WIN_LENGTH = 4
 WinState = namedtuple('WinState', 'is_ended winner')
 
 
-class Board():
+class Board:
     """
     Connect4 Board.
     """
 
-    def __init__(self, height=None, width=None, win_length=None, np_pieces=None):
+    def __init__(self, height: int = None, width: int = None, win_length: int = None, np_pieces: np.ndarray = None):
         "Set up initial board configuration."
         self.height = height or DEFAULT_HEIGHT
         self.width = width or DEFAULT_WIDTH
@@ -25,7 +26,7 @@ class Board():
             self.np_pieces = np_pieces
             assert self.np_pieces.shape == (self.height, self.width)
 
-    def add_stone(self, column, player):
+    def add_stone(self, column: int, player: int) -> None:
         "Create copy of board containing new stone."
         available_idx, = np.where(self.np_pieces[:, column] == 0)
         if len(available_idx) == 0:
@@ -33,11 +34,11 @@ class Board():
 
         self.np_pieces[available_idx[-1]][column] = player
 
-    def get_valid_moves(self):
+    def get_valid_moves(self) -> np.ndarray:
         "Any zero value in top row in a valid move"
         return self.np_pieces[0] == 0
 
-    def get_win_state(self):
+    def get_win_state(self) -> WinState:
         for player in [-1, 1]:
             player_pieces = self.np_pieces == -player
             # Check rows & columns for win
@@ -53,13 +54,13 @@ class Board():
         # Game is not ended yet.
         return WinState(False, None)
 
-    def with_np_pieces(self, np_pieces):
+    def with_np_pieces(self, np_pieces: np.ndarray) -> Board:
         """Create copy of board with specified pieces."""
         if np_pieces is None:
             np_pieces = self.np_pieces
         return Board(self.height, self.width, self.win_length, np_pieces)
 
-    def _is_diagonal_winner(self, player_pieces):
+    def _is_diagonal_winner(self, player_pieces: np.ndarray) -> bool:
         """Checks if player_pieces contains a diagonal win."""
         win_length = self.win_length
         for i in range(len(player_pieces) - win_length + 1):
@@ -71,11 +72,11 @@ class Board():
                     return True
         return False
 
-    def _is_straight_winner(self, player_pieces):
+    def _is_straight_winner(self, player_pieces: np.ndarray) -> bool:
         """Checks if player_pieces contains a vertical or horizontal win."""
         run_lengths = [player_pieces[:, i:i + self.win_length].sum(axis=1)
                        for i in range(len(player_pieces) - self.win_length + 2)]
         return max([x.max() for x in run_lengths]) >= self.win_length
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.np_pieces)

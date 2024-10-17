@@ -1,11 +1,11 @@
 import numpy as np
+from types import Game
 
-
-class RandomPlayer():
-    def __init__(self, game):
+class RandomPlayer:
+    def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, 1)
         while valids[a]!=1:
@@ -13,11 +13,11 @@ class RandomPlayer():
         return a
 
 
-class HumanGobangPlayer():
-    def __init__(self, game):
+class HumanGobangPlayer:
+    def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         # display(board)
         valid = self.game.getValidMoves(board, 1)
         for i in range(len(valid)):
@@ -36,11 +36,11 @@ class HumanGobangPlayer():
         return a
 
 
-class GreedyGobangPlayer():
-    def __init__(self, game):
+class GreedyGobangPlayer:
+    def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: np.ndarray) -> int:
         valids = self.game.getValidMoves(board, 1)
         candidates = []
         for a in range(self.game.getActionSize()):
