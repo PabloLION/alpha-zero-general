@@ -5,6 +5,10 @@ description = ""
 authors = ["PabloLION <36828324+PabloLION@users.noreply.github.com>"]
 readme = "README.md"
 
+[tool.poetry.scripts]
+test = "pytest:main"
+
+
 [tool.poetry.dependencies]
 python = "^3.12"
 grpcio = "1.66.2"
@@ -12,7 +16,7 @@ tensorboard-plugin-wit = "1.8.1"
 absl-py = "1.1.0"
 astunparse = "1.6.3"
 cachetools = "5.2.0"
-certifi = "2022.5.18.1"
+certifi = "^2024.8.30"
 charset-normalizer = "2.0.12"
 coloredlogs = "15.0.1"
 flatbuffers = "1.12"
@@ -44,13 +48,21 @@ tensorboard-data-server = "0.6.1"
 tensorflow-estimator = "2.9.0"
 termcolor = "1.1.0"
 tqdm = "4.64.0"
-typing-extensions = "4.2.0"
+typing-extensions = "4.12.2"
 urllib3 = "1.26.9"
 werkzeug = "2.1.2"
 wrapt = "1.14.1"
 zipp = "3.8.0"
 h5py = "^3.12.1"
+pytest = "^8.3.3"
+pytest-mock = "^3.14.0"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [build-system]
 requires = ["poetry-core"]
