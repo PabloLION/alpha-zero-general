@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 from collections import deque
 from pickle import Pickler, Unpickler
 from random import shuffle
@@ -187,7 +186,7 @@ class Coach:
             log.warning(f'File "{examplesFile}" with trainExamples not found!')
             r = input("Continue? [y|n]")
             if r != "y":
-                sys.exit()
+                return
         else:
             log.info("File with trainExamples found. Loading it...")
             with open(examplesFile, "rb") as f:

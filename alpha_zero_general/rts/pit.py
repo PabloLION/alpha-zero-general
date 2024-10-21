@@ -1,8 +1,5 @@
-import sys
-
 from rts.src.config_class import CONFIG
 
-sys.path.append('..')
 import Arena
 from rts.RTSGame import display, RTSGame
 

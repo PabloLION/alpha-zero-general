@@ -1,9 +1,6 @@
 import os
-import sys
 import numpy as np
 from flask import Flask, request, Response
-
-sys.path.append("..")
 
 from MCTS import MCTS
 

@@ -1,10 +1,5 @@
-import sys
-
 import numpy as np
 
-from alpha_zero_general.type import Game
-
-sys.path.append("..")
 from alpha_zero_general.Game import Game
 
 from .Connect4Logic import Board
@@ -31,7 +26,7 @@ class Connect4Game(Game):
     def getBoardSize(self) -> tuple[int, int]:
         return (self._base_board.height, self._base_board.width)
 
-    def getActionSize(self) -> int:
+    def getActionSize() -> int:
         return self._base_board.width
 
     def getNextState(

@@ -1,8 +1,5 @@
 from __future__ import print_function
 
-import sys
-
-sys.path.append("..")
 import numpy as np
 
 from alpha_zero_general.Game import Game

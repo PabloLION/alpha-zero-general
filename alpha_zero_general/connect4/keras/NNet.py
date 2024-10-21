@@ -3,12 +3,10 @@ import math
 import os
 import random
 import shutil
-import sys
 import time
 
 import numpy as np
 
-sys.path.append("../..")
 import logging
 
 import coloredlogs  # type: ignore

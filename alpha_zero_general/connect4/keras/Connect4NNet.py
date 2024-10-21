@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append("..")
 import argparse
 from typing import Any
 

@@ -1,11 +1,9 @@
-import sys
 from typing import Tuple
 
 import numpy as np
 
 from alpha_zero_general.rts.src.config_class import CONFIG
 
-sys.path.append('..')
 from alpha_zero_general.rts.src.Board import Board
 from alpha_zero_general.rts.src.config import NUM_ENCODERS, NUM_ACTS, P_NAME_IDX, A_TYPE_IDX, TIME_IDX, FPS
 

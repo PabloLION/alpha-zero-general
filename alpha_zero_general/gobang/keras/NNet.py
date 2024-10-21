@@ -3,13 +3,11 @@ import math
 import os
 import random
 import shutil
-import sys
 import time
 
 import numpy as np
 import tensorflow as tf
 
-sys.path.append("..")
 import argparse
 
 from NeuralNet import NeuralNet

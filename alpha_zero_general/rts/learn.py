@@ -1,8 +1,5 @@
-import sys
-
 from rts.src.config_class import CONFIG
 
-sys.path.append('..')
 from Coach import Coach
 # from rts.configurations.ConfigWrapper import LearnArgs
 from rts.RTSGame import RTSGame as Game

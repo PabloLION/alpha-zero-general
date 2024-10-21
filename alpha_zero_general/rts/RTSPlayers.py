@@ -1,6 +1,5 @@
 import ctypes
 import os
-import sys
 from math import sqrt
 from typing import List
 
