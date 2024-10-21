@@ -1,17 +1,20 @@
 import logging
-from types import Player, Game, Display
 
 from tqdm import tqdm
+
+from type import Display, Game, Player
 
 log = logging.getLogger(__name__)
 
 
-class Arena():
+class Arena:
     """
     An Arena class where any 2 agents can be pit against each other.
     """
 
-    def __init__(self, player1: Player, player2: Player, game: Game, display: Display = None):
+    def __init__(
+        self, player1: Player, player2: Player, game: Game, display: Display = None
+    ):
         """
         Input:
             player 1,2: two functions that takes board as input, return action
@@ -53,13 +56,17 @@ class Arena():
                 assert self.display
                 print("Turn ", str(it), "Player ", str(curPlayer))
                 self.display(board)
-            action = players[curPlayer + 1](self.game.getCanonicalForm(board, curPlayer))
+            action = players[curPlayer + 1](
+                self.game.getCanonicalForm(board, curPlayer)
+            )
 
-            valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer), 1)
+            valids = self.game.getValidMoves(
+                self.game.getCanonicalForm(board, curPlayer), 1
+            )
 
             if valids[action] == 0:
-                log.error(f'Action {action} is not valid!')
-                log.debug(f'valids = {valids}')
+                log.error(f"Action {action} is not valid!")
+                log.debug(f"valids = {valids}")
                 assert valids[action] > 0
 
             # Notifying the opponent for the move
@@ -75,7 +82,12 @@ class Arena():
 
         if verbose:
             assert self.display
-            print("Game over: Turn ", str(it), "Result ", str(self.game.getGameEnded(board, 1)))
+            print(
+                "Game over: Turn ",
+                str(it),
+                "Result ",
+                str(self.game.getGameEnded(board, 1)),
+            )
             self.display(board)
         return curPlayer * self.game.getGameEnded(board, curPlayer)
 
