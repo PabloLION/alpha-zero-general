@@ -1,30 +1,30 @@
 import numpy as np
+from types import Board
 
+class Board:
 
-class Board():
-
-    def __init__(self, n=5):
+    def __init__(self, n: int = 5):
         "Set up initial board configuration."
         self.n = n
         self.pieces = np.zeros((2*n+1, n+1))
 
     # add [][] indexer syntax to the Board
-    def __getitem__(self, index): 
+    def __getitem__(self, index: int) -> np.ndarray:
         return self.pieces[index]
 
-    def increase_score(self, score, player):
+    def increase_score(self, score: int, player: int) -> None:
         if player == 1:
             self.pieces[0, -1] += score
         else:
             self.pieces[1, -1] += score
 
-    def is_pass_on(self):
+    def is_pass_on(self) -> bool:
         return self.pieces[2, -1]
 
-    def toggle_pass(self, state=False):
+    def toggle_pass(self, state: bool = False) -> None:
         self.pieces[2, -1] = state
 
-    def get_legal_moves(self, color=1):
+    def get_legal_moves(self, color: int = 1) -> np.ndarray:
         """Returns all the legal moves
         @param color not used and came from previous version.
         """
@@ -35,11 +35,11 @@ class Board():
             legal_moves[-1] = True
         return legal_moves
 
-    def has_legal_moves(self):
+    def has_legal_moves(self) -> bool:
         is_board_full = np.all(self.pieces[:self.n+1, :-1]) and np.all(self.pieces[-self.n:, :])
         return not is_board_full
 
-    def execute_move(self, action, color=1):
+    def execute_move(self, action: int, color: int = 1) -> None:
         """Perform the given move on the board; 
         color gives the color pf the piece to play (1=white,-1=black)
         """

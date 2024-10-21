@@ -1,3 +1,5 @@
+from types import Game, list, tuple
+
 class NeuralNet():
     """
     This class specifies the base NeuralNet class. To define your own neural
@@ -8,10 +10,10 @@ class NeuralNet():
     See othello/NNet.py for an example implementation.
     """
 
-    def __init__(self, game):
+    def __init__(self, game: Game):
         pass
 
-    def train(self, examples):
+    def train(self, examples: list[tuple]):
         """
         This function trains the neural network with examples obtained from
         self-play.
@@ -24,7 +26,7 @@ class NeuralNet():
         """
         pass
 
-    def predict(self, board):
+    def predict(self, board: Any) -> tuple:
         """
         Input:
             board: current board in its canonical form.
@@ -36,14 +38,14 @@ class NeuralNet():
         """
         pass
 
-    def save_checkpoint(self, folder, filename):
+    def save_checkpoint(self, folder: str, filename: str) -> None:
         """
         Saves the current neural network (with its parameters) in
         folder/filename
         """
         pass
 
-    def load_checkpoint(self, folder, filename):
+    def load_checkpoint(self, folder: str, filename: str) -> None:
         """
         Loads parameters of the neural network from folder/filename
         """

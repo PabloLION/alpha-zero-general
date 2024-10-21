@@ -1,6 +1,7 @@
 import sys
 sys.path.append('..')
 from utils import *
+from types import Any
 
 import argparse
 from tensorflow.keras.models import *
@@ -8,12 +9,12 @@ from tensorflow.keras.layers import *
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.activations import *
 
-def relu_bn(inputs):
+def relu_bn(inputs: Any) -> Any:
     relu1 = relu(inputs)
     bn = BatchNormalization()(relu1)
     return bn
 
-def residual_block(x, filters, kernel_size=3):
+def residual_block(x: Any, filters: int, kernel_size: int = 3) -> Any:
     y = Conv2D(kernel_size=kernel_size,
                strides= (1),
                filters=filters,
@@ -31,7 +32,7 @@ def residual_block(x, filters, kernel_size=3):
 
     return out
 
-def value_head(input):
+def value_head(input: Any) -> Any:
     conv1 = Conv2D(kernel_size=1,
                 strides=1,
                 filters=1,
@@ -49,7 +50,7 @@ def value_head(input):
 
     return dense2
 
-def policy_head(input):
+def policy_head(input: Any) -> Any:
     conv1 = Conv2D(kernel_size=2,
                 strides=1,
                 filters=1,
@@ -60,7 +61,7 @@ def policy_head(input):
     return flat
 
 class Connect4NNet():
-    def __init__(self, game, args):
+    def __init__(self, game: Any, args: Any):
         # game params
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
@@ -88,7 +89,7 @@ class Connect4NNet():
         self.model = Model(inputs=self.input_boards, outputs=[self.pi, self.v])
         self.model.compile(loss=[self.loss_pi ,self.loss_v], optimizer=Adam(args.lr))
 
-    def calculate_loss(self):
+    def calculate_loss(self) -> None:
         self.target_pis = tf.placeholder(tf.float32, shape=[None, self.action_size])
         self.target_vs = tf.placeholder(tf.float32, shape=[None])
         self.loss_pi =  tf.losses.softmax_cross_entropy(self.target_pis, self.pi)

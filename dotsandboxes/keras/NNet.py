@@ -4,6 +4,7 @@ import os
 sys.path.append('..')
 from utils import dotdict
 from NeuralNet import NeuralNet
+from types import Any, list, tuple
 
 from .DotsAndBoxesNNet import DotsAndBoxesNNet as onnet
 
@@ -17,7 +18,7 @@ args = dotdict({
 })
 
 
-def normalize_score(board):
+def normalize_score(board: np.ndarray) -> None:
     p1_score = board[:, 0, -1]
     p2_score = board[:, 1, -1]
     score = p1_score - p2_score
@@ -35,12 +36,12 @@ def normalize_score(board):
 
 
 class NNetWrapper(NeuralNet):
-    def __init__(self, game):
+    def __init__(self, game: Any):
         self.nnet = onnet(game, args)
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
 
-    def train(self, examples):
+    def train(self, examples: list[tuple[np.ndarray, list[float], float]]) -> None:
         """
         examples: list of examples, each example is of form (board, pi, v)
         """
@@ -53,7 +54,7 @@ class NNetWrapper(NeuralNet):
         target_vs = np.asarray(target_vs)
         self.nnet.model.fit(x=input_boards, y=[target_pis, target_vs], batch_size=args.batch_size, epochs=args.epochs)
 
-    def predict(self, board):
+    def predict(self, board: np.ndarray) -> tuple[np.ndarray, float]:
         """
         board: np array with board
         """
@@ -66,7 +67,7 @@ class NNetWrapper(NeuralNet):
 
         return pi[0], v[0]
 
-    def save_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
+    def save_checkpoint(self, folder: str = 'checkpoint', filename: str = 'checkpoint.pth.tar') -> None:
         # change extension
         filename = filename.split(".")[0] + ".h5"
         
@@ -78,7 +79,7 @@ class NNetWrapper(NeuralNet):
             print("Checkpoint Directory exists! ")
         self.nnet.model.save_weights(filepath)
 
-    def load_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
+    def load_checkpoint(self, folder: str = 'checkpoint', filename: str = 'checkpoint.pth.tar') -> None:
         # change extension
         filename = filename.split(".")[0] + ".h5"
         

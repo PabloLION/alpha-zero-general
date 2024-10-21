@@ -1,11 +1,12 @@
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Activation, BatchNormalization, Dense, Dropout, Flatten, Input
 from tensorflow.keras.optimizers import Adam
+from types import Any
 
 
 class DotsAndBoxesNNet():
 
-    def create_model(self, dropout):
+    def create_model(self, dropout: float) -> Model:
         # Neural Net
         self.input_boards = Input(shape=(self.board_x, self.board_y))    # s: batch_size x board_x x board_y
 
@@ -19,7 +20,7 @@ class DotsAndBoxesNNet():
 
         return Model(inputs=self.input_boards, outputs=[self.pi, self.v])
 
-    def __init__(self, game, args):
+    def __init__(self, game: Any, args: Any):
         # game params
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
