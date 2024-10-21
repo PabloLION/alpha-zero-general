@@ -9,8 +9,8 @@ from typing import Any, Callable
 import numpy as np
 from tqdm import tqdm
 
-from Arena import Arena
-from MCTS import MCTS
+from alpha_zero_general.Arena import Arena
+from alpha_zero_general.MCTS import MCTS
 
 log = logging.getLogger(__name__)
 

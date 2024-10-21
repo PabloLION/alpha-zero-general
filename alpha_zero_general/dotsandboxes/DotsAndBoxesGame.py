@@ -1,8 +1,8 @@
 import numpy as np
 
-from type import Game
+from alpha_zero_general.type import Game
 
-from ..Game import Game
+from alpha_zero_general.Game import Game
 from .DotsAndBoxesLogic import Board
 
 

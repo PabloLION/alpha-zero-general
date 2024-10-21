@@ -3,11 +3,11 @@ from typing import Tuple
 
 import numpy as np
 
-from rts.src.config_class import CONFIG
+from alpha_zero_general.rts.src.config_class import CONFIG
 
 sys.path.append('..')
-from rts.src.Board import Board
-from rts.src.config import NUM_ENCODERS, NUM_ACTS, P_NAME_IDX, A_TYPE_IDX, TIME_IDX, FPS
+from alpha_zero_general.rts.src.Board import Board
+from alpha_zero_general.rts.src.config import NUM_ENCODERS, NUM_ACTS, P_NAME_IDX, A_TYPE_IDX, TIME_IDX, FPS
 
 """ USE_TIMEOUT, MAX_TIME, d_a_type, a_max_health, INITIAL_GOLD, TIMEOUT, visibility"""
 
@@ -223,7 +223,7 @@ def display(board):
     :param board: game state
     :return: /
     """
-    from rts.visualization.rts_pygame import init_visuals, update_graphics
+    from alpha_zero_general.rts.visualization.rts_pygame import init_visuals, update_graphics
 
     if not CONFIG.visibility:
         return

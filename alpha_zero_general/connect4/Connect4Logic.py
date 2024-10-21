@@ -1,6 +1,6 @@
 import numpy as np
 
-from type import WinState
+from alpha_zero_general.type import WinState
 
 DEFAULT_HEIGHT = 6
 DEFAULT_WIDTH = 7

@@ -1,7 +1,7 @@
 from __future__ import print_function
 import sys
 sys.path.append('..')
-from Game import Game
+from alpha_zero_general.Game import Game
 from .SantoriniLogic import Board
 import numpy as np
 
@@ -75,7 +75,7 @@ class SantoriniGame(Game):
         char = piece_locations[char_idx]
         
         action_move = (action_move[0]+char[0], action_move[1]+char[1])
-        action_build = (action_move[0]+ action_build[0], action_move[1]+action_build[1])
+        action_build = (action_move[0]+ action_build[0], action_build[1]+action_build[1])
         action = [char, action_move, action_build]        
 
         try:

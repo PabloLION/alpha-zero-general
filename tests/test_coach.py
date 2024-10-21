@@ -1,9 +1,9 @@
 import pytest
 from pytest_mock import mocker
-from Coach import Coach
-from connect4.Connect4Game import Connect4Game
-from connect4.keras.NNet import NNetWrapper as nn
-from utils import dotdict
+from alpha_zero_general.Coach import Coach
+from alpha_zero_general.connect4.Connect4Game import Connect4Game
+from alpha_zero_general.connect4.keras.NNet import NNetWrapper as nn
+from alpha_zero_general.utils import dotdict
 
 class TestCoach:
 

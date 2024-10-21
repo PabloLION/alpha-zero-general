@@ -2,11 +2,11 @@ from __future__ import print_function
 
 import sys
 
-from type import Game
+from alpha_zero_general.type import Game
 
 sys.path.append("..")
 import numpy as np
-from Game import Game
+from alpha_zero_general.Game import Game
 
 from .GobangLogic import Board
 

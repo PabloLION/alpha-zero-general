@@ -2,10 +2,10 @@ import logging
 
 import coloredlogs  # type: ignore
 
-from Coach import Coach
-from othello.OthelloGame import OthelloGame as Game
-from othello.pytorch.NNet import NNetWrapper as nn
-from utils import *
+from alpha_zero_general.Coach import Coach
+from alpha_zero_general.othello.OthelloGame import OthelloGame as Game
+from alpha_zero_general.othello.pytorch.NNet import NNetWrapper as nn
+from alpha_zero_general.utils import *
 
 log = logging.getLogger(__name__)
 

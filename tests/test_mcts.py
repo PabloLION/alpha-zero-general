@@ -1,9 +1,9 @@
 import numpy as np
 import pytest
-from connect4.Connect4Game import Connect4Game
-from connect4.keras.NNet import NNetWrapper as nn
-from MCTS import MCTS
-from utils import dotdict
+from alpha_zero_general.connect4.Connect4Game import Connect4Game
+from alpha_zero_general.connect4.keras.NNet import NNetWrapper as nn
+from alpha_zero_general.MCTS import MCTS
+from alpha_zero_general.utils import dotdict
 
 
 class TestMCTS:
@@ -24,7 +24,7 @@ class TestMCTS:
 
     def test_search(self, mocker):
         mocker.patch(
-            "connect4.keras.NNetWrapper.predict",
+            "alpha_zero_general.connect4.keras.NNetWrapper.predict",
             return_value=(np.array([1 / 7] * 7), 0),
         )
         board = self.game.getInitBoard()

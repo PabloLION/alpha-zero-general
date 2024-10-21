@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from tictactoe.TicTacToeGame import TicTacToeGame
+from alpha_zero_general.tictactoe.TicTacToeGame import TicTacToeGame
 from pytest_mock import mocker
 
 class TestTicTacToeGame:

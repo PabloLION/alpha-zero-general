@@ -1,3 +1,4 @@
+from alpha_zero_general.type import Game
 import numpy as np
 import subprocess
 

@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
+from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
 from pytest_mock import mocker
 
 class TestDotsAndBoxesGame:

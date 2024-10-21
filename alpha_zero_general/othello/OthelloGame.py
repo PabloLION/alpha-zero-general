@@ -5,7 +5,7 @@ import sys
 sys.path.append("..")
 import numpy as np
 
-from Game import Game
+from alpha_zero_general.Game import Game
 
 from .OthelloLogic import Board
 
