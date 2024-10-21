@@ -1,9 +1,9 @@
 import pytest
-import numpy as np
-from pytest_mock import mocker
-from Arena import Arena
-from connect4.Connect4Game import Connect4Game
-from connect4.Connect4Players import RandomPlayer
+
+from alpha_zero_general.Arena import Arena
+from alpha_zero_general.connect4.Connect4Game import Connect4Game
+from alpha_zero_general.connect4.Connect4Players import RandomPlayer
+
 
 class TestArena:
 

@@ -54,12 +54,10 @@ werkzeug = "2.1.2"
 wrapt = "1.14.1"
 zipp = "3.8.0"
 h5py = "^3.12.1"
-pytest = "^8.3.3"
-pytest-mock = "^3.14.0"
-
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.3"
+pytest-mock = "^3.14.0"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

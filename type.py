@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Callable, TypedDict, Union
+from typing import Any, Callable, NamedTuple, TypedDict, Union
 
 import numpy as np
 
@@ -21,6 +21,6 @@ class BoardState(TypedDict):
     np_pieces: np.ndarray[Any, Any]
 
 
-class WinState(TypedDict):
+class WinState(NamedTuple):
     is_ended: bool
-    winner: int
+    winner: int | None

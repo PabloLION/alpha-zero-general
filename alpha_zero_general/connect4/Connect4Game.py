@@ -1,9 +1,12 @@
 import sys
-import numpy as np
-from types import Board, Game
 
-sys.path.append('..')
+import numpy as np
+
+from type import Game
+
+sys.path.append("..")
 from Game import Game
+
 from .Connect4Logic import Board
 
 
@@ -12,7 +15,13 @@ class Connect4Game(Game):
     Connect4 Game class implementing the alpha-zero-general Game interface.
     """
 
-    def __init__(self, height: int = None, width: int = None, win_length: int = None, np_pieces: np.ndarray = None):
+    def __init__(
+        self,
+        height: int = None,
+        width: int = None,
+        win_length: int = None,
+        np_pieces: np.ndarray = None,
+    ):
         Game.__init__(self)
         self._base_board = Board(height, width, win_length, np_pieces)
 
@@ -25,7 +34,9 @@ class Connect4Game(Game):
     def getActionSize(self) -> int:
         return self._base_board.width
 
-    def getNextState(self, board: np.ndarray, player: int, action: int) -> tuple[np.ndarray, int]:
+    def getNextState(
+        self, board: np.ndarray, player: int, action: int
+    ) -> tuple[np.ndarray, int]:
         """Returns a copy of the board with updated move, original board is unmodified."""
         b = self._base_board.with_np_pieces(np_pieces=np.copy(board))
         b.add_stone(action, player)
@@ -47,7 +58,7 @@ class Connect4Game(Game):
             elif winstate.winner == -player:
                 return -1
             else:
-                raise ValueError('Unexpected winstate found: ', winstate)
+                raise ValueError("Unexpected winstate found: ", winstate)
         else:
             # 0 used to represent unfinished game.
             return 0
@@ -56,7 +67,9 @@ class Connect4Game(Game):
         # Flip player from 1 to -1
         return board * player
 
-    def getSymmetries(self, board: np.ndarray, pi: list[float]) -> list[tuple[np.ndarray, list[float]]]:
+    def getSymmetries(
+        self, board: np.ndarray, pi: list[float]
+    ) -> list[tuple[np.ndarray, list[float]]]:
         """Board is left/right board symmetric"""
         return [(board, pi), (board[:, ::-1], pi[::-1])]
 
@@ -66,6 +79,6 @@ class Connect4Game(Game):
     @staticmethod
     def display(board: np.ndarray) -> None:
         print(" -----------------------")
-        print(' '.join(map(str, range(len(board[0])))))
+        print(" ".join(map(str, range(len(board[0])))))
         print(board)
         print(" -----------------------")
