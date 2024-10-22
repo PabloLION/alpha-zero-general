@@ -47,7 +47,6 @@ from utils import *
 
 
 class TestAllGames(unittest.TestCase):
-
     @staticmethod
     def execute_game_test(game, neural_net):
         rp = RandomPlayer(game).play

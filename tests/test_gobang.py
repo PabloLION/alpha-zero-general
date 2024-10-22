@@ -2,8 +2,8 @@ import pytest
 import numpy as np
 from alpha_zero_general.gobang.GobangGame import GobangGame
 
-class TestGobangGame:
 
+class TestGobangGame:
     @pytest.fixture(autouse=True)
     def setup_method(self):
         self.game = GobangGame()

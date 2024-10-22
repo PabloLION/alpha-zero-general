@@ -7,7 +7,6 @@ from alpha_zero_general.utils import dotdict
 
 
 class TestMCTS:
-
     @pytest.fixture(autouse=True)
     def setup_method(self):
         self.game = Connect4Game()

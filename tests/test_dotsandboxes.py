@@ -3,8 +3,8 @@ import numpy as np
 from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
 from pytest_mock import mocker
 
-class TestDotsAndBoxesGame:
 
+class TestDotsAndBoxesGame:
     @pytest.fixture(autouse=True)
     def setup(self):
         self.game = DotsAndBoxesGame(n=3)

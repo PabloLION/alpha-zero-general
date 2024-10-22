@@ -3,8 +3,8 @@ import numpy as np
 from alpha_zero_general.tictactoe.TicTacToeGame import TicTacToeGame
 from pytest_mock import mocker
 
-class TestTicTacToeGame:
 
+class TestTicTacToeGame:
     @pytest.fixture(autouse=True)
     def setup_method(self):
         self.game = TicTacToeGame()

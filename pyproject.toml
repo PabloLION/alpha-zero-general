@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.scripts]
 test = "pytest:main"
-format = "black:black_main"
+format = "black:main"
 
 
 [tool.poetry.dependencies]
@@ -63,6 +63,21 @@ black = "^24.10.0"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.black]
+line-length = 88 # Set the maximum allowed line length
+# Target Python version(s) will be inferred from the environment
+include = '\.pyi?$' # Specify files to include
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+''' # Specify files or directories to exclude
 
 [build-system]
 requires = ["poetry-core"]

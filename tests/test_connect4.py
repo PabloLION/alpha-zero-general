@@ -3,8 +3,8 @@ import numpy as np
 from alpha_zero_general.connect4.Connect4Game import Connect4Game
 from pytest_mock import mocker
 
-class TestConnect4Game:
 
+class TestConnect4Game:
     @pytest.fixture(autouse=True)
     def setup_method(self):
         self.game = Connect4Game()
@@ -42,7 +42,7 @@ class TestConnect4Game:
 
     def test_getSymmetries(self):
         board = self.game.getInitBoard()
-        pi = [1/7] * 7
+        pi = [1 / 7] * 7
         symmetries = self.game.getSymmetries(board, pi)
         assert len(symmetries) == 2
 

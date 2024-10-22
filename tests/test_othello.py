@@ -3,8 +3,8 @@ import numpy as np
 from alpha_zero_general.othello.OthelloGame import OthelloGame
 from pytest_mock import mocker
 
-class TestOthelloGame:
 
+class TestOthelloGame:
     @pytest.fixture(autouse=True)
     def setup(self):
         self.game = OthelloGame(8)
@@ -50,7 +50,7 @@ class TestOthelloGame:
 
     def test_getSymmetries(self):
         board = self.game.getInitBoard()
-        pi = [1/65] * 65
+        pi = [1 / 65] * 65
         symmetries = self.game.getSymmetries(board, pi)
         assert len(symmetries) == 8
 

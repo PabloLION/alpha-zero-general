@@ -13,7 +13,6 @@ from type import Any
 
 
 class DotsAndBoxesNNet:
-
     def create_model(self, dropout: float) -> Model:
         # Neural Net
         self.input_boards = Input(

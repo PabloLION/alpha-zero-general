@@ -6,7 +6,6 @@ from alpha_zero_general.connect4.Connect4Players import RandomPlayer
 
 
 class TestArena:
-
     @pytest.fixture(autouse=True)
     def setup_method(self):
         self.game = Connect4Game()
