@@ -4,19 +4,10 @@ from typing import Any
 import numpy as np
 
 sys.path.append("../..")
-from alpha_zero_general.rts.src.config import (
-    A_TYPE_IDX,
-    ACTS_REV,
-    CARRY_IDX,
-    HEALTH_IDX,
-    MONEY_IDX,
-    NUM_ACTS,
-    NUM_ENCODERS,
-    P_NAME_IDX,
-    TIME_IDX,
-    d_a_type,
-    d_acts,
-)
+from alpha_zero_general.rts.src.config import (A_TYPE_IDX, ACTS_REV, CARRY_IDX,
+                                               HEALTH_IDX, MONEY_IDX, NUM_ACTS,
+                                               NUM_ENCODERS, P_NAME_IDX,
+                                               TIME_IDX, d_a_type, d_acts)
 
 """
 Board.py

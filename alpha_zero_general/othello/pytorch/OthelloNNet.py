@@ -1,10 +1,11 @@
-from alpha_zero_general.utils import *
-
 import argparse
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+
+from alpha_zero_general.utils import *
 
 
 class OthelloNNet(nn.Module):

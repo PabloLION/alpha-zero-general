@@ -2,19 +2,12 @@ from typing import Tuple
 
 import numpy as np
 
-from alpha_zero_general.rts.src.config_class import CONFIG
-
-from alpha_zero_general.rts.src.Board import Board
-from alpha_zero_general.rts.src.config import (
-    NUM_ENCODERS,
-    NUM_ACTS,
-    P_NAME_IDX,
-    A_TYPE_IDX,
-    TIME_IDX,
-    FPS,
-)
-
 from alpha_zero_general.Game import Game
+from alpha_zero_general.rts.src.Board import Board
+from alpha_zero_general.rts.src.config import (A_TYPE_IDX, FPS, NUM_ACTS,
+                                               NUM_ENCODERS, P_NAME_IDX,
+                                               TIME_IDX)
+from alpha_zero_general.rts.src.config_class import CONFIG
 
 """ USE_TIMEOUT, MAX_TIME, d_a_type, a_max_health, INITIAL_GOLD, TIMEOUT, visibility"""
 
@@ -241,9 +234,7 @@ def display(board):
     :return: /
     """
     from alpha_zero_general.rts.visualization.rts_pygame import (
-        init_visuals,
-        update_graphics,
-    )
+        init_visuals, update_graphics)
 
     if not CONFIG.visibility:
         return

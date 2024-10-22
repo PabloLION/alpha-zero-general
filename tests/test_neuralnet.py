@@ -1,9 +1,10 @@
-import pytest
 import numpy as np
+import pytest
+from pytest_mock import mocker
+
 from alpha_zero_general.connect4.Connect4Game import Connect4Game
 from alpha_zero_general.connect4.keras.NNet import NNetWrapper as nn
 from alpha_zero_general.utils import dotdict
-from pytest_mock import mocker
 
 
 class TestNeuralNet:

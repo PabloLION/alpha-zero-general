@@ -1,13 +1,7 @@
 from typing import Any
 
-from tensorflow.keras.layers import (
-    Activation,
-    BatchNormalization,
-    Dense,
-    Dropout,
-    Flatten,
-    Input,
-)
+from tensorflow.keras.layers import (Activation, BatchNormalization, Dense,
+                                     Dropout, Flatten, Input)
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 

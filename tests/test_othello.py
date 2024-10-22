@@ -1,7 +1,8 @@
-import pytest
 import numpy as np
-from alpha_zero_general.othello.OthelloGame import OthelloGame
+import pytest
 from pytest_mock import mocker
+
+from alpha_zero_general.othello.OthelloGame import OthelloGame
 
 
 class TestOthelloGame:

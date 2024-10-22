@@ -3,8 +3,9 @@ To run tests:
 pytest-3 connect4
 """
 
-from collections import namedtuple
 import textwrap
+from collections import namedtuple
+
 import numpy as np
 
 from alpha_zero_general.connect4.Connect4Game import Connect4Game

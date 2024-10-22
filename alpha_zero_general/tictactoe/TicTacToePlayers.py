@@ -1,4 +1,5 @@
 import numpy as np
+
 from alpha_zero_general.Game import Game
 
 """

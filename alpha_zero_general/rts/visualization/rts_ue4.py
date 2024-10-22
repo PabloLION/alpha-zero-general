@@ -4,10 +4,8 @@ import os
 
 import numpy as np
 import tensorflow as tf
-
 # noinspection PyUnresolvedReferences
 import unreal_engine as ue
-
 # noinspection PyUnresolvedReferences
 from TFPluginAPI import TFPluginAPI
 

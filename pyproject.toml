@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.scripts]
 test = "pytest:main"
 format = "black:main"
+lint = "scripts.lint:run_lint"
 
 
 [tool.poetry.dependencies]
@@ -62,6 +63,7 @@ pytest = "^8.3.3"
 pytest-mock = "^3.14.0"
 packaging = "^24.1"
 black = "^24.10.0"
+isort = "^5.13.2"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

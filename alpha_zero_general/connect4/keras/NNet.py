@@ -17,7 +17,8 @@ log = logging.getLogger(__name__)
 
 import argparse
 
-from alpha_zero_general.connect4.keras.Connect4NNet import Connect4NNet as onnet
+from alpha_zero_general.connect4.keras.Connect4NNet import \
+    Connect4NNet as onnet
 
 args = dotdict(
     {

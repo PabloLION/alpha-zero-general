@@ -1,6 +1,8 @@
-from alpha_zero_general.Game import Game
-import numpy as np
 import subprocess
+
+import numpy as np
+
+from alpha_zero_general.Game import Game
 
 
 class RandomPlayer:

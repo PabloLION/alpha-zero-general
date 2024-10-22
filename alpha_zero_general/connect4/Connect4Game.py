@@ -1,8 +1,7 @@
 import numpy as np
 
-from alpha_zero_general.Game import Game
-
 from alpha_zero_general.connect4.Connect4Logic import Board
+from alpha_zero_general.Game import Game
 
 
 class Connect4Game(Game):

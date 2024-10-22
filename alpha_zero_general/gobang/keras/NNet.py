@@ -8,11 +8,10 @@ import time
 import numpy as np
 import tensorflow as tf
 
+from alpha_zero_general.gobang.keras.GobangNNet import GobangNNet as onnet
 from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.type import Any
 from alpha_zero_general.utils import *
-
-from alpha_zero_general.gobang.keras.GobangNNet import GobangNNet as onnet
 
 args = dotdict(
     {

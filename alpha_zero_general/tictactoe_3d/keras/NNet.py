@@ -12,9 +12,9 @@ sys.path.append("..")
 import argparse
 
 from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.tictactoe_3d.keras.TicTacToeNNet import \
+    TicTacToeNNet as onnet
 from alpha_zero_general.utils import *
-
-from alpha_zero_general.tictactoe_3d.keras.TicTacToeNNet import TicTacToeNNet as onnet
 
 """
 NeuralNet wrapper class for the TicTacToeNNet.
