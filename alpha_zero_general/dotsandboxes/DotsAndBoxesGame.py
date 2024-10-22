@@ -1,7 +1,7 @@
 import numpy as np
 
 from alpha_zero_general.Game import Game
-from .DotsAndBoxesLogic import Board
+from alpha_zero_general.dotsandboxes.DotsAndBoxesLogic import Board
 
 
 class DotsAndBoxesGame(Game):

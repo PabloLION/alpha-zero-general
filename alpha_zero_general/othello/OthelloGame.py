@@ -4,7 +4,7 @@ import numpy as np
 
 from alpha_zero_general.Game import Game
 
-from .OthelloLogic import Board
+from alpha_zero_general.othello.OthelloLogic import Board
 
 
 class OthelloGame(Game):
@@ -117,3 +117,4 @@ class OthelloGame(Game):
             print("|")
 
         print("-----------------------")
+

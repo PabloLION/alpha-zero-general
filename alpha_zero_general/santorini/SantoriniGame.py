@@ -3,7 +3,7 @@ import sys
 
 sys.path.append("..")
 from alpha_zero_general.Game import Game
-from .SantoriniLogic import Board
+from alpha_zero_general.santorini.SantoriniLogic import Board
 import numpy as np
 
 
@@ -458,15 +458,15 @@ class SantoriniGame(Game):
                                 0  1  2    
         initially a is:         3  a  4    
                                 5  6  7 
-
+        
                                 2  4  7
         after CCW rotation:     1  a  6
                                 0  3  5
                                 
         
-                            
+                             
         initial values at indices: [0, 1, 2, 3, 4, 5, 6, 7]
-                               --->[2, 4, 7, 1, 6, 0, 3, 5] under 1 CCW rotation
+                            --->[2, 4, 7, 1, 6, 0, 3, 5] under 1 CCW rotation
         
         
         

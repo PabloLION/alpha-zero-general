@@ -7,7 +7,7 @@ from collections import namedtuple
 import textwrap
 import numpy as np
 
-from .Connect4Game import Connect4Game
+from alpha_zero_general.connect4.Connect4Game import Connect4Game
 
 # Tuple of (Board, Player, Game) to simplify testing.
 BPGTuple = namedtuple("BPGTuple", "board player game")

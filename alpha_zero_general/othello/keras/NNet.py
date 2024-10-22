@@ -10,7 +10,7 @@ import numpy as np
 from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.utils import *
 
-from .OthelloNNet import OthelloNNet as onnet
+from alpha_zero_general.othello.keras.OthelloNNet import OthelloNNet as onnet
 
 args = dotdict(
     {

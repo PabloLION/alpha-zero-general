@@ -6,7 +6,7 @@ from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.type import Any
 from alpha_zero_general.utils import dotdict
 
-from .DotsAndBoxesNNet import DotsAndBoxesNNet as onnet
+from alpha_zero_general.dotsandboxes.keras.DotsAndBoxesNNet import DotsAndBoxesNNet as onnet
 
 args = dotdict(
     {

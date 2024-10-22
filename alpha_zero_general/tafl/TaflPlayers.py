@@ -1,5 +1,5 @@
 import numpy as np
-from .Digits import int2base
+from alpha_zero_general.tafl.Digits import int2base
 
 
 class RandomTaflPlayer:

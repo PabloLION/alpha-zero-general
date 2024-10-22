@@ -3,7 +3,7 @@ from __future__ import print_function
 import numpy as np
 from alpha_zero_general.Game import Game
 
-from .GobangLogic import Board
+from alpha_zero_general.gobang.GobangLogic import Board
 
 
 class GobangGame(Game):

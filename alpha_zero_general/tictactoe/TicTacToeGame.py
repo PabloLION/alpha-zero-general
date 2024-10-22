@@ -7,7 +7,7 @@ import numpy as np
 
 from alpha_zero_general.Game import Game
 
-from .TicTacToeLogic import Board
+from alpha_zero_general.tictactoe.TicTacToeLogic import Board
 
 """
 Game class implementation for the game of TicTacToe.
