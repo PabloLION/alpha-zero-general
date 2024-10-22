@@ -9,7 +9,7 @@ import numpy as np
 import tensorflow as tf
 
 from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.type import Any, list, tuple
+from alpha_zero_general.type import Any
 from alpha_zero_general.utils import *
 
 from .GobangNNet import GobangNNet as onnet

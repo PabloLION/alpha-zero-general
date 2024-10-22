@@ -1,6 +1,5 @@
 import os
 import sys
-from typing import List, Tuple
 
 import numpy as np
 
@@ -662,7 +661,7 @@ class Configuration:
         cpuct: float = 1,
         checkpoint: str = ".\\..\\temp\\",
         load_model: bool = False,
-        load_folder_file: Tuple[str, str] = (".\\..\\temp\\", "checkpoint_13.pth.tar"),
+        load_folder_file: tuple[str, str] = (".\\..\\temp\\", "checkpoint_13.pth.tar"),
         num_iters_for_train_examples_history: int = 8,
         save_train_examples: bool = False,
         load_train_examples: bool = False,
@@ -678,7 +677,7 @@ class Configuration:
         batch_size: int = 256,
         cuda: bool = True,
         num_channels: int = 128,
-        initial_board_config: List[BoardTile] = None,
+        initial_board_config: list[BoardTile] = None,
     ):
         """
         :param grid_size: Grid size of game for example 8,6...
