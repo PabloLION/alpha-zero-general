@@ -1,4 +1,4 @@
-from utils import *
+from alpha_zero_general.utils import *
 
 import argparse
 import torch

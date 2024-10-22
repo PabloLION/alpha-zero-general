@@ -24,6 +24,7 @@ from alpha_zero_general.rts.visualization.rts_pygame import (
     message_display,
 )
 from alpha_zero_general.utils import dotdict
+from alpha_zero_general.Game import Game
 
 """
 RTSPlayers.py

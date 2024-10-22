@@ -9,7 +9,7 @@ import sys
 
 sys.path.append("..")
 from utils import *
-from NeuralNet import NeuralNet
+from alpha_zero_general.NeuralNet import NeuralNet
 
 import argparse
 from .TicTacToeNNet import TicTacToeNNet as onnet

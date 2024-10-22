@@ -1,6 +1,6 @@
 from rts.src.config_class import CONFIG
 
-from Coach import Coach
+from alpha_zero_general.Coach import Coach
 
 # from rts.configurations.ConfigWrapper import LearnArgs
 from rts.RTSGame import RTSGame as Game

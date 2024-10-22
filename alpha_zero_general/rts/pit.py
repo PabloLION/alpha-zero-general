@@ -1,6 +1,6 @@
 from rts.src.config_class import CONFIG
 
-import Arena
+from alpha_zero_general import Arena
 from rts.RTSGame import display, RTSGame
 
 """

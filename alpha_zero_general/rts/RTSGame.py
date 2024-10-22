@@ -14,6 +14,8 @@ from alpha_zero_general.rts.src.config import (
     FPS,
 )
 
+from alpha_zero_general.Game import Game
+
 """ USE_TIMEOUT, MAX_TIME, d_a_type, a_max_health, INITIAL_GOLD, TIMEOUT, visibility"""
 
 """
@@ -25,7 +27,7 @@ Includes:
 
 
 # noinspection PyPep8Naming,PyMethodMayBeStatic
-class RTSGame:
+class RTSGame(Game):
     def __init__(self) -> None:
         self.n = CONFIG.grid_size
 

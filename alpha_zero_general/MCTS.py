@@ -3,7 +3,9 @@ import math
 
 import numpy as np
 
-from alpha_zero_general.type import Args, Game, NeuralNet
+from alpha_zero_general.type import Args
+from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.Game import Game
 
 EPS = 1e-8
 

@@ -8,7 +8,7 @@ from tqdm import tqdm
 sys.path.append("../../")
 from utils import *
 
-from NeuralNet import NeuralNet
+from alpha_zero_general.NeuralNet import NeuralNet
 
 import torch
 import torch.optim as optim

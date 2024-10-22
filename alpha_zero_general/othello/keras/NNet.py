@@ -6,7 +6,7 @@ import random
 import numpy as np
 import math
 from utils import *
-from NeuralNet import NeuralNet
+from alpha_zero_general.NeuralNet import NeuralNet
 
 import argparse
 

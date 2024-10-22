@@ -1,7 +1,7 @@
 import os
 
 import numpy as np
-from NeuralNet import NeuralNet
+from alpha_zero_general.NeuralNet import NeuralNet
 from utils import dotdict
 
 from alpha_zero_general.type import Any, list, tuple

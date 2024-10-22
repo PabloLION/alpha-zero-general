@@ -1,3 +1,5 @@
+from alpha_zero_general.utils import dotdict
+
 class AverageMeter(object):
     """From https://github.com/pytorch/examples/blob/master/imagenet/main.py"""
 

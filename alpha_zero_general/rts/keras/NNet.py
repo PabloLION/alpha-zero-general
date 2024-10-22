@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 
-from NeuralNet import NeuralNet
+from alpha_zero_general.NeuralNet import NeuralNet
 from rts.keras.RTSNNet import RTSNNet
 from rts.src.config import VERBOSE_MODEL_FIT
 

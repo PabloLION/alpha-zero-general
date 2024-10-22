@@ -8,7 +8,7 @@ import time
 
 import coloredlogs  # type: ignore
 import numpy as np
-from NeuralNet import NeuralNet
+from alpha_zero_general.NeuralNet import NeuralNet
 from utils import *
 
 from alpha_zero_general.type import Any
