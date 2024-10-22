@@ -9,10 +9,10 @@ class RandomPlayer:
         self.game = game
 
     def play(self, board: BoardMatrix) -> int:
-        a = np.random.randint(self.game.getActionSize())
-        valids = self.game.getValidMoves(board, 1)
+        a = np.random.randint(self.game.get_action_size())
+        valids = self.game.get_valid_moves(board, 1)
         while valids[a] != 1:
-            a = np.random.randint(self.game.getActionSize())
+            a = np.random.randint(self.game.get_action_size())
         return a
 
 
@@ -21,7 +21,7 @@ class HumanConnect4Player:
         self.game = game
 
     def play(self, board: BoardMatrix) -> int:
-        valid_moves = self.game.getValidMoves(board, 1)
+        valid_moves = self.game.get_valid_moves(board, 1)
         print("\nMoves:", [i for (i, valid) in enumerate(valid_moves) if valid])
 
         while True:
@@ -42,19 +42,19 @@ class OneStepLookaheadConnect4Player:
         self.verbose = verbose
 
     def play(self, board: BoardMatrix) -> int:
-        valid_moves = self.game.getValidMoves(board, self.player_num)
+        valid_moves = self.game.get_valid_moves(board, self.player_num)
         win_move_set = set()
         fallback_move_set = set()
         stop_loss_move_set = set()
         for move, valid in enumerate(valid_moves):
             if not valid:
                 continue
-            if self.player_num == self.game.getGameEnded(
-                *self.game.getNextState(board, self.player_num, move)
+            if self.player_num == self.game.get_game_ended(
+                *self.game.get_next_state(board, self.player_num, move)
             ):
                 win_move_set.add(move)
-            if -self.player_num == self.game.getGameEnded(
-                *self.game.getNextState(board, -self.player_num, move)
+            if -self.player_num == self.game.get_game_ended(
+                *self.game.get_next_state(board, -self.player_num, move)
             ):
                 stop_loss_move_set.add(move)
             else:
@@ -79,7 +79,7 @@ class OneStepLookaheadConnect4Player:
                 )
         else:
             raise Exception(
-                "No valid moves remaining: %s" % game.stringRepresentation(board)
+                "No valid moves remaining: %s" % game.string_representation(board)
             )
 
         return ret_move

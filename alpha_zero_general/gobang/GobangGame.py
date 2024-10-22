@@ -12,20 +12,20 @@ class GobangGame(Game):
         self.n = n
         self.n_in_row = nir
 
-    def getInitBoard(self) -> BoardMatrix:
+    def get_init_board(self) -> BoardMatrix:
         # return initial board (numpy board)
         b = Board(self.n)
         return np.array(b.pieces)
 
-    def getBoardSize(self) -> tuple[int, int]:
+    def get_board_size(self) -> tuple[int, int]:
         # (a,b) tuple
         return (self.n, self.n)
 
-    def getActionSize(self) -> int:
+    def get_action_size(self) -> int:
         # return number of actions
         return self.n * self.n + 1
 
-    def getNextState(
+    def get_next_state(
         self, board: BoardMatrix, player: int, action: int
     ) -> tuple[BoardMatrix, int]:
         # if player takes action on board, return next (board,player)
@@ -39,9 +39,9 @@ class GobangGame(Game):
         return (b.pieces, -player)
 
     # modified
-    def getValidMoves(self, board: BoardMatrix, player: int) -> BoardMatrix:
+    def get_valid_moves(self, board: BoardMatrix, player: int) -> BoardMatrix:
         # return a fixed size binary vector
-        valids = [0] * self.getActionSize()
+        valids = [0] * self.get_action_size()
         b = Board(self.n)
         b.pieces = np.copy(board)
         legalMoves = b.get_legal_moves(player)
@@ -53,7 +53,7 @@ class GobangGame(Game):
         return np.array(valids)
 
     # modified
-    def getGameEnded(self, board: BoardMatrix, player: int) -> float:
+    def get_game_ended(self, board: BoardMatrix, player: int) -> float:
         # return 0 if not ended, 1 if player 1 won, -1 if player 1 lost
         # player = 1
         b = Board(self.n)
@@ -92,12 +92,12 @@ class GobangGame(Game):
             return 0
         return 1e-4
 
-    def getCanonicalForm(self, board: BoardMatrix, player: int) -> BoardMatrix:
+    def get_canonical_form(self, board: BoardMatrix, player: int) -> BoardMatrix:
         # return state if player==1, else return -state if player==-1
         return player * board
 
     # modified
-    def getSymmetries(
+    def get_symmetries(
         self, board: BoardMatrix, pi: list[float]
     ) -> list[tuple[BoardMatrix, list[float]]]:
         # mirror, rotational
@@ -115,7 +115,7 @@ class GobangGame(Game):
                 l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return l
 
-    def stringRepresentation(self, board: BoardMatrix) -> str:
+    def string_representation(self, board: BoardMatrix) -> str:
         # 8x8 numpy array (canonical board)
         return board.tostring()
 

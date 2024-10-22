@@ -32,7 +32,7 @@ class Arena:
         self.game = game
         self.display = display
 
-    def playGame(self, verbose: bool = False) -> int:
+    def play_game(self, verbose: bool = False) -> int:
         """
         Executes one episode of a game.
 
@@ -92,7 +92,7 @@ class Arena:
             self.display(board)
         return curPlayer * self.game.getGameEnded(board, curPlayer)
 
-    def playGames(self, num: int, verbose: bool = False) -> tuple[int, int, int]:
+    def play_games(self, num: int, verbose: bool = False) -> tuple[int, int, int]:
         """
         Plays num games in which player1 starts num/2 games and player2 starts
         num/2 games.
@@ -108,7 +108,7 @@ class Arena:
         twoWon = 0
         draws = 0
         for _ in tqdm(range(num), desc="Arena.playGames (1)"):
-            gameResult = self.playGame(verbose=verbose)
+            gameResult = self.play_game(verbose=verbose)
             if gameResult == 1:
                 oneWon += 1
             elif gameResult == -1:
@@ -119,7 +119,7 @@ class Arena:
         self.player1, self.player2 = self.player2, self.player1
 
         for _ in tqdm(range(num), desc="Arena.playGames (2)"):
-            gameResult = self.playGame(verbose=verbose)
+            gameResult = self.play_game(verbose=verbose)
             if gameResult == -1:
                 oneWon += 1
             elif gameResult == 1:

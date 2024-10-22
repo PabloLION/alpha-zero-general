@@ -40,7 +40,7 @@ class Coach:
         )  # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skipFirstSelfPlay = False  # can be overriden in loadTrainExamples()
 
-    def executeEpisode(self) -> list[TrainExample]:
+    def execute_episode(self) -> list[TrainExample]:
         """
         This function executes one episode of self-play, starting with player 1.
         As the game is played, each turn is added as a training example to
@@ -104,7 +104,7 @@ class Coach:
                     self.mcts = MCTS(
                         self.game, self.nnet, self.args
                     )  # reset search tree
-                    iterationTrainExamples += self.executeEpisode()
+                    iterationTrainExamples += self.execute_episode()
 
                 # save the iteration examples to the history
                 self.trainExamplesHistory.append(iterationTrainExamples)
@@ -119,7 +119,7 @@ class Coach:
                 self.trainExamplesHistory.pop(0)
             # backup history to a file
             # NB! the examples were collected using the model from the previous iteration, so (i-1)
-            self.saveTrainExamples(i - 1)
+            self.save_train_examples(i - 1)
 
             # shuffle examples before training
             trainExamples = []
@@ -159,25 +159,25 @@ class Coach:
             else:
                 log.info("ACCEPTING NEW MODEL")
                 self.nnet.save_checkpoint(
-                    folder=self.args.checkpoint, filename=self.getCheckpointFile(i)
+                    folder=self.args.checkpoint, filename=self.get_checkpoint_file(i)
                 )
                 self.nnet.save_checkpoint(
                     folder=self.args.checkpoint, filename="best.pth.tar"
                 )
 
-    def getCheckpointFile(self, iteration: int) -> CheckpointFile:
+    def get_checkpoint_file(self, iteration: int) -> CheckpointFile:
         return "checkpoint_" + str(iteration) + ".pth.tar"
 
-    def saveTrainExamples(self, iteration: int):
+    def save_train_examples(self, iteration: int):
         folder = self.args.checkpoint
         if not os.path.exists(folder):
             os.makedirs(folder)
-        filename = os.path.join(folder, self.getCheckpointFile(iteration) + ".examples")
+        filename = os.path.join(folder, self.get_checkpoint_file(iteration) + ".examples")
         with open(filename, "wb+") as f:
             Pickler(f).dump(self.trainExamplesHistory)
         f.closed
 
-    def loadTrainExamples(self):
+    def load_train_examples(self):
         modelFile = os.path.join(
             self.args.load_folder_file[0], self.args.load_folder_file[1]
         )

@@ -4,7 +4,7 @@ import time
 
 import numpy as np
 
-from alpha_zero_general.connect4.Connect4Game import Connect4Game
+from alpha_zero_general.connect4.connect4_game import Connect4Game
 from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.type import BoardMatrix
 from alpha_zero_general.utils import dotdict
@@ -12,7 +12,7 @@ from alpha_zero_general.utils import dotdict
 log = logging.getLogger(__name__)
 
 
-from alpha_zero_general.connect4.keras.Connect4NNet import Connect4NNet as onnet
+from alpha_zero_general.connect4.keras.connect4_nnet import Connect4NNet as onnet
 
 args = dotdict(
     {
@@ -32,8 +32,8 @@ class NNetWrapper(NeuralNet):
     def __init__(self, game: Connect4Game):
         self.nnet = onnet(game, args)
         self.nnet.model.summary()
-        self.board_x, self.board_y = game.getBoardSize()
-        self.action_size = game.getActionSize()
+        self.board_x, self.board_y = game.get_board_size()
+        self.action_size = game.get_action_size()
 
     def train(self, examples: list[tuple[BoardMatrix, list[float], float]]) -> None:
         """
