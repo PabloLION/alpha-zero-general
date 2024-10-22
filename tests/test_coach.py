@@ -1,5 +1,6 @@
 import pytest
-from pytest_mock import mocker
+from pytest_mock import MockerFixture
+
 from alpha_zero_general.Coach import Coach
 from alpha_zero_general.connect4.Connect4Game import Connect4Game
 from alpha_zero_general.connect4.keras.NNet import NNetWrapper as nn
@@ -29,7 +30,7 @@ class TestCoach:
         )
         self.coach = Coach(self.game, self.nnet, self.args)
 
-    def test_executeEpisode(self, mocker):
+    def test_executeEpisode(self, mocker: MockerFixture):
         self.coach.mcts.getActionProb = mocker.MagicMock(return_value=[1])
         self.coach.game.getNextState = mocker.MagicMock(
             return_value=(self.game.getInitBoard(), 1)
@@ -39,7 +40,7 @@ class TestCoach:
         assert len(trainExamples) == 1
         assert trainExamples[0][2] == 1
 
-    def test_learn(self, mocker):
+    def test_learn(self, mocker: MockerFixture):
         self.coach.executeEpisode = mocker.MagicMock(
             return_value=[(self.game.getInitBoard(), 1, [1], 1)]
         )

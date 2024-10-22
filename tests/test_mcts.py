@@ -1,5 +1,7 @@
 import numpy as np
 import pytest
+from pytest_mock import MockerFixture
+
 from alpha_zero_general.connect4.Connect4Game import Connect4Game
 from alpha_zero_general.connect4.keras.NNet import NNetWrapper as nn
 from alpha_zero_general.MCTS import MCTS
@@ -21,7 +23,7 @@ class TestMCTS:
         assert len(probs) == self.game.getActionSize()
         assert np.isclose(sum(probs), 1)
 
-    def test_search(self, mocker):
+    def test_search(self, mocker: MockerFixture):
         mocker.patch(
             "alpha_zero_general.connect4.keras.NNetWrapper.predict",
             return_value=(np.array([1 / 7] * 7), 0),
