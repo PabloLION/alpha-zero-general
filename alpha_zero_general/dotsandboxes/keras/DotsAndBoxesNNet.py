@@ -1,3 +1,5 @@
+from typing import Any
+
 from tensorflow.keras.layers import (
     Activation,
     BatchNormalization,
@@ -8,8 +10,6 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
-
-from alpha_zero_general.Game import Any
 
 
 class DotsAndBoxesNNet:
