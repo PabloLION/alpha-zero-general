@@ -1,8 +1,12 @@
-import numpy as np
+from numpy import array2string, copy
 
-from alpha_zero_general.connect4.Connect4Logic import Board
+from alpha_zero_general.connect4.Connect4Logic import Connect4Board
 from alpha_zero_general.Game import Game
 from alpha_zero_general.type import BoardMatrix
+
+DEFAULT_CONNECT4_BOARD_HEIGHT = 6
+DEFAULT_CONNECT4_BOARD_WIDTH = 7
+DEFAULT_CONNECT4_BOARD_WIN_LENGTH = 4
 
 
 class Connect4Game(Game):
@@ -12,13 +16,13 @@ class Connect4Game(Game):
 
     def __init__(
         self,
-        height: int = DEFAULT_HEIGHT,
-        width: int = DEFAULT_WIDTH,
-        win_length: int = DEFAULT_WIN_LENGTH,
-        np_pieces: BoardMatrix = None,
+        height: int = DEFAULT_CONNECT4_BOARD_HEIGHT,
+        width: int = DEFAULT_CONNECT4_BOARD_WIDTH,
+        win_length: int = DEFAULT_CONNECT4_BOARD_WIN_LENGTH,
+        np_pieces: BoardMatrix | None = None,
     ):
         Game.__init__(self)
-        self._base_board = Board(height, width, win_length, np_pieces)
+        self._base_board = Connect4Board(height, width, win_length, np_pieces)
 
     def getInitBoard(self) -> BoardMatrix:
         return self._base_board.np_pieces
@@ -26,14 +30,14 @@ class Connect4Game(Game):
     def getBoardSize(self) -> tuple[int, int]:
         return (self._base_board.height, self._base_board.width)
 
-    def getActionSize() -> int:
+    def getActionSize(self) -> int:
         return self._base_board.width
 
     def getNextState(
         self, board: BoardMatrix, player: int, action: int
     ) -> tuple[BoardMatrix, int]:
         """Returns a copy of the board with updated move, original board is unmodified."""
-        b = self._base_board.with_np_pieces(np_pieces=np.copy(board))
+        b = self._base_board.with_np_pieces(np_pieces=copy(board))
         b.add_stone(action, player)
         return b.np_pieces, -player
 
@@ -69,7 +73,7 @@ class Connect4Game(Game):
         return [(board, pi), (board[:, ::-1], pi[::-1])]
 
     def stringRepresentation(self, board: BoardMatrix) -> str:
-        return board.tostring()
+        return array2string(board)
 
     @staticmethod
     def display(board: BoardMatrix) -> None:

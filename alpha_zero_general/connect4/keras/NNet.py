@@ -2,8 +2,11 @@ import logging
 import os
 import time
 
-from alpha_zero_general.type import BoardMatrix
+import numpy as np
+
+from alpha_zero_general.connect4.Connect4Game import Connect4Game
 from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.type import BoardMatrix
 from alpha_zero_general.utils import dotdict
 
 log = logging.getLogger(__name__)
@@ -25,7 +28,8 @@ args = dotdict(
 
 
 class NNetWrapper(NeuralNet):
-    def __init__(self, game: Any):
+
+    def __init__(self, game: Connect4Game):
         self.nnet = onnet(game, args)
         self.nnet.model.summary()
         self.board_x, self.board_y = game.getBoardSize()
