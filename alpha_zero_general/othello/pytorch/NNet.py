@@ -2,13 +2,12 @@ import os
 import time
 
 import numpy as np
-from tqdm import tqdm
-
 import torch
 import torch.optim as optim
+from tqdm import tqdm
 
-from NeuralNet import NeuralNet
-from utils import *
+from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.utils import *
 
 from .OthelloNNet import OthelloNNet as onnet
 

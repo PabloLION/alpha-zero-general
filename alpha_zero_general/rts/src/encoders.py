@@ -134,12 +134,12 @@ class OneHotEncoder(Encoder):
         :param board: normal board
         :return: new encoded board
         """
-        from rts.src.config import (
-            P_NAME_IDX,
+        from alpha_zero_general.rts.src.config import (
             A_TYPE_IDX,
-            HEALTH_IDX,
             CARRY_IDX,
+            HEALTH_IDX,
             MONEY_IDX,
+            P_NAME_IDX,
             TIME_IDX,
         )
 

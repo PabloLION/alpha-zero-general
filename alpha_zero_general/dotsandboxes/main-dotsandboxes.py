@@ -2,11 +2,10 @@ import logging
 
 import coloredlogs
 
-from Coach import Coach
-from utils import dotdict
-from dotsandboxes.keras.NNet import NNetWrapper as nn
-
-from dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
+from alpha_zero_general.Coach import Coach
+from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
+from alpha_zero_general.dotsandboxes.keras.NNet import NNetWrapper as nn
+from alpha_zero_general.utils import dotdict
 
 log = logging.getLogger(__name__)
 

@@ -11,12 +11,12 @@ import unreal_engine as ue
 # noinspection PyUnresolvedReferences
 from TFPluginAPI import TFPluginAPI
 
-from MCTS import MCTS
-from rts.RTSGame import RTSGame
-from rts.keras.NNet import NNetWrapper as NNet
-from rts.src.config import ACTS_REV, NUM_ACTS
-from rts.src.encoders import OneHotEncoder
-from utils import dotdict
+from alpha_zero_general.MCTS import MCTS
+from alpha_zero_general.rts.keras.NNet import NNetWrapper as NNet
+from alpha_zero_general.rts.RTSGame import RTSGame
+from alpha_zero_general.rts.src.config import ACTS_REV, NUM_ACTS
+from alpha_zero_general.rts.src.encoders import OneHotEncoder
+from alpha_zero_general.utils import dotdict
 
 """
 rts_ue4.py

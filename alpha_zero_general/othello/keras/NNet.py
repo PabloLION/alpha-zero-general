@@ -1,14 +1,14 @@
 import argparse
+import math
 import os
+import random
 import shutil
 import time
-import random
-import numpy as np
-import math
-from utils import *
-from alpha_zero_general.NeuralNet import NeuralNet
 
-import argparse
+import numpy as np
+
+from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.utils import *
 
 from .OthelloNNet import OthelloNNet as onnet
 

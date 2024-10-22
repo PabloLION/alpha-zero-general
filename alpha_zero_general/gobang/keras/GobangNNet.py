@@ -3,9 +3,9 @@ import argparse
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import *
 from tensorflow.keras.optimizers import *
-from utils import *
 
 from alpha_zero_general.type import Any
+from alpha_zero_general.utils import *
 
 
 class GobangNNet:

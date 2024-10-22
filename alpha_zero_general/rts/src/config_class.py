@@ -1,5 +1,5 @@
 # noinspection PyUnresolvedReferences
-from rts.src.config import Configuration
+from alpha_zero_general.rts.src.config import Configuration
 
 # Basic config:
 # CONFIG = Configuration()

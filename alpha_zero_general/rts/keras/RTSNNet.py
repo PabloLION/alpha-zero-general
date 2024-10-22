@@ -2,9 +2,9 @@ import os
 
 from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import (
-    Conv2D,
-    BatchNormalization,
     Activation,
+    BatchNormalization,
+    Conv2D,
     Dense,
     Dropout,
     Flatten,
@@ -12,7 +12,7 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.optimizers import Adam
 
-from rts.src.config import USE_TF_CPU, SHOW_TENSORFLOW_GPU
+from alpha_zero_general.rts.src.config import SHOW_TENSORFLOW_GPU, USE_TF_CPU
 
 if USE_TF_CPU:
     print("Using TensorFlow CPU")
@@ -34,7 +34,7 @@ class RTSNNet:
         :param game: game configuration
         :param encoder: Encoder, used to encode game boards
         """
-        from rts.src.config_class import CONFIG
+        from alpha_zero_general.rts.src.config_class import CONFIG
 
         # game params
         self.board_x, self.board_y, num_encoders = game.getBoardSize()

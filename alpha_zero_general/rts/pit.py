@@ -1,7 +1,6 @@
-from rts.src.config_class import CONFIG
-
 from alpha_zero_general import Arena
-from rts.RTSGame import display, RTSGame
+from alpha_zero_general.rts.RTSGame import RTSGame, display
+from alpha_zero_general.rts.src.config_class import CONFIG
 
 """
 rts/pit.py

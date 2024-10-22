@@ -1,16 +1,17 @@
 import os
-import numpy as np
+
 import Arena
-from MCTS import MCTS
-from utils import dotdict
-from dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
-from dotsandboxes.DotsAndBoxesPlayers import (
+import numpy as np
+
+from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
+from alpha_zero_general.dotsandboxes.DotsAndBoxesPlayers import (
+    GreedyRandomPlayer,
     HumanDotsAndBoxesPlayer,
     RandomPlayer,
-    GreedyRandomPlayer,
 )
-from dotsandboxes.keras.NNet import NNetWrapper
-
+from alpha_zero_general.dotsandboxes.keras.NNet import NNetWrapper
+from alpha_zero_general.MCTS import MCTS
+from alpha_zero_general.utils import dotdict
 
 g = DotsAndBoxesGame(n=3)
 

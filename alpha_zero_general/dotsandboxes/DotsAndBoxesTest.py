@@ -1,6 +1,8 @@
 import unittest
+
 import numpy as np
-from dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
+
+from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
 
 
 class DotsAndBoxesTests(unittest.TestCase):

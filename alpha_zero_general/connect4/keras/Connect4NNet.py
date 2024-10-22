@@ -5,7 +5,8 @@ from tensorflow.keras.activations import *
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import *
 from tensorflow.keras.optimizers import Adam
-from utils import *
+
+from alpha_zero_general.utils import *
 
 
 def relu_bn(inputs: Any) -> Any:

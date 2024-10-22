@@ -1,13 +1,14 @@
 import os
+
 import numpy as np
-from flask import Flask, request, Response
+from flask import Flask, Response, request
 
-from MCTS import MCTS
-
-from dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
-from dotsandboxes.keras.NNet import NNetWrapper
-from dotsandboxes.DotsAndBoxesPlayers import GreedyRandomPlayer
-from utils import dotdict
+from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
+from alpha_zero_general.dotsandboxes.DotsAndBoxesPlayers import \
+    GreedyRandomPlayer
+from alpha_zero_general.dotsandboxes.keras.NNet import NNetWrapper
+from alpha_zero_general.MCTS import MCTS
+from alpha_zero_general.utils import dotdict
 
 app = Flask(__name__)
 

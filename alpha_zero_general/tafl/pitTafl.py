@@ -1,14 +1,15 @@
-# Note: Run this file from Arena directory (the one above /tafl)
+# Note: Run this file from alpha_zero_general.Arena directory (the one above /tafl)
 
 import Arena
-from MCTS import MCTS
-from tafl.TaflGame import TaflGame, display
-from tafl.TaflPlayers import *
-
-# from tafl.keras.NNet import NNetWrapper as NNet
-
 import numpy as np
-from utils import *
+
+from alpha_zero_general.MCTS import MCTS
+from alpha_zero_general.tafl.TaflGame import TaflGame, display
+from alpha_zero_general.tafl.TaflPlayers import *
+from alpha_zero_general.utils import *
+
+# from alpha_zero_general.tafl.keras.NNet import NNetWrapper as NNet
+
 
 """
 use this script to play any two agents against each other, or play manually with

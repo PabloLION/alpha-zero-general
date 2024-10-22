@@ -1,17 +1,19 @@
 import argparse
-import os
-import shutil
-import time
-import random
-import numpy as np
 import math
+import os
+import random
+import shutil
 import sys
+import time
+
+import numpy as np
 
 sys.path.append("..")
-from utils import *
-from alpha_zero_general.NeuralNet import NeuralNet
-
 import argparse
+
+from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.utils import *
+
 from .TicTacToeNNet import TicTacToeNNet as onnet
 
 """

@@ -1,7 +1,7 @@
-from Coach import Coach
-from tafl.TaflGame import TaflGame as Game
-from tafl.pytorch.NNet import NNetWrapper as nn
-from utils import *
+from alpha_zero_general.Coach import Coach
+from alpha_zero_general.tafl.pytorch.NNet import NNetWrapper as nn
+from alpha_zero_general.tafl.TaflGame import TaflGame as Game
+from alpha_zero_general.utils import *
 
 args = dotdict(
     {

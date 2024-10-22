@@ -3,8 +3,8 @@ import os
 import numpy as np
 
 from alpha_zero_general.NeuralNet import NeuralNet
-from rts.keras.RTSNNet import RTSNNet
-from rts.src.config import VERBOSE_MODEL_FIT
+from alpha_zero_general.rts.keras.RTSNNet import RTSNNet
+from alpha_zero_general.rts.src.config import VERBOSE_MODEL_FIT
 
 """
 NNet.py
@@ -23,7 +23,7 @@ class NNetWrapper(NeuralNet):
         :param game: game configuration
         :param encoder: encoded that will be used for training and later predictions
         """
-        from rts.src.config_class import CONFIG
+        from alpha_zero_general.rts.src.config_class import CONFIG
 
         # default
         encoder = encoder or CONFIG.nnet_args.encoder
@@ -39,7 +39,7 @@ class NNetWrapper(NeuralNet):
         Encodes examples using one of 2 encoders and starts fitting.
         :param examples: list of examples, each example is of form (board, pi, v)
         """
-        from rts.src.config_class import CONFIG
+        from alpha_zero_general.rts.src.config_class import CONFIG
 
         input_boards, target_pis, target_vs = list(zip(*examples))
         input_boards = np.asarray(input_boards)

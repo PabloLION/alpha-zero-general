@@ -5,8 +5,8 @@ from typing import List, Tuple
 import numpy as np
 
 sys.path.append("../..")
-from rts.src.encoders import OneHotEncoder, NumericEncoder
-from utils import dotdict
+from alpha_zero_general.rts.src.encoders import NumericEncoder, OneHotEncoder
+from alpha_zero_general.utils import dotdict
 
 # ####################################################################################
 # ###################### INITIAL CONFIGS AND OUTPUTS ##################################
@@ -531,7 +531,11 @@ class Configuration:
             onehot_encoder: bool,
             player_model_file: str,
         ):
-            from rts.RTSPlayers import RandomPlayer, GreedyRTSPlayer, HumanRTSPlayer
+            from alpha_zero_general.rts.RTSPlayers import (
+                GreedyRTSPlayer,
+                HumanRTSPlayer,
+                RandomPlayer,
+            )
 
             if player_type == "nnet":
                 if player_config is None:
@@ -551,8 +555,9 @@ class Configuration:
 
         class _PitNNetPlayer:
             def __init__(self, g, player_config, onehot_encoder, player_model_file):
-                from rts.keras.NNet import NNetWrapper as NNet
                 from MCTS import MCTS
+
+                from alpha_zero_general.rts.keras.NNet import NNetWrapper as NNet
 
                 if onehot_encoder:
                     encoder = OneHotEncoder()

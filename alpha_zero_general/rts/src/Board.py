@@ -4,18 +4,18 @@ from typing import Any
 import numpy as np
 
 sys.path.append("../..")
-from rts.src.config import (
-    d_a_type,
-    d_acts,
+from alpha_zero_general.rts.src.config import (
     A_TYPE_IDX,
-    P_NAME_IDX,
+    ACTS_REV,
     CARRY_IDX,
+    HEALTH_IDX,
     MONEY_IDX,
     NUM_ACTS,
-    ACTS_REV,
     NUM_ENCODERS,
-    HEALTH_IDX,
+    P_NAME_IDX,
     TIME_IDX,
+    d_a_type,
+    d_acts,
 )
 
 """
@@ -41,7 +41,7 @@ class Board:
         :param player: int - player that is executing action
         :return: /
         """
-        from rts.src.config_class import CONFIG
+        from alpha_zero_general.rts.src.config_class import CONFIG
 
         if player == 1:
             config = CONFIG.player1_config

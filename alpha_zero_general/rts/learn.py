@@ -1,12 +1,11 @@
-from rts.src.config_class import CONFIG
-
 from alpha_zero_general.Coach import Coach
+from alpha_zero_general.rts.keras.NNet import NNetWrapper as nn
 
-# from rts.configurations.ConfigWrapper import LearnArgs
-from rts.RTSGame import RTSGame as Game
-from rts.keras.NNet import NNetWrapper as nn
+# from alpha_zero_general.rts.configurations.ConfigWrapper import LearnArgs
+from alpha_zero_general.rts.RTSGame import RTSGame as Game
+from alpha_zero_general.rts.src.config_class import CONFIG
 
-# from rts.src.config import grid_size
+# from alpha_zero_general.rts.src.config import grid_size
 
 """
 rts/learn.py

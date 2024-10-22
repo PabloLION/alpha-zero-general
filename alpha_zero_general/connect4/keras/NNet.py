@@ -8,10 +8,10 @@ import time
 
 import coloredlogs  # type: ignore
 import numpy as np
-from alpha_zero_general.NeuralNet import NeuralNet
-from utils import *
 
+from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.type import Any
+from alpha_zero_general.utils import *
 
 log = logging.getLogger(__name__)
 

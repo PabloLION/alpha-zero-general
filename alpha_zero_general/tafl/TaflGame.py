@@ -1,12 +1,15 @@
 from __future__ import print_function
+
 import sys
 
 sys.path.append("..")
-from Game import Game
-from .TaflLogic import Board
 import numpy as np
-from .GameVariants import *
+
+from alpha_zero_general.Game import Game
+
 from .Digits import int2base
+from .GameVariants import *
+from .TaflLogic import Board
 
 
 class TaflGame(Game):

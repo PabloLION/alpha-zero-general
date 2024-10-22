@@ -1,19 +1,19 @@
 import ctypes
 import sys
-from typing import Any, Tuple, Optional
+from typing import Any, Optional, Tuple
 
 import numpy as np
 
 sys.path.append("../..")
-from rts.src.config import (
-    P_NAME_IDX,
+from alpha_zero_general.rts.src.config import (
     A_TYPE_IDX,
-    d_a_color,
-    d_type_rev,
-    MONEY_IDX,
-    TIME_IDX,
     CARRY_IDX,
     HEALTH_IDX,
+    MONEY_IDX,
+    P_NAME_IDX,
+    TIME_IDX,
+    d_a_color,
+    d_type_rev,
 )
 
 """
