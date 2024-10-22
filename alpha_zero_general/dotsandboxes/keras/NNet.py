@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 import numpy as np
 
@@ -6,7 +7,7 @@ from alpha_zero_general.dotsandboxes.keras.DotsAndBoxesNNet import (
     DotsAndBoxesNNet as onnet,
 )
 from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.type import Any, BoardMatrix
+from alpha_zero_general.type import BoardMatrix
 from alpha_zero_general.utils import dotdict
 
 args = dotdict(
