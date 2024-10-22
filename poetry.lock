@@ -1890,6 +1890,58 @@ tests = ["autopep8", "flake8", "isort", "llnl-hatchet", "numpy", "pytest", "scip
 tutorials = ["matplotlib", "pandas", "tabulate"]
 
 [[package]]
+name = "types-protobuf"
+version = "5.28.0.20240924"
+description = "Typing stubs for protobuf"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-protobuf-5.28.0.20240924.tar.gz", hash = "sha256:d181af8a256e5a91ce8d5adb53496e880efd9144c7d54483e3653332b60296f0"},
+    {file = "types_protobuf-5.28.0.20240924-py3-none-any.whl", hash = "sha256:5cecf612ccdefb7dc95f7a51fb502902f20fc2e6681cd500184aaa1b3931d6a7"},
+]
+
+[[package]]
+name = "types-requests"
+version = "2.31.0.6"
+description = "Typing stubs for requests"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "types-requests-2.31.0.6.tar.gz", hash = "sha256:cd74ce3b53c461f1228a9b783929ac73a666658f223e28ed29753771477b3bd0"},
+    {file = "types_requests-2.31.0.6-py3-none-any.whl", hash = "sha256:a2db9cb228a81da8348b49ad6db3f5519452dd20a9c1e1a868c83c5fe88fd1a9"},
+]
+
+[package.dependencies]
+types-urllib3 = "*"
+
+[[package]]
+name = "types-tensorflow"
+version = "2.17.0.20240920"
+description = "Typing stubs for tensorflow"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-tensorflow-2.17.0.20240920.tar.gz", hash = "sha256:a5c3d544a98b1fe22f91fcc002584ae6c618efd8caaac3046f5d645ee8e5f158"},
+    {file = "types_tensorflow-2.17.0.20240920-py3-none-any.whl", hash = "sha256:a2041590fa3186d01d414c4f77db233d5d6beffc9f66cd7bb60b4c796bd7d7ed"},
+]
+
+[package.dependencies]
+numpy = ">=1.20,<2.1.0"
+types-protobuf = "*"
+types-requests = "*"
+
+[[package]]
+name = "types-urllib3"
+version = "1.26.25.14"
+description = "Typing stubs for urllib3"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-urllib3-1.26.25.14.tar.gz", hash = "sha256:229b7f577c951b8c1b92c1bc2b2fdb0b49847bd2af6d1cc2a2e3dd340f3bda8f"},
+    {file = "types_urllib3-1.26.25.14-py3-none-any.whl", hash = "sha256:9683bbb7fb72e32bfe9d2be6e04875fbe1b3eeec3cbb4ea231435aa7fd6b4f0e"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.12.2"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -2045,4 +2097,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "f050494ff4755541bcf9800af80ab8c3f9bdc4e165fece3ae27174a1ba635ec6"
+content-hash = "16e9b75e749c410a0a555db65cc7caf341a6d0dacec2d1826c66993f33312896"

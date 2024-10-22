@@ -1,13 +1,12 @@
 # Note: Run this file from alpha_zero_general.Arena directory (the one above /tafl)
 
-import Arena
-
+from alpha_zero_general.Arena import Arena
 from alpha_zero_general.tafl.TaflGame import TaflGame, display
-from alpha_zero_general.tafl.TaflPlayers import *
-from alpha_zero_general.utils import *
-
-# from alpha_zero_general.tafl.keras.NNet import NNetWrapper as NNet
-
+from alpha_zero_general.tafl.TaflPlayers import (
+    GreedyTaflPlayer,
+    HumanTaflPlayer,
+    RandomTaflPlayer,
+)
 
 """
 use this script to play any two agents against each other, or play manually with
@@ -29,6 +28,6 @@ hp = HumanTaflPlayer(g).play
 # n1p = lambda x: np.argmax(mcts1.getActionProb(x, temp=0))
 
 
-arena = Arena.Arena(hp, gp, g, display=display)
+arena = Arena(hp, gp, g, display=display)
 # arena = Arena.Arena(gp, rp, g, display=display)
 print(arena.playGames(2, verbose=True))

@@ -3,9 +3,13 @@ import numpy as np
 import alpha_zero_general.Arena as Arena
 from alpha_zero_general.MCTS import MCTS
 from alpha_zero_general.othello.OthelloGame import OthelloGame
-from alpha_zero_general.othello.OthelloPlayers import *
+from alpha_zero_general.othello.OthelloPlayers import (
+    GreedyOthelloPlayer,
+    HumanOthelloPlayer,
+    RandomPlayer,
+)
 from alpha_zero_general.othello.pytorch.NNet import NNetWrapper as NNet
-from alpha_zero_general.utils import *
+from alpha_zero_general.utils import dotdict
 
 """
 use this script to play any two agents against each other, or play manually with
