@@ -3,9 +3,9 @@ import math
 
 import numpy as np
 
-from alpha_zero_general.type import Args
-from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.Game import Game
+from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.type import MctsArgs
 
 EPS = 1e-8
 
@@ -17,7 +17,7 @@ class MCTS:
     This class handles the MCTS tree.
     """
 
-    def __init__(self, game: Game, nnet: NeuralNet, args: Args):
+    def __init__(self, game: Game, nnet: NeuralNet, args: MctsArgs):
         self.game = game
         self.nnet = nnet
         self.args = args

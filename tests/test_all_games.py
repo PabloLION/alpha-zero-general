@@ -22,11 +22,13 @@ import unittest
 
 import numpy as np
 
-import Arena
+import alpha_zero_general.Arena
 from alpha_zero_general.connect4.Connect4Game import Connect4Game
 from alpha_zero_general.connect4.keras.NNet import NNetWrapper as Connect4KerasNNet
 from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
-from alpha_zero_general.dotsandboxes.keras.NNet import NNetWrapper as DotsAndBoxesKerasNNet
+from alpha_zero_general.dotsandboxes.keras.NNet import (
+    NNetWrapper as DotsAndBoxesKerasNNet,
+)
 from alpha_zero_general.gobang.GobangGame import GobangGame
 from alpha_zero_general.gobang.keras.NNet import NNetWrapper as GobangKerasNNet
 from alpha_zero_general.MCTS import MCTS
@@ -41,8 +43,12 @@ from alpha_zero_general.tafl.pytorch.NNet import NNetWrapper as TaflPytorchNNet
 from alpha_zero_general.tafl.TaflGame import TaflGame
 from alpha_zero_general.tictactoe.keras.NNet import NNetWrapper as TicTacToeKerasNNet
 from alpha_zero_general.tictactoe.TicTacToeGame import TicTacToeGame
-from alpha_zero_general.tictactoe_3d.keras.NNet import NNetWrapper as TicTacToe3DKerasNNet
-from alpha_zero_general.tictactoe_3d.TicTacToeGame import TicTacToeGame as TicTacToe3DGame
+from alpha_zero_general.tictactoe_3d.keras.NNet import (
+    NNetWrapper as TicTacToe3DKerasNNet,
+)
+from alpha_zero_general.tictactoe_3d.TicTacToeGame import (
+    TicTacToeGame as TicTacToe3DGame,
+)
 from alpha_zero_general.utils import *
 
 

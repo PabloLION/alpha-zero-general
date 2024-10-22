@@ -23,3 +23,12 @@ class BoardState(TypedDict):
 class WinState(NamedTuple):
     is_ended: bool
     winner: int | None
+
+
+MctsArgs = TypedDict(
+    "MctsArgs",
+    {
+        "numMCTSSims": int,
+        "cpuct": float,
+    },
+)
