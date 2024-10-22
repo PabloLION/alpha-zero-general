@@ -1,4 +1,4 @@
-from alpha_zero_general.type import Game
+from alpha_zero_general.Game import Game
 import numpy as np
 import subprocess
 

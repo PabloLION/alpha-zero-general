@@ -1,5 +1,6 @@
 import numpy as np
 from .GameVariants import Tafl
+from alpha_zero_general.type import WinState
 
 
 class Board:

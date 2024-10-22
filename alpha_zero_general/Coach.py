@@ -10,11 +10,11 @@ from tqdm import tqdm
 
 from alpha_zero_general.Arena import Arena
 from alpha_zero_general.MCTS import MCTS
+from alpha_zero_general.Game import Game
 
 log = logging.getLogger(__name__)
 
 Player = Callable[[Any], int]
-Game = Any
 Display = Callable[[Any], None]
 Board = Any
 TrainExample = tuple[Any, int, list[float], float]

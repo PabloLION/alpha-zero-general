@@ -9,7 +9,7 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
-from alpha_zero_general.type import Any
+from alpha_zero_general.Game import Any
 
 
 class DotsAndBoxesNNet:
