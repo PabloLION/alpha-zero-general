@@ -5,10 +5,16 @@ from typing import Any, Optional, Tuple
 import numpy as np
 
 sys.path.append("../..")
-from alpha_zero_general.rts.src.config import (A_TYPE_IDX, CARRY_IDX,
-                                               HEALTH_IDX, MONEY_IDX,
-                                               P_NAME_IDX, TIME_IDX, d_a_color,
-                                               d_type_rev)
+from alpha_zero_general.rts.src.config import (
+    A_TYPE_IDX,
+    CARRY_IDX,
+    HEALTH_IDX,
+    MONEY_IDX,
+    P_NAME_IDX,
+    TIME_IDX,
+    d_a_color,
+    d_type_rev,
+)
 
 """
 rts_pygame.py

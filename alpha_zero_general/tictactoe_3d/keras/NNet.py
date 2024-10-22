@@ -7,9 +7,8 @@ import numpy as np
 sys.path.append("..")
 
 from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.tictactoe_3d.keras.TicTacToeNNet import \
-    TicTacToeNNet as onnet
-from alpha_zero_general.utils import *
+from alpha_zero_general.tictactoe_3d.keras.TicTacToeNNet import TicTacToeNNet as onnet
+from alpha_zero_general.utils import dotdict
 
 """
 NeuralNet wrapper class for the TicTacToeNNet.

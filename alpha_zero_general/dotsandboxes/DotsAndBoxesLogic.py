@@ -1,7 +1,6 @@
 import numpy as np
 
 
-
 class Board:
     def __init__(self, n: int = 5):
         "Set up initial board configuration."

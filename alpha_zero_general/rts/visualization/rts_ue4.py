@@ -3,6 +3,7 @@ import os
 
 import numpy as np
 import tensorflow as tf
+
 # noinspection PyUnresolvedReferences
 # noinspection PyUnresolvedReferences
 from TFPluginAPI import TFPluginAPI

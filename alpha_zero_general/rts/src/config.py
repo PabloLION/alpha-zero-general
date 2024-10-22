@@ -530,9 +530,11 @@ class Configuration:
             onehot_encoder: bool,
             player_model_file: str,
         ):
-            from alpha_zero_general.rts.RTSPlayers import (GreedyRTSPlayer,
-                                                           HumanRTSPlayer,
-                                                           RandomPlayer)
+            from alpha_zero_general.rts.RTSPlayers import (
+                GreedyRTSPlayer,
+                HumanRTSPlayer,
+                RandomPlayer,
+            )
 
             if player_type == "nnet":
                 if player_config is None:
@@ -554,8 +556,7 @@ class Configuration:
             def __init__(self, g, player_config, onehot_encoder, player_model_file):
                 from MCTS import MCTS
 
-                from alpha_zero_general.rts.keras.NNet import \
-                    NNetWrapper as NNet
+                from alpha_zero_general.rts.keras.NNet import NNetWrapper as NNet
 
                 if onehot_encoder:
                     encoder = OneHotEncoder()

@@ -24,33 +24,32 @@ import numpy as np
 
 from alpha_zero_general.Arena import Arena
 from alpha_zero_general.connect4.Connect4Game import Connect4Game
-from alpha_zero_general.connect4.keras.NNet import \
-    NNetWrapper as Connect4KerasNNet
+from alpha_zero_general.connect4.keras.NNet import NNetWrapper as Connect4KerasNNet
 from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
-from alpha_zero_general.dotsandboxes.keras.NNet import \
-    NNetWrapper as DotsAndBoxesKerasNNet
+from alpha_zero_general.dotsandboxes.keras.NNet import (
+    NNetWrapper as DotsAndBoxesKerasNNet,
+)
 from alpha_zero_general.gobang.GobangGame import GobangGame
 from alpha_zero_general.gobang.keras.NNet import NNetWrapper as GobangKerasNNet
 from alpha_zero_general.MCTS import MCTS
-from alpha_zero_general.othello.keras.NNet import \
-    NNetWrapper as OthelloKerasNNet
+from alpha_zero_general.othello.keras.NNet import NNetWrapper as OthelloKerasNNet
 from alpha_zero_general.othello.OthelloGame import OthelloGame
 from alpha_zero_general.othello.OthelloPlayers import RandomPlayer
-from alpha_zero_general.othello.pytorch.NNet import \
-    NNetWrapper as OthelloPytorchNNet
+from alpha_zero_general.othello.pytorch.NNet import NNetWrapper as OthelloPytorchNNet
 from alpha_zero_general.rts.keras.NNet import NNetWrapper as RTSKerasNNet
 from alpha_zero_general.rts.RTSGame import RTSGame
 from alpha_zero_general.tafl.keras.NNet import NNetWrapper as TaflKerasNNet
 from alpha_zero_general.tafl.pytorch.NNet import NNetWrapper as TaflPytorchNNet
 from alpha_zero_general.tafl.TaflGame import TaflGame
-from alpha_zero_general.tictactoe.keras.NNet import \
-    NNetWrapper as TicTacToeKerasNNet
+from alpha_zero_general.tictactoe.keras.NNet import NNetWrapper as TicTacToeKerasNNet
 from alpha_zero_general.tictactoe.TicTacToeGame import TicTacToeGame
-from alpha_zero_general.tictactoe_3d.keras.NNet import \
-    NNetWrapper as TicTacToe3DKerasNNet
-from alpha_zero_general.tictactoe_3d.TicTacToeGame import \
-    TicTacToeGame as TicTacToe3DGame
-from alpha_zero_general.utils import *
+from alpha_zero_general.tictactoe_3d.keras.NNet import (
+    NNetWrapper as TicTacToe3DKerasNNet,
+)
+from alpha_zero_general.tictactoe_3d.TicTacToeGame import (
+    TicTacToeGame as TicTacToe3DGame,
+)
+from alpha_zero_general.utils import dotdict
 
 
 class TestAllGames(unittest.TestCase):

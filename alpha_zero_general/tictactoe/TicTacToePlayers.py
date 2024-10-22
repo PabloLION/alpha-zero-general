@@ -1,6 +1,5 @@
 import numpy as np
 
-
 """
 Random and Human-ineracting players for the game of TicTacToe.
 

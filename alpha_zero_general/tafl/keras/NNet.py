@@ -8,7 +8,7 @@ sys.path.append("../..")
 
 from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.tafl.keras.TaflNNet import TaflNNet as onnet
-from alpha_zero_general.utils import *
+from alpha_zero_general.utils import dotdict
 
 args = dotdict(
     {

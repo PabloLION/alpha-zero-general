@@ -1,4 +1,3 @@
-
 """
 Author: Eric P. Nichols
 Date: Feb 8, 2008.

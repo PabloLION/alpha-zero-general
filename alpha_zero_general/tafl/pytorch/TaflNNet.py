@@ -7,7 +7,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-
 class TaflNNet(nn.Module):
     def __init__(self, game, args):
         # game params

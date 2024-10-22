@@ -7,13 +7,22 @@ import numpy as np
 import pygame
 from pygame.rect import Rect
 
-from alpha_zero_general.rts.src.config import (A_TYPE_IDX, ACTS, ACTS_REV, FPS,
-                                               NUM_ACTS, P_NAME_IDX, d_a_type,
-                                               d_user_shortcuts,
-                                               d_user_shortcuts_rev)
-from alpha_zero_general.rts.visualization.rts_pygame import (init_visuals,
-                                                             message_display,
-                                                             update_graphics)
+from alpha_zero_general.rts.src.config import (
+    A_TYPE_IDX,
+    ACTS,
+    ACTS_REV,
+    FPS,
+    NUM_ACTS,
+    P_NAME_IDX,
+    d_a_type,
+    d_user_shortcuts,
+    d_user_shortcuts_rev,
+)
+from alpha_zero_general.rts.visualization.rts_pygame import (
+    init_visuals,
+    message_display,
+    update_graphics,
+)
 from alpha_zero_general.utils import dotdict
 
 """

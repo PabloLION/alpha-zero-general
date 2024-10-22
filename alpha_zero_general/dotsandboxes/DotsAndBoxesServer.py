@@ -4,8 +4,7 @@ import numpy as np
 from flask import Flask, Response, request
 
 from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
-from alpha_zero_general.dotsandboxes.DotsAndBoxesPlayers import \
-    GreedyRandomPlayer
+from alpha_zero_general.dotsandboxes.DotsAndBoxesPlayers import GreedyRandomPlayer
 from alpha_zero_general.dotsandboxes.keras.NNet import NNetWrapper
 from alpha_zero_general.MCTS import MCTS
 from alpha_zero_general.utils import dotdict

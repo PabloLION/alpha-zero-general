@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.othello.pytorch.OthelloNNet import OthelloNNet as onnet
-from alpha_zero_general.utils import *
+from alpha_zero_general.utils import AverageMeter, dotdict
 
 args = dotdict(
     {
