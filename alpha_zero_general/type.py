@@ -1,26 +1,26 @@
 from pathlib import Path
-from typing import Any, Callable, NamedTuple, TypeAlias, TypedDict, Union
+from typing import Any, Callable, NamedTuple, TypeAlias, TypedDict, TypeVar, Union
 
-import numpy as np
+from numpy import dtype, int8, ndarray
 
-Player = Callable[[Union[np.ndarray[Any, Any], list[list[int]]]], int]
-Display = Callable[[Union[np.ndarray[Any, Any], list[list[int]]]], None]
-TrainExample = tuple[
-    Union[np.ndarray[Any, Any], list[list[int]]], int, list[float], float
-]
+Player = Callable[[Union[ndarray[Any, Any], list[list[int]]]], int]
+Display = Callable[[Union[ndarray[Any, Any], list[list[int]]]], None]
+TrainExample = tuple[Union[ndarray[Any, Any], list[list[int]]], int, list[float], float]
 TrainExamplesHistory = list[list[TrainExample]]
 CheckpointFile = Path
 TrainExamplesFile = Path
 
-BoardDataType: TypeAlias = np.int8
+
+BoardDataType: TypeAlias = int8
 BoardShapeType: TypeAlias = Any
-BoardMatrix: TypeAlias = np.ndarray[BoardShapeType, BoardDataType]
+BoardMatrix: TypeAlias = ndarray[BoardShapeType, dtype[BoardDataType]]
+
 
 class BoardState(TypedDict):
     height: int
     width: int
     win_length: int
-    np_pieces: np.ndarray[Any, Any]
+    np_pieces: BoardMatrix
 
 
 class WinState(NamedTuple):
