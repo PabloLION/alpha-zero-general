@@ -14,7 +14,9 @@ class NeuralNet:
     """
 
     def __init__(self, game: Game):
-        pass
+        raise NotImplementedError(
+            "The __init__ method must be implemented by the subclass"
+        )
 
     def train(self, examples: list[tuple]):
         """
@@ -27,7 +29,7 @@ class NeuralNet:
                       the given board, and v is its value. The examples has
                       board in its canonical form.
         """
-        pass
+        raise NotImplementedError("train method must be implemented by the subclass")
 
     def predict(self, board: Any) -> tuple:
         """
@@ -39,17 +41,21 @@ class NeuralNet:
                 game.getActionSize
             v: a float in [-1,1] that gives the value of the current board
         """
-        pass
+        raise NotImplementedError("predict method must be implemented by the subclass")
 
     def save_checkpoint(self, folder: str, filename: str) -> None:
         """
         Saves the current neural network (with its parameters) in
         folder/filename
         """
-        pass
+        raise NotImplementedError(
+            "save_checkpoint method must be implemented by the subclass"
+        )
 
     def load_checkpoint(self, folder: str, filename: str) -> None:
         """
         Loads parameters of the neural network from folder/filename
         """
-        pass
+        raise NotImplementedError(
+            "load_checkpoint method must be implemented by the subclass"
+        )
