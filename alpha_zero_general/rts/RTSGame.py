@@ -13,6 +13,7 @@ from alpha_zero_general.rts.src.config import (
     TIME_IDX,
 )
 from alpha_zero_general.rts.src.config_class import CONFIG
+from alpha_zero_general.type import BoardMatrix
 
 """ USE_TIMEOUT, MAX_TIME, d_a_type, a_max_health, INITIAL_GOLD, TIMEOUT, visibility"""
 
@@ -38,7 +39,7 @@ class RTSGame(Game):
         """
         self.initial_board_config = board_config
 
-    def getInitBoard(self) -> np.ndarray:
+    def getInitBoard(self) -> BoardMatrix:
         """
         :return: Returns new board from initial_board_config. That config can be dynamically changed as game progresses.
         """
@@ -68,8 +69,8 @@ class RTSGame(Game):
         return self.n * self.n * NUM_ACTS + 1
 
     def getNextState(
-        self, board: np.ndarray, player: int, action: int
-    ) -> Tuple[np.ndarray, int]:
+        self, board: BoardMatrix, player: int, action: int
+    ) -> Tuple[BoardMatrix, int]:
         """
         Gets next state for board. It also updates tick for board as game tick iterations are transfered within board as 6. parameter
         :param board: current board
@@ -101,7 +102,7 @@ class RTSGame(Game):
 
         return b.pieces, -player
 
-    def getValidMoves(self, board: np.ndarray, player: int):
+    def getValidMoves(self, board: BoardMatrix, player: int):
         valids = []
         b = Board(self.n)
         b.pieces = np.copy(board)
@@ -124,7 +125,7 @@ class RTSGame(Game):
         return np.array(valids)
 
     # noinspection PyUnusedLocal
-    def getGameEnded(self, board: np.ndarray, player) -> float:
+    def getGameEnded(self, board: BoardMatrix, player) -> float:
         """
         Ok, this function is where it gets complicated...
         See, its  hard to decide when to finish rts game, as players might not have enough time to execute wanted actions, but in the other hand, if players are left to play for too long, games become very long, or even 'infinitely' long
@@ -185,12 +186,12 @@ class RTSGame(Game):
         # continue game
         return 0
 
-    def getCanonicalForm(self, board: np.ndarray, player: int):
+    def getCanonicalForm(self, board: BoardMatrix, player: int):
         b = np.copy(board)
         b[:, :, P_NAME_IDX] = b[:, :, P_NAME_IDX] * player
         return b
 
-    def getSymmetries(self, board: np.ndarray, pi):
+    def getSymmetries(self, board: BoardMatrix, pi):
         # mirror, rotational
         assert len(pi) == self.n * self.n * NUM_ACTS + 1  # 1 for pass
         pi_board = np.reshape(pi[:-1], (self.n, self.n, NUM_ACTS))
@@ -205,10 +206,10 @@ class RTSGame(Game):
                 return_list += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return return_list
 
-    def stringRepresentation(self, board: np.ndarray):
+    def stringRepresentation(self, board: BoardMatrix):
         return board.tostring()
 
-    def getScore(self, board: np.array, player: int):
+    def getScore(self, board: BoardMatrix, player: int):
         """
         Uses one of 3 elo functions that determine better player
         :param board: game state

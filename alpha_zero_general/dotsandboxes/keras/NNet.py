@@ -6,7 +6,7 @@ from alpha_zero_general.dotsandboxes.keras.DotsAndBoxesNNet import (
     DotsAndBoxesNNet as onnet,
 )
 from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.type import Any
+from alpha_zero_general.type import Any, BoardMatrix
 from alpha_zero_general.utils import dotdict
 
 args = dotdict(
@@ -21,7 +21,7 @@ args = dotdict(
 )
 
 
-def normalize_score(board: np.ndarray) -> None:
+def normalize_score(board: BoardMatrix) -> None:
     p1_score = board[:, 0, -1]
     p2_score = board[:, 1, -1]
     score = p1_score - p2_score
@@ -46,7 +46,7 @@ class NNetWrapper(NeuralNet):
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
 
-    def train(self, examples: list[tuple[np.ndarray, list[float], float]]) -> None:
+    def train(self, examples: list[tuple[BoardMatrix, list[float], float]]) -> None:
         """
         examples: list of examples, each example is of form (board, pi, v)
         """
@@ -64,7 +64,7 @@ class NNetWrapper(NeuralNet):
             epochs=args.epochs,
         )
 
-    def predict(self, board: np.ndarray) -> tuple[np.ndarray, float]:
+    def predict(self, board: BoardMatrix) -> tuple[np.ndarray, float]:
         """
         board: np array with board
         """

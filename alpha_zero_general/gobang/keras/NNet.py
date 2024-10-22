@@ -4,7 +4,7 @@ import numpy as np
 
 from alpha_zero_general.gobang.keras.GobangNNet import GobangNNet as onnet
 from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.type import Any
+from alpha_zero_general.type import Any, BoardMatrix
 from alpha_zero_general.utils import dotdict
 
 args = dotdict(
@@ -25,7 +25,7 @@ class NNetWrapper(NeuralNet):
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
 
-    def train(self, examples: list[tuple[np.ndarray, list[float], float]]) -> None:
+    def train(self, examples: list[tuple[BoardMatrix, list[float], float]]) -> None:
         """
         examples: list of examples, each example is of form (board, pi, v)
         """
@@ -40,7 +40,7 @@ class NNetWrapper(NeuralNet):
             epochs=args.epochs,
         )
 
-    def predict(self, board: np.ndarray) -> tuple[np.ndarray, float]:
+    def predict(self, board: BoardMatrix) -> tuple[np.ndarray, float]:
         """
         board: np array with board
         """

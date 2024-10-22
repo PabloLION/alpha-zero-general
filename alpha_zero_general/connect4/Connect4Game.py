@@ -2,6 +2,7 @@ import numpy as np
 
 from alpha_zero_general.connect4.Connect4Logic import Board
 from alpha_zero_general.Game import Game
+from alpha_zero_general.type import BoardMatrix
 
 
 class Connect4Game(Game):
@@ -14,12 +15,12 @@ class Connect4Game(Game):
         height: int = None,
         width: int = None,
         win_length: int = None,
-        np_pieces: np.ndarray = None,
+        np_pieces: BoardMatrix = None,
     ):
         Game.__init__(self)
         self._base_board = Board(height, width, win_length, np_pieces)
 
-    def getInitBoard(self) -> np.ndarray:
+    def getInitBoard(self) -> BoardMatrix:
         return self._base_board.np_pieces
 
     def getBoardSize(self) -> tuple[int, int]:
@@ -29,18 +30,18 @@ class Connect4Game(Game):
         return self._base_board.width
 
     def getNextState(
-        self, board: np.ndarray, player: int, action: int
-    ) -> tuple[np.ndarray, int]:
+        self, board: BoardMatrix, player: int, action: int
+    ) -> tuple[BoardMatrix, int]:
         """Returns a copy of the board with updated move, original board is unmodified."""
         b = self._base_board.with_np_pieces(np_pieces=np.copy(board))
         b.add_stone(action, player)
         return b.np_pieces, -player
 
-    def getValidMoves(self, board: np.ndarray, player: int) -> np.ndarray:
+    def getValidMoves(self, board: BoardMatrix, player: int) -> BoardMatrix:
         "Any zero value in top row in a valid move"
         return self._base_board.with_np_pieces(np_pieces=board).get_valid_moves()
 
-    def getGameEnded(self, board: np.ndarray, player: int) -> float:
+    def getGameEnded(self, board: BoardMatrix, player: int) -> float:
         b = self._base_board.with_np_pieces(np_pieces=board)
         winstate = b.get_win_state()
         if winstate.is_ended:
@@ -57,21 +58,21 @@ class Connect4Game(Game):
             # 0 used to represent unfinished game.
             return 0
 
-    def getCanonicalForm(self, board: np.ndarray, player: int) -> np.ndarray:
+    def getCanonicalForm(self, board: BoardMatrix, player: int) -> BoardMatrix:
         # Flip player from 1 to -1
         return board * player
 
     def getSymmetries(
-        self, board: np.ndarray, pi: list[float]
-    ) -> list[tuple[np.ndarray, list[float]]]:
+        self, board: BoardMatrix, pi: list[float]
+    ) -> list[tuple[BoardMatrix, list[float]]]:
         """Board is left/right board symmetric"""
         return [(board, pi), (board[:, ::-1], pi[::-1])]
 
-    def stringRepresentation(self, board: np.ndarray) -> str:
+    def stringRepresentation(self, board: BoardMatrix) -> str:
         return board.tostring()
 
     @staticmethod
-    def display(board: np.ndarray) -> None:
+    def display(board: BoardMatrix) -> None:
         print(" -----------------------")
         print(" ".join(map(str, range(len(board[0])))))
         print(board)

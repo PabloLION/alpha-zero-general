@@ -1,13 +1,14 @@
 import numpy as np
 
 from alpha_zero_general.Game import Game
+from alpha_zero_general.type import BoardMatrix
 
 
 class RandomPlayer:
     def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board: np.ndarray) -> int:
+    def play(self, board: BoardMatrix) -> int:
         a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, 1)
         while valids[a] != 1:
@@ -19,7 +20,7 @@ class HumanConnect4Player:
     def __init__(self, game: Game):
         self.game = game
 
-    def play(self, board: np.ndarray) -> int:
+    def play(self, board: BoardMatrix) -> int:
         valid_moves = self.game.getValidMoves(board, 1)
         print("\nMoves:", [i for (i, valid) in enumerate(valid_moves) if valid])
 
@@ -40,7 +41,7 @@ class OneStepLookaheadConnect4Player:
         self.player_num = 1
         self.verbose = verbose
 
-    def play(self, board: np.ndarray) -> int:
+    def play(self, board: BoardMatrix) -> int:
         valid_moves = self.game.getValidMoves(board, self.player_num)
         win_move_set = set()
         fallback_move_set = set()

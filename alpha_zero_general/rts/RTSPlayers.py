@@ -24,6 +24,7 @@ from alpha_zero_general.rts.visualization.rts_pygame import (
     update_graphics,
 )
 from alpha_zero_general.utils import dotdict
+from alpha_zero_general.type import BoardMatrix
 
 """
 RTSPlayers.py
@@ -37,7 +38,7 @@ class RandomPlayer:
     def __init__(self, game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: BoardMatrix):
         a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, 1)
         while valids[a] != 1:
@@ -50,7 +51,7 @@ class HumanRTSPlayer:
         self.game = game
         self.USER_PLAYER = 1  # used by Human Player - this does not change if human pit player is 1 or -1
 
-    def play(self, board: np.ndarray) -> List:
+    def play(self, board: BoardMatrix) -> List:
         """
         Manages input using PyGame canvas/ console input
         :param board: current board
@@ -87,7 +88,7 @@ class HumanRTSPlayer:
 
         return a
 
-    def display_valid_moves(self, board, valid) -> None:
+    def display_valid_moves(self, board: BoardMatrix, valid) -> None:
         """
         Displays all valid moves in console for specific board
         :param board: board to display moves upon
@@ -104,7 +105,7 @@ class HumanRTSPlayer:
                 print("----------")
 
     @staticmethod
-    def select_object(board: np.ndarray, click_location: tuple) -> dotdict:
+    def select_object(board: BoardMatrix, click_location: tuple) -> dotdict:
         """
         Selects object on PyGame canvas using mouse click
         :param board: game state board
@@ -134,7 +135,7 @@ class HumanRTSPlayer:
                     return dotdict({"x": x, "y": y})
         return dotdict({"x": -1, "y": -1})
 
-    def _manage_input(self, board: np.ndarray) -> list:
+    def _manage_input(self, board: BoardMatrix) -> list:
         """
         Manages click and keyboard selections on PyGame canvas
         :param board: game state
@@ -350,7 +351,7 @@ class GreedyRTSPlayer:
     def __init__(self, game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: BoardMatrix):
         valids = self.game.getValidMoves(board, 1)
 
         print("sum valids", sum(valids))

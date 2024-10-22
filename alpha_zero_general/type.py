@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Callable, NamedTuple, TypedDict, Union
+from typing import Any, Callable, NamedTuple, TypeAlias, TypedDict, Union
 
 import numpy as np
 
@@ -12,6 +12,9 @@ TrainExamplesHistory = list[list[TrainExample]]
 CheckpointFile = Path
 TrainExamplesFile = Path
 
+BoardDataType: TypeAlias = np.int8
+BoardShapeType: TypeAlias = Any
+BoardMatrix: TypeAlias = np.ndarray[BoardShapeType, BoardDataType]
 
 class BoardState(TypedDict):
     height: int

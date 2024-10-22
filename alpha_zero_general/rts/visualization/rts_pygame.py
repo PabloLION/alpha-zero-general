@@ -15,6 +15,7 @@ from alpha_zero_general.rts.src.config import (
     d_a_color,
     d_type_rev,
 )
+from alpha_zero_general.type import BoardMatrix
 
 """
 rts_pygame.py
@@ -75,7 +76,7 @@ def init_visuals(
         return game_display, clock
 
 
-def update_graphics(board: np.ndarray, game_display, clock, fps: int = 1) -> None:
+def update_graphics(board: BoardMatrix, game_display, clock, fps: int = 1) -> None:
     """
     Executes game tick on canvas, redrawing whole game state. Values here are somewhat hardcoded, which can be changed to display game in some nicer config.
     Board size 8x8 is working best with this config, 6x6 might work as well, but other might not.

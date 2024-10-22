@@ -1,6 +1,6 @@
 import numpy as np
 
-from alpha_zero_general.type import WinState
+from alpha_zero_general.type import WinState, BoardMatrix
 
 DEFAULT_HEIGHT = 6
 DEFAULT_WIDTH = 7
@@ -17,7 +17,7 @@ class Board:
         height: int = None,
         width: int = None,
         win_length: int = None,
-        np_pieces: np.ndarray = None,
+        np_pieces: BoardMatrix | None = None,
     ):
         "Set up initial board configuration."
         self.height = height or DEFAULT_HEIGHT
@@ -60,7 +60,7 @@ class Board:
         # Game is not ended yet.
         return WinState(False, None)
 
-    def with_np_pieces(self, np_pieces: np.ndarray) -> "Board":
+    def with_np_pieces(self, np_pieces: BoardMatrix) -> "Board":
         """Create copy of board with specified pieces."""
         if np_pieces is None:
             np_pieces = self.np_pieces

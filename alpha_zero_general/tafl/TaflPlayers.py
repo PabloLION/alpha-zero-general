@@ -1,4 +1,5 @@
 import numpy as np
+from alpha_zero_general.type import BoardMatrix
 
 from alpha_zero_general.tafl.Digits import int2base
 
@@ -7,7 +8,7 @@ class RandomTaflPlayer:
     def __init__(self, game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: BoardMatrix):
         a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, board.getPlayerToMove())
         while valids[a] != 1:
@@ -19,7 +20,7 @@ class HumanTaflPlayer:
     def __init__(self, game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: BoardMatrix):
         # display(board)
         valid = self.game.getValidMoves(board, board.getPlayerToMove())
         m = []
@@ -44,7 +45,7 @@ class GreedyTaflPlayer:
     def __init__(self, game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: BoardMatrix):
         valids = self.game.getValidMoves(board, board.getPlayerToMove())
         candidates = []
         for a in range(self.game.getActionSize()):

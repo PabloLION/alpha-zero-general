@@ -1,4 +1,5 @@
 from typing import List
+from alpha_zero_general.type import BoardMatrix
 
 import numpy as np
 
@@ -16,7 +17,7 @@ class Encoder:
     def __init__(self):
         self.NUM_ENCODERS = None
 
-    def encode(self, board) -> np.ndarray:
+    def encode(self, board: BoardMatrix) -> BoardMatrix:
         pass
 
     def encode_multiple(self, boards: np.ndarray) -> np.ndarray:
@@ -42,7 +43,7 @@ class NumericEncoder(Encoder):
         """
         return boards
 
-    def encode(self, board) -> np.ndarray:
+    def encode(self, board: BoardMatrix) -> BoardMatrix:
         """
         Do nothing - already encoded numerically
         :param board: just board
@@ -128,7 +129,7 @@ class OneHotEncoder(Encoder):
             new_boards.append(self.encode(board))
         return np.asarray(new_boards)
 
-    def encode(self, board) -> np.ndarray:
+    def encode(self, board: BoardMatrix) -> BoardMatrix:
         """
         Encode single board using onehot encoder
         :param board: normal board

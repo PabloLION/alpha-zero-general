@@ -4,6 +4,7 @@ import numpy as np
 
 from alpha_zero_general.Game import Game
 from alpha_zero_general.gobang.GobangLogic import Board
+from alpha_zero_general.type import BoardMatrix
 
 
 class GobangGame(Game):
@@ -11,7 +12,7 @@ class GobangGame(Game):
         self.n = n
         self.n_in_row = nir
 
-    def getInitBoard(self) -> np.ndarray:
+    def getInitBoard(self) -> BoardMatrix:
         # return initial board (numpy board)
         b = Board(self.n)
         return np.array(b.pieces)
@@ -25,8 +26,8 @@ class GobangGame(Game):
         return self.n * self.n + 1
 
     def getNextState(
-        self, board: np.ndarray, player: int, action: int
-    ) -> tuple[np.ndarray, int]:
+        self, board: BoardMatrix, player: int, action: int
+    ) -> tuple[BoardMatrix, int]:
         # if player takes action on board, return next (board,player)
         # action must be a valid move
         if action == self.n * self.n:
@@ -38,7 +39,7 @@ class GobangGame(Game):
         return (b.pieces, -player)
 
     # modified
-    def getValidMoves(self, board: np.ndarray, player: int) -> np.ndarray:
+    def getValidMoves(self, board: BoardMatrix, player: int) -> BoardMatrix:
         # return a fixed size binary vector
         valids = [0] * self.getActionSize()
         b = Board(self.n)
@@ -52,7 +53,7 @@ class GobangGame(Game):
         return np.array(valids)
 
     # modified
-    def getGameEnded(self, board: np.ndarray, player: int) -> float:
+    def getGameEnded(self, board: BoardMatrix, player: int) -> float:
         # return 0 if not ended, 1 if player 1 won, -1 if player 1 lost
         # player = 1
         b = Board(self.n)
@@ -91,14 +92,14 @@ class GobangGame(Game):
             return 0
         return 1e-4
 
-    def getCanonicalForm(self, board: np.ndarray, player: int) -> np.ndarray:
+    def getCanonicalForm(self, board: BoardMatrix, player: int) -> BoardMatrix:
         # return state if player==1, else return -state if player==-1
         return player * board
 
     # modified
     def getSymmetries(
-        self, board: np.ndarray, pi: list[float]
-    ) -> list[tuple[np.ndarray, list[float]]]:
+        self, board: BoardMatrix, pi: list[float]
+    ) -> list[tuple[BoardMatrix, list[float]]]:
         # mirror, rotational
         assert len(pi) == self.n**2 + 1  # 1 for pass
         pi_board = np.reshape(pi[:-1], (self.n, self.n))
@@ -114,12 +115,12 @@ class GobangGame(Game):
                 l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return l
 
-    def stringRepresentation(self, board: np.ndarray) -> str:
+    def stringRepresentation(self, board: BoardMatrix) -> str:
         # 8x8 numpy array (canonical board)
         return board.tostring()
 
     @staticmethod
-    def display(board: np.ndarray) -> None:
+    def display(board: BoardMatrix) -> None:
         n = board.shape[0]
 
         for y in range(n):
