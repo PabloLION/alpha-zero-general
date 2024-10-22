@@ -22,7 +22,7 @@ import unittest
 
 import numpy as np
 
-import alpha_zero_general.Arena
+from alpha_zero_general.Arena import Arena
 from alpha_zero_general.connect4.Connect4Game import Connect4Game
 from alpha_zero_general.connect4.keras.NNet import NNetWrapper as Connect4KerasNNet
 from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
@@ -61,7 +61,7 @@ class TestAllGames(unittest.TestCase):
         mcts = MCTS(game, neural_net(game), args)
         n1p = lambda x: np.argmax(mcts.getActionProb(x, temp=0))
 
-        arena = Arena.Arena(n1p, rp, game)
+        arena = Arena(n1p, rp, game)
         print(arena.playGames(2, verbose=False))
 
     def test_othello_pytorch(self):
