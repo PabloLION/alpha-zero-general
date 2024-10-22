@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-from pytest_mock import mocker
 
 from alpha_zero_general.connect4.Connect4Game import Connect4Game
 

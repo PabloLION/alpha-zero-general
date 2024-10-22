@@ -7,7 +7,6 @@ import numpy as np
 import pygame
 from pygame.rect import Rect
 
-from alpha_zero_general.Game import Game
 from alpha_zero_general.rts.src.config import (A_TYPE_IDX, ACTS, ACTS_REV, FPS,
                                                NUM_ACTS, P_NAME_IDX, d_a_type,
                                                d_user_shortcuts,
@@ -69,7 +68,7 @@ class HumanRTSPlayer:
             try:
                 tup = (int(y), int(x), int(action_index))
                 a = np.ravel_multi_index(tup, (n, n, NUM_ACTS))
-            except Exception as e:
+            except Exception:
                 print("Could not parse action")
             if valid[a]:
                 break
@@ -161,7 +160,7 @@ class HumanRTSPlayer:
                             action_to_execute = shortcut_pressed
                             clicked_actor_index_arr.append(action_to_execute)
                             return clicked_actor_index_arr
-                        except Exception as e:
+                        except Exception:
                             print("shortcut '" + event.unicode + "' not supported.")
 
                     if event.key == pygame.K_ESCAPE:

@@ -82,7 +82,7 @@ class NNetWrapper(NeuralNet):
         board: np array with board
         """
         # timing
-        start = time.time()
+        time.time()
 
         # preparing input
         board = torch.FloatTensor(board.astype(np.float64))

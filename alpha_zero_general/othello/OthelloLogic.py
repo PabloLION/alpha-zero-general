@@ -1,4 +1,3 @@
-from alpha_zero_general.Game import Game
 
 """
 Author: Eric P. Nichols

@@ -1,4 +1,3 @@
-import argparse
 
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import *

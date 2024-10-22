@@ -18,21 +18,18 @@ class Game:
             startBoard: a representation of the board (ideally this is the form
                         that will be the input to your neural network)
         """
-        pass
 
     def getBoardSize(self):
         """
         Returns:
             (x,y): a tuple of board dimensions
         """
-        pass
 
     def getActionSize(self):
         """
         Returns:
             actionSize: number of all possible actions
         """
-        pass
 
     def getNextState(self, board, player, action):
         """
@@ -45,7 +42,6 @@ class Game:
             nextBoard: board after applying action
             nextPlayer: player who plays in the next turn (should be -player)
         """
-        pass
 
     def getValidMoves(self, board, player):
         """
@@ -58,7 +54,6 @@ class Game:
                         moves that are valid from the current board and player,
                         0 for invalid moves
         """
-        pass
 
     def getGameEnded(self, board, player):
         """
@@ -71,7 +66,6 @@ class Game:
                small non-zero value for draw.
 
         """
-        pass
 
     def getCanonicalForm(self, board, player):
         """
@@ -87,7 +81,6 @@ class Game:
                             board as is. When the player is black, we can invert
                             the colors and return the board.
         """
-        pass
 
     def getSymmetries(self, board, pi):
         """
@@ -100,7 +93,6 @@ class Game:
                        form of the board and the corresponding pi vector. This
                        is used when training the neural network from examples.
         """
-        pass
 
     def stringRepresentation(self, board):
         """
@@ -111,4 +103,3 @@ class Game:
             boardString: a quick conversion of board to a string format.
                          Required by MCTS for hashing.
         """
-        pass

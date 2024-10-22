@@ -1,12 +1,6 @@
-import argparse
-import math
 import os
-import random
-import shutil
-import time
 
 import numpy as np
-import tensorflow as tf
 
 from alpha_zero_general.gobang.keras.GobangNNet import GobangNNet as onnet
 from alpha_zero_general.NeuralNet import NeuralNet

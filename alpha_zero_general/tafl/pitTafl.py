@@ -1,9 +1,7 @@
 # Note: Run this file from alpha_zero_general.Arena directory (the one above /tafl)
 
 import Arena
-import numpy as np
 
-from alpha_zero_general.MCTS import MCTS
 from alpha_zero_general.tafl.TaflGame import TaflGame, display
 from alpha_zero_general.tafl.TaflPlayers import *
 from alpha_zero_general.utils import *

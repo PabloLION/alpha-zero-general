@@ -1,12 +1,7 @@
-import argparse
 import logging
-import math
 import os
-import random
-import shutil
 import time
 
-import coloredlogs  # type: ignore
 import numpy as np
 
 from alpha_zero_general.NeuralNet import NeuralNet
@@ -15,10 +10,8 @@ from alpha_zero_general.utils import *
 
 log = logging.getLogger(__name__)
 
-import argparse
 
-from alpha_zero_general.connect4.keras.Connect4NNet import \
-    Connect4NNet as onnet
+from alpha_zero_general.connect4.keras.Connect4NNet import Connect4NNet as onnet
 
 args = dotdict(
     {
@@ -60,7 +53,7 @@ class NNetWrapper(NeuralNet):
         board: np array with board
         """
         # timing
-        start = time.time()
+        time.time()
 
         # preparing input
         board = board[np.newaxis, :, :]

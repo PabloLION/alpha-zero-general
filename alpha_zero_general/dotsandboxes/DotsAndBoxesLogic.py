@@ -1,6 +1,5 @@
 import numpy as np
 
-from alpha_zero_general.type import WinState
 
 
 class Board:

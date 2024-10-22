@@ -1,8 +1,4 @@
-import argparse
-import math
 import os
-import random
-import shutil
 import time
 
 import numpy as np
@@ -49,7 +45,7 @@ class NNetWrapper(NeuralNet):
         board: np array with board
         """
         # timing
-        start = time.time()
+        time.time()
 
         # preparing input
         board = board[np.newaxis, :, :]

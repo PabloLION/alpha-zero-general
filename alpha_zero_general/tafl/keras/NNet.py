@@ -1,15 +1,10 @@
-import argparse
-import math
 import os
-import random
-import shutil
 import sys
 import time
 
 import numpy as np
 
 sys.path.append("../..")
-import argparse
 
 from alpha_zero_general.NeuralNet import NeuralNet
 from alpha_zero_general.tafl.keras.TaflNNet import TaflNNet as onnet
@@ -53,7 +48,7 @@ class NNetWrapper(NeuralNet):
         board: np array with board
         """
         # timing
-        start = time.time()
+        time.time()
 
         # preparing input
         board = board[np.newaxis, :, :]
