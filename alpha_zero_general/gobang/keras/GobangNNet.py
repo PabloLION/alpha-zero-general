@@ -5,7 +5,7 @@ from tensorflow.keras.models import *
 from tensorflow.keras.optimizers import *
 from utils import *
 
-from type import Any
+from alpha_zero_general.type import Any
 
 
 class GobangNNet:

@@ -7,13 +7,10 @@ import time
 
 import numpy as np
 import tensorflow as tf
-
-import argparse
-
 from NeuralNet import NeuralNet
 from utils import *
 
-from type import Any, list, tuple
+from alpha_zero_general.type import Any, list, tuple
 
 from .GobangNNet import GobangNNet as onnet
 

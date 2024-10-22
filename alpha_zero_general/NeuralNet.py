@@ -1,6 +1,6 @@
 from typing import Any
 
-from type import Game
+from alpha_zero_general.type import Game
 
 
 class NeuralNet:

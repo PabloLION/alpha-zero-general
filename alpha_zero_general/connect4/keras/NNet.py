@@ -1,19 +1,17 @@
 import argparse
+import logging
 import math
 import os
 import random
 import shutil
 import time
 
-import numpy as np
-
-import logging
-
 import coloredlogs  # type: ignore
+import numpy as np
 from NeuralNet import NeuralNet
 from utils import *
 
-from type import Any
+from alpha_zero_general.type import Any
 
 log = logging.getLogger(__name__)
 

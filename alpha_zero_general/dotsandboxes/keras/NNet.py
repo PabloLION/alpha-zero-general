@@ -1,11 +1,10 @@
 import os
 
 import numpy as np
-
 from NeuralNet import NeuralNet
 from utils import dotdict
 
-from type import Any, list, tuple
+from alpha_zero_general.type import Any, list, tuple
 
 from .DotsAndBoxesNNet import DotsAndBoxesNNet as onnet
 

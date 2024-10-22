@@ -4,7 +4,6 @@ from typing import Any, Callable, NamedTuple, TypedDict, Union
 import numpy as np
 
 Player = Callable[[Union[np.ndarray[Any, Any], list[list[int]]]], int]
-Game = Any
 Display = Callable[[Union[np.ndarray[Any, Any], list[list[int]]]], None]
 TrainExample = tuple[
     Union[np.ndarray[Any, Any], list[list[int]]], int, list[float], float
