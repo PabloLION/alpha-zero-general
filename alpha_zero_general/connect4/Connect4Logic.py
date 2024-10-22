@@ -14,15 +14,15 @@ class Board:
 
     def __init__(
         self,
-        height: int = None,
-        width: int = None,
-        win_length: int = None,
+        height: int = DEFAULT_HEIGHT,
+        width: int = DEFAULT_WIDTH,
+        win_length: int = DEFAULT_WIN_LENGTH,
         np_pieces: BoardMatrix | None = None,
     ):
         "Set up initial board configuration."
-        self.height = height or DEFAULT_HEIGHT
-        self.width = width or DEFAULT_WIDTH
-        self.win_length = win_length or DEFAULT_WIN_LENGTH
+        self.height = height
+        self.width = width
+        self.win_length = win_length
 
         if np_pieces is None:
             self.np_pieces = np.zeros([self.height, self.width], dtype=BoardDataType)

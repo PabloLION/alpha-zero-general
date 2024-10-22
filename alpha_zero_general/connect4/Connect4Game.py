@@ -12,9 +12,9 @@ class Connect4Game(Game):
 
     def __init__(
         self,
-        height: int = None,
-        width: int = None,
-        win_length: int = None,
+        height: int = DEFAULT_HEIGHT,
+        width: int = DEFAULT_WIDTH,
+        win_length: int = DEFAULT_WIN_LENGTH,
         np_pieces: BoardMatrix = None,
     ):
         Game.__init__(self)

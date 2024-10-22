@@ -27,8 +27,8 @@ Includes:
 
 # noinspection PyPep8Naming,PyMethodMayBeStatic
 class RTSGame(Game):
-    def __init__(self) -> None:
-        self.n = CONFIG.grid_size
+    def __init__(self, n: int = CONFIG.grid_size) -> None:
+        self.n = n
 
         self.initial_board_config = CONFIG.initial_board_config
 
