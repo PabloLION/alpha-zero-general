@@ -14,10 +14,10 @@ class TestConnect4Game:
         assert board.shape == (6, 7)
         assert np.all(board == 0)
 
-    def test_getBoardSize(self):
+    def test_get_board_size(self):
         assert self.game.get_board_size() == (6, 7)
 
-    def test_getActionSize(self):
+    def test_get_action_size(self):
         assert self.game.get_action_size() == 7
 
     def test_getNextState(self):
@@ -26,7 +26,7 @@ class TestConnect4Game:
         assert next_board[5, 0] == 1
         assert next_player == -1
 
-    def test_getValidMoves(self):
+    def test_get_valid_moves(self):
         board = self.game.get_init_board()
         valid_moves = self.game.get_valid_moves(board, 1)
         assert np.all(valid_moves == 1)
@@ -47,6 +47,7 @@ class TestConnect4Game:
         assert len(symmetries) == 2
 
     def test_stringRepresentation(self):
+        # TODO: need a `get hash`
         board = self.game.get_init_board()
         board_str = self.game.string_representation(board)
-        assert isinstance(board_str, bytes)
+        assert isinstance(board_str, str)

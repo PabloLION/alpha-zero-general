@@ -17,10 +17,10 @@ class TestOthelloGame:
         assert board[3, 3] == -1
         assert board[4, 4] == -1
 
-    def test_getBoardSize(self):
+    def test_get_board_size(self):
         assert self.game.get_board_size() == (8, 8)
 
-    def test_getActionSize(self):
+    def test_get_action_size(self):
         assert self.game.get_action_size() == 65
 
     def test_getNextState(self):
@@ -31,7 +31,7 @@ class TestOthelloGame:
         assert next_board[4, 3] == 1
         assert next_player == -1
 
-    def test_getValidMoves(self):
+    def test_get_valid_moves(self):
         board = self.game.get_init_board()
         valid_moves = self.game.get_valid_moves(board, 1)
         assert valid_moves[19] == 1

@@ -14,10 +14,10 @@ class TestTicTacToeGame:
         expected_board = np.zeros((3, 3))
         assert np.array_equal(board, expected_board)
 
-    def test_getBoardSize(self):
+    def test_get_board_size(self):
         assert self.game.get_board_size() == (3, 3)
 
-    def test_getActionSize(self):
+    def test_get_action_size(self):
         assert self.game.get_action_size() == 10
 
     def test_getNextState(self):
@@ -27,19 +27,36 @@ class TestTicTacToeGame:
         assert np.array_equal(next_board, expected_board)
         assert next_player == -1
 
-    def test_getValidMoves(self):
+    def test_get_valid_moves(self):
         board = self.game.get_init_board()
         valid_moves = self.game.get_valid_moves(board, 1)
         expected_valid_moves = np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 0])
         assert np.array_equal(valid_moves, expected_valid_moves)
 
     def test_getGameEnded(self):
+        # player 1 won due to first row
         board = np.array([[1, 1, 1], [0, -1, -1], [0, 0, 0]])
         assert self.game.get_game_ended(board, 1) == 1
+
+        # player -1 won due to first rowj
         board = np.array([[-1, -1, -1], [0, 1, 1], [0, 0, 0]])
-        assert self.game.get_game_ended(board, -1) == -1
+        assert self.game.get_game_ended(board, -1) == 1  # player -1 won here.
+
+        # player 1 won due to main diagonal
         board = np.array([[1, -1, 1], [-1, 1, -1], [1, -1, 1]])
+        assert self.game.get_game_ended(board, 1) == 1
+
+        # player -1 won due to anti diagonal
+        board = np.array([[-1, 1, 0], [0, -1, 1], [-1, 1, -1]])
+        assert self.game.get_game_ended(board, -1) == 1
+
+        # draw due to no more valid moves   | X O X
+        # and no player won                 | O X O
+        # board shown on the right.         | O X O
+        board = np.array([[1, -1, 1], [-1, 1, -1], [-1, 1, -1]])
         assert self.game.get_game_ended(board, 1) == 1e-4
+        assert self.game.get_game_ended(board, -1) == 1e-4
+        # #TODO: why 1e-4? also floating number is dangerous in python.
 
     def test_getCanonicalForm(self):
         board = np.array([[1, -1, 0], [0, 1, -1], [0, 0, 1]])
@@ -59,5 +76,5 @@ class TestTicTacToeGame:
     def test_stringRepresentation(self):
         board = np.array([[1, 0, -1], [0, 1, 0], [-1, 0, 1]])
         board_string = self.game.string_representation(board)
-        expected_string = board.tostring()
+        expected_string = np.array2string(board)
         assert board_string == expected_string

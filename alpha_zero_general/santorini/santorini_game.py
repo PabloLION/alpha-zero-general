@@ -110,7 +110,7 @@ class SantoriniGame(GenericGame):
         return np.array(b.get_legal_moves_binary(color))
         # Get all the squares with pieces of the given color.
 
-    def getValidMovesHuman(self, board, player):
+    def get_valid_movesHuman(self, board, player):
         b = Board(self.n)
         b.pieces = np.copy(board)
         color = player
@@ -481,7 +481,7 @@ class SantoriniGame(GenericGame):
         """
 
     def string_representation(self, board):
-        return board.tostring()
+        return np.array2string(board)
 
     def stringRepresentationReadable(self, board):
         # Do not think this works.

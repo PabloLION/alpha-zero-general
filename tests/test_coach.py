@@ -31,7 +31,7 @@ class TestCoach:
         self.coach = Coach(self.game, self.nnet, self.args)
 
     def test_executeEpisode(self, mocker: MockerFixture):
-        self.coach.mcts.getActionProb = mocker.MagicMock(return_value=[1])
+        self.coach.mcts.get_action_prob = mocker.MagicMock(return_value=[1])
         self.coach.game.get_next_state = mocker.MagicMock(
             return_value=(self.game.get_init_board(), 1)
         )

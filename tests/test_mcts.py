@@ -16,10 +16,10 @@ class TestMCTS:
         self.args = dotdict({"numMCTSSims": 10, "cpuct": 1})
         self.mcts = MCTS(self.game, self.nnet, self.args)
 
-    def test_getActionProb(self):
+    def test_get_action_prob(self):
         board = self.game.get_init_board()
         canonicalBoard = self.game.get_canonical_form(board, 1)
-        probs = self.mcts.getActionProb(canonicalBoard, temp=1)
+        probs = self.mcts.get_action_prob(canonicalBoard, temp=1)
         assert len(probs) == self.game.get_action_size()
         assert np.isclose(sum(probs), 1)
 

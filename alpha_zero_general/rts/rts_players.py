@@ -39,10 +39,10 @@ class RandomPlayer:
         self.game = game
 
     def play(self, board: GenericBoardTensor):
-        a = np.random.randint(self.game.getActionSize())
-        valids = self.game.getValidMoves(board, 1)
+        a = np.random.randint(self.game.get_action_size())
+        valids = self.game.get_valid_moves(board, 1)
         while valids[a] != 1:
-            a = np.random.randint(self.game.getActionSize())
+            a = np.random.randint(self.game.get_action_size())
         return a
 
 
@@ -60,7 +60,7 @@ class HumanRTSPlayer:
         from alpha_zero_general.rts.src.config_class import CONFIG
 
         n = board.shape[0]
-        valid = self.game.getValidMoves(board, 1)
+        valid = self.game.get_valid_moves(board, 1)
         self.display_valid_moves(board, valid)
         while True:
             if CONFIG.visibility > 3:
@@ -95,7 +95,7 @@ class HumanRTSPlayer:
         :param valid: vector of valid moves
         """
         if valid is None:
-            valid = self.game.getValidMoves(board, 1)
+            valid = self.game.get_valid_moves(board, 1)
         n = board.shape[0]
         print("----------")
         for i in range(len(valid)):
@@ -353,11 +353,11 @@ class GreedyRTSPlayer:
         self.game = game
 
     def play(self, board: GenericBoardTensor):
-        valids = self.game.getValidMoves(board, 1)
+        valids = self.game.get_valid_moves(board, 1)
 
         print("sum valids", sum(valids))
         candidates = []
-        for a in range(self.game.getActionSize()):
+        for a in range(self.game.get_action_size()):
             if valids[a] == 0:
                 continue
             next_board, _ = self.game.getNextState(board, 1, a)

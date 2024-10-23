@@ -21,7 +21,7 @@ class GobangGame(GenericGame):
         # (a,b) tuple
         return (self.n, self.n)
 
-    def get_action_size() -> int:
+    def get_action_size(self) -> int:
         # return number of actions
         return self.n * self.n + 1
 
@@ -121,7 +121,7 @@ class GobangGame(GenericGame):
 
     def string_representation(self, board: GenericBoardTensor) -> str:
         # 8x8 numpy array (canonical board)
-        return board.tostring()
+        return np.array2string(board)
 
     @staticmethod
     def display(board: GenericBoardTensor) -> None:

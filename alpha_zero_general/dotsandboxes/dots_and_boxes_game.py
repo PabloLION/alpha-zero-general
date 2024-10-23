@@ -120,7 +120,7 @@ class DotsAndBoxesGame(GenericGame):
 
     def string_representation(self, board: GenericBoardTensor) -> str:
         # 8x8 numpy array (canonical board)
-        return board.tostring()
+        return np.array2string(board)
 
     @staticmethod
     def display(board: GenericBoardTensor) -> None:

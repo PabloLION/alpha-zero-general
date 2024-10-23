@@ -87,7 +87,7 @@ class OthelloGame(GenericGame):
         return l
 
     def string_representation(self, board):
-        return board.tostring()
+        return np.array2string(board)
 
     def stringRepresentationReadable(self, board):
         board_s = "".join(

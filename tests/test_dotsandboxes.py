@@ -14,10 +14,10 @@ class TestDotsAndBoxesGame:
         assert board.shape == (7, 4)
         assert np.all(board == 0)
 
-    def test_getBoardSize(self):
+    def test_get_board_size(self):
         assert self.game.get_board_size() == (7, 4)
 
-    def test_getActionSize(self):
+    def test_get_action_size(self):
         assert self.game.get_action_size() == 25
 
     def test_getNextState(self):
@@ -26,7 +26,7 @@ class TestDotsAndBoxesGame:
         assert next_player == -1
         assert next_board[0, 0] == 1
 
-    def test_getValidMoves(self):
+    def test_get_valid_moves(self):
         board = self.game.get_init_board()
         valid_moves = self.game.get_valid_moves(board, 1)
         assert len(valid_moves) == 25
@@ -60,4 +60,4 @@ class TestDotsAndBoxesGame:
     def test_stringRepresentation(self):
         board = self.game.get_init_board()
         board_str = self.game.string_representation(board)
-        assert board_str == board.tostring()
+        assert board_str == np.array2string(board)

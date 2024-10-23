@@ -22,7 +22,7 @@ def predict():
 
     use_alpha_zero = True
     if use_alpha_zero:
-        action = np.argmax(mcts.getActionProb(board, temp=0))
+        action = np.argmax(mcts.get_action_prob(board, temp=0))
     else:
         action = GreedyRandomPlayer(g).play(board)
 

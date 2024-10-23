@@ -1,10 +1,8 @@
-from typing import Tuple
-
 import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.game import GenericGame
-from alpha_zero_general.rts.src.Board import Board
+from alpha_zero_general.rts.src.board import Board
 from alpha_zero_general.rts.src.config import (
     A_TYPE_IDX,
     FPS,
@@ -61,7 +59,7 @@ class RTSGame(GenericGame):
         b.pieces[:, :, TIME_IDX] = remaining_time
         return np.array(b.pieces)
 
-    def get_board_size(self) -> Tuple[int, int, int]:
+    def get_board_size(self) -> tuple[int, int, int]:
         # (a,b) tuple
         return self.n, self.n, NUM_ENCODERS
 
@@ -70,7 +68,7 @@ class RTSGame(GenericGame):
 
     def get_next_state(
         self, board: GenericBoardTensor, player: int, action: int
-    ) -> Tuple[GenericBoardTensor, int]:
+    ) -> tuple[GenericBoardTensor, int]:
         """
         Gets next state for board. It also updates tick for board as game tick iterations are transfered within board as 6. parameter
         :param board: current board
@@ -207,7 +205,7 @@ class RTSGame(GenericGame):
         return return_list
 
     def string_representation(self, board: GenericBoardTensor):
-        return board.tostring()
+        return np.array2string(board)
 
     def getScore(self, board: GenericBoardTensor, player: int):
         """

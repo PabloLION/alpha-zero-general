@@ -11,4 +11,4 @@ CONFIG.set_runner("pit")  # set visibility as pit
 g = RTSGame()
 player1, player2 = CONFIG.pit_args.create_players(g)
 arena = Arena.Arena(player1, player2, g, display=display)
-print(arena.playGames(CONFIG.pit_args.num_games, verbose=CONFIG.visibility))
+print(arena.play_games(CONFIG.pit_args.num_games, verbose=CONFIG.visibility))

@@ -52,10 +52,10 @@ class Board:
         """Returns all the legal moves for the given color.
         (1 for white, -1 for black
         """
-        return self._getValidMoves(color)
+        return self._get_valid_moves(color)
 
     def has_legal_moves(self, color):
-        vm = self._getValidMoves(color)
+        vm = self._get_valid_moves(color)
         if len(vm) > 0:
             return True
         return False
@@ -195,7 +195,7 @@ class Board:
                 return pieceno
         return -1
 
-    def _getValidMoves(self, player):
+    def _get_valid_moves(self, player):
         moves = []
         for pieceno in range(len(self.pieces)):
             piece = self.pieces[pieceno]

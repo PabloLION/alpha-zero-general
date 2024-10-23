@@ -14,10 +14,10 @@ class TestGobangGame:
         assert board.shape == (15, 15)
         assert np.all(board == 0)
 
-    def test_getBoardSize(self):
+    def test_get_board_size(self):
         assert self.game.get_board_size() == (15, 15)
 
-    def test_getActionSize(self):
+    def test_get_action_size(self):
         assert self.game.get_action_size() == 226
 
     def test_getNextState(self):
@@ -26,7 +26,7 @@ class TestGobangGame:
         assert next_board[0, 0] == 1
         assert next_player == -1
 
-    def test_getValidMoves(self):
+    def test_get_valid_moves(self):
         board = self.game.get_init_board()
         valid_moves = self.game.get_valid_moves(board, 1)
         assert np.sum(valid_moves) == 225

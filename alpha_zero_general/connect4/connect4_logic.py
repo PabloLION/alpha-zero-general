@@ -1,6 +1,7 @@
 import numpy as np
 
-from alpha_zero_general.type import BoardDataType, GenericBoardTensor, WinState
+from alpha_zero_general import GenericBoardDataType, GenericBoardTensor
+from alpha_zero_general.type import WinState
 
 
 class Connect4Board:
@@ -21,7 +22,9 @@ class Connect4Board:
         self.win_length = win_length
 
         if np_pieces is None:
-            self.np_pieces = np.zeros([self.height, self.width], dtype=BoardDataType)
+            self.np_pieces = np.zeros(
+                [self.height, self.width], dtype=GenericBoardDataType
+            )
         else:
             self.np_pieces = np_pieces
             assert self.np_pieces.shape == (self.height, self.width)

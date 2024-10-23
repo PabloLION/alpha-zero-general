@@ -57,10 +57,10 @@ def execute_game_test(game: GenericGame, neural_net: type[NeuralNet]):
 
     args = dotdict({"numMCTSSims": 25, "cpuct": 1.0})
     mcts = MCTS(game, neural_net(game), args)
-    n1p = lambda x: np.argmax(mcts.getActionProb(x, temp=0))
+    n1p = lambda x: np.argmax(mcts.get_action_prob(x, temp=0))
 
     arena = Arena(n1p, random_play, game)
-    print(arena.playGames(2, verbose=False))
+    print(arena.play_games(2, verbose=False))
 
 
 def test_othello_pytorch():

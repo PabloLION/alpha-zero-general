@@ -21,7 +21,7 @@ class Connect4Game(GenericGame):
         win_length: int = DEFAULT_CONNECT4_BOARD_WIN_LENGTH,
         np_pieces: GenericBoardTensor | None = None,
     ):
-        GenericGame.__init__(self)
+        # GenericGame.__init__(self)
         self._base_board = Connect4Board(height, width, win_length, np_pieces)
 
     def get_init_board(self) -> GenericBoardTensor:

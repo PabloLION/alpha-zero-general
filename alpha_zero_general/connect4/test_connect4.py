@@ -68,7 +68,7 @@ def test_get_valid_moves():
 
     for moves, expected_valid in move_valid_pairs:
         board, player, game = init_board_from_moves(moves)
-        assert (np.array(expected_valid) == game.getValidMoves(board, player)).all()
+        assert (np.array(expected_valid) == game.get_valid_moves(board, player)).all()
 
 
 def test_symmetries():

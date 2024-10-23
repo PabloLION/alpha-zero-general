@@ -6,11 +6,11 @@ from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
 
 
 class DotsAndBoxesTests(unittest.TestCase):
-    def testGetBoardSize(self):
+    def testget_board_size(self):
         self.assertEqual((5, 3), DotsAndBoxesGame(n=2).get_board_size())
         self.assertEqual((7, 4), DotsAndBoxesGame(n=3).get_board_size())
 
-    def testGetActionSize(self):
+    def testget_action_size(self):
         self.assertEqual(13, DotsAndBoxesGame(n=2).get_action_size())
         self.assertEqual(25, DotsAndBoxesGame(n=3).get_action_size())
 
@@ -154,7 +154,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testGetValidMoves(self):
+    def testget_valid_moves(self):
         g = DotsAndBoxesGame(n=2)
 
         # All valid
