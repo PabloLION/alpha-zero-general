@@ -6,7 +6,7 @@ sys.path.append("..")
 import numpy as np
 
 from alpha_zero_general.game import Game
-from alpha_zero_general.tictactoe_3d.TicTacToeLogic import Board
+from alpha_zero_general.tictactoe_3d.tic_tac_toe_logic import Board
 
 """
 Game class implementation for the game of 3D TicTacToe or Qubic.

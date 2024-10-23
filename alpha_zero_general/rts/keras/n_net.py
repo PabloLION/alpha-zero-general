@@ -2,8 +2,8 @@ import os
 
 import numpy as np
 
-from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.rts.keras.RTSNNet import RTSNNet
+from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.rts.keras.rtsn_net import RTSNNet
 from alpha_zero_general.rts.src.config import VERBOSE_MODEL_FIT
 
 """

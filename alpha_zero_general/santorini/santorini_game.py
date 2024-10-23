@@ -6,7 +6,7 @@ sys.path.append("..")
 import numpy as np
 
 from alpha_zero_general.Game import Game
-from alpha_zero_general.santorini.SantoriniLogic import Board
+from alpha_zero_general.santorini.santorini_logic import Board
 
 
 class SantoriniGame(Game):

@@ -6,8 +6,8 @@ import torch
 import torch.optim as optim
 from tqdm import tqdm
 
-from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.othello.pytorch.OthelloNNet import OthelloNNet as onnet
+from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.othello.pytorch.othello_n_net import OthelloNNet as onnet
 from alpha_zero_general.utils import AverageMeter, dotdict
 
 args = dotdict(

@@ -2,13 +2,13 @@ import numpy as np
 
 import alpha_zero_general.Arena as Arena
 from alpha_zero_general.MCTS import MCTS
-from alpha_zero_general.othello.OthelloGame import OthelloGame
-from alpha_zero_general.othello.OthelloPlayers import (
+from alpha_zero_general.othello.othello_game import OthelloGame
+from alpha_zero_general.othello.othello_players import (
     GreedyOthelloPlayer,
     HumanOthelloPlayer,
     RandomPlayer,
 )
-from alpha_zero_general.othello.pytorch.NNet import NNetWrapper as NNet
+from alpha_zero_general.othello.pytorch.n_net import NNetWrapper as NNet
 from alpha_zero_general.utils import dotdict
 
 """

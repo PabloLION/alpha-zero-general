@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from alpha_zero_general.tictactoe.TicTacToeGame import TicTacToeGame
+from alpha_zero_general.tictactoe.tic_tac_toe_game import TicTacToeGame
 
 
 class TestTicTacToeGame:

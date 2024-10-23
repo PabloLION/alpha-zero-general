@@ -1,15 +1,15 @@
 import os
 
-import Arena
+from alpha_zero_general.arena import Arena
 import numpy as np
 
-from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
-from alpha_zero_general.dotsandboxes.DotsAndBoxesPlayers import (
+from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
+from alpha_zero_general.dotsandboxes.dots_and_boxes_players import (
     GreedyRandomPlayer,
     HumanDotsAndBoxesPlayer,
     RandomPlayer,
 )
-from alpha_zero_general.dotsandboxes.keras.NNet import NNetWrapper
+from alpha_zero_general.dotsandboxes.keras.n_net import NNetWrapper
 from alpha_zero_general.MCTS import MCTS
 from alpha_zero_general.utils import dotdict
 
@@ -46,20 +46,20 @@ n2p = lambda x: np.argmax(mcts2.getActionProb(x, temp=0))
 # Play AlphaZero versus Human
 p1 = n1p
 p2 = hp1
-arena = Arena.Arena(p1, p2, g, display=DotsAndBoxesGame.display)
+arena = Arena(p1, p2, g, display=DotsAndBoxesGame.display)
 oneWon, twoWon, draws = arena.playGames(2, verbose=True)
 print("oneWon: {}, twoWon: {}, draws: {}".format(oneWon, twoWon, draws))
 
 # # Play Greedy vs Greedy
 # p1 = grp1
 # p2 = grp2
-# arena = Arena.Arena(p1, p2, g, display=DotsAndBoxesGame.display)
+# arena = Arena(p1, p2, g, display=DotsAndBoxesGame.display)
 # oneWon, twoWon, draws = arena.playGames(100, verbose=False)
 # print("oneWon: {}, twoWon: {}, draws: {}".format(oneWon, twoWon, draws))
 
 # # Play AlphaZero vs Greedy
 # p1 = n1p
 # p2 = grp2
-# arena = Arena.Arena(p1, p2, g, display=DotsAndBoxesGame.display)
+# arena = Arena(p1, p2, g, display=DotsAndBoxesGame.display)
 # oneWon, twoWon, draws = arena.playGames(2, verbose=False)
 # print("oneWon: {}, twoWon: {}, draws: {}".format(oneWon, twoWon, draws))

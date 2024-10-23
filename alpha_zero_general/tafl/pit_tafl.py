@@ -1,8 +1,8 @@
 # Note: Run this file from alpha_zero_general.Arena directory (the one above /tafl)
 
 from alpha_zero_general.Arena import Arena
-from alpha_zero_general.tafl.TaflGame import TaflGame, display
-from alpha_zero_general.tafl.TaflPlayers import (
+from alpha_zero_general.tafl.tafl_game import TaflGame, display
+from alpha_zero_general.tafl.tafl_players import (
     GreedyTaflPlayer,
     HumanTaflPlayer,
     RandomTaflPlayer,

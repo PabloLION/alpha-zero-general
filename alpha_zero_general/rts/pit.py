@@ -1,5 +1,5 @@
 from alpha_zero_general import Arena
-from alpha_zero_general.rts.RTSGame import RTSGame, display
+from alpha_zero_general.rts.rts_game import RTSGame, display
 from alpha_zero_general.rts.src.config_class import CONFIG
 
 """

@@ -3,7 +3,6 @@ import os
 from math import sqrt
 from typing import List
 
-import numpy as np
 import pygame
 from pygame.rect import Rect
 
@@ -334,6 +333,7 @@ class HumanRTSPlayer:
                                     # we moved mouse more in x direction than y, so its horizontal movement
                                     if clicked_x < clicked_actors_world_x:
                                         print("clicked left...")
+
                                         clicked_actor_index_arr.append(ACTS["left"])
 
                                     if clicked_x > clicked_actors_world_x:
