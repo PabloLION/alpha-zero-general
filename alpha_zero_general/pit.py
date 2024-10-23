@@ -9,6 +9,7 @@ from alpha_zero_general.othello.othello_players import (
     RandomPlayer,
 )
 from alpha_zero_general.othello.pytorch.n_net import NNetWrapper as NNet
+from alpha_zero_general.type import MctsArgs
 from alpha_zero_general.utils import dotdict
 
 """
@@ -38,9 +39,13 @@ else:
     n1.load_checkpoint(
         "./pretrained_models/othello/pytorch/", "8x8_100checkpoints_best.pth.tar"
     )
-args1 = dotdict({"numMCTSSims": 50, "cpuct": 1.0})
+args1 = MctsArgs(numMCTSSims=50, cpuct=1.0)
 mcts1 = MCTS(g, n1, args1)
-n1p = lambda x: np.argmax(mcts1.getActionProb(x, temp=0))
+
+
+def n1p(x: np.ndarray) -> int:
+    return np.argmax(mcts1.getActionProb(x, temp=0))
+
 
 if human_vs_cpu:
     player2 = hp

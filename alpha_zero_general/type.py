@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, NamedTuple, TypeAlias, TypedDict, TypeVar, Union
 
@@ -28,10 +29,7 @@ class WinState(NamedTuple):
     winner: int | None
 
 
-MctsArgs = TypedDict(
-    "MctsArgs",
-    {
-        "numMCTSSims": int,
-        "cpuct": float,
-    },
-)
+@dataclass
+class MctsArgs:
+    numMCTSSims: int
+    cpuct: float

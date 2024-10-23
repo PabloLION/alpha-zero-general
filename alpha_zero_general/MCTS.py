@@ -1,10 +1,9 @@
 import logging
 import math
 
-from alpha_zero_general.type import BoardMatrix
 from alpha_zero_general.game import Game
 from alpha_zero_general.neural_net import NeuralNet
-from alpha_zero_general.type import MctsArgs
+from alpha_zero_general.type import BoardMatrix, MctsArgs
 
 EPS = 1e-8
 
@@ -16,19 +15,30 @@ class MCTS:
     This class handles the MCTS tree.
     """
 
+    game: Game
+    nnet: NeuralNet
+    args: MctsArgs
+    Qsa: dict[tuple[str, int], float]  # stores Q values for s,a (as in the paper)
+    Nsa: dict[tuple[str, int], int]  # stores #times edge s,a was visited
+    Ns: dict[str, int]  # stores #times board s was visited
+    Ps: dict[str, list[float]]  # stores initial policy (returned by neural net)
+    Es: dict[str, float]  # stores game.getGameEnded ended for board s
+    Vs: dict[str, list[int]]  # stores game.getValidMoves for board s
+
     def __init__(self, game: Game, nnet: NeuralNet, args: MctsArgs):
         self.game = game
         self.nnet = nnet
         self.args = args
-        self.Qsa = {}  # stores Q values for s,a (as defined in the paper)
-        self.Nsa = {}  # stores #times edge s,a was visited
-        self.Ns = {}  # stores #times board s was visited
-        self.Ps = {}  # stores initial policy (returned by neural net)
+        self.Qsa = {}
+        self.Nsa = {}
+        self.Ns = {}
+        self.Ps = {}
+        self.Es = {}
+        self.Vs = {}
 
-        self.Es = {}  # stores game.getGameEnded ended for board s
-        self.Vs = {}  # stores game.getValidMoves for board s
-
-    def get_action_prob(self, canonical_board: BoardMatrix, temp: int = 1) -> list[float]:
+    def get_action_prob(
+        self, canonical_board: BoardMatrix, temp: int = 1
+    ) -> list[float]:
         """
         This function performs numMCTSSims simulations of MCTS starting from
         canonicalBoard.
@@ -37,7 +47,7 @@ class MCTS:
             probs: a policy vector where the probability of the ith action is
                    proportional to Nsa[(s,a)]**(1./temp)
         """
-        for i in range(self.args.numMCTSSims):
+        for _ in range(self.args.numMCTSSims):
             self.search(canonical_board)
 
         s = self.game.string_representation(canonical_board)

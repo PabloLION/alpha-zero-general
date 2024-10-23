@@ -5,7 +5,7 @@ import sys
 sys.path.append("..")
 import numpy as np
 
-from alpha_zero_general.Game import Game
+from alpha_zero_general.game import Game
 from alpha_zero_general.santorini.santorini_logic import Board
 
 
