@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
 
-from alpha_zero_general import GenericBoardTensor, GenericBooleanBoardTensor
+from alpha_zero_general import (
+    GenericBoardTensor,
+    GenericBooleanBoardTensor,
+    GenericPolicyTensor,
+)
 
 
 class GenericGame(ABC):
@@ -80,6 +84,10 @@ class GenericGame(ABC):
     @abstractmethod
     def get_game_ended(self, board: GenericBoardTensor, player: int) -> int:
         """
+        #TODO:
+            Function name not corresponding to return type.
+            Here it gets `value`, not "if ended"
+
         Input:
             board: current board
             player: current player (1 or -1)
@@ -113,8 +121,8 @@ class GenericGame(ABC):
 
     @abstractmethod
     def get_symmetries(
-        self, board: GenericBoardTensor, pi: list[float]
-    ) -> list[tuple[GenericBoardTensor, list[float]]]:
+        self, board: GenericBoardTensor, pi: list[GenericPolicyTensor]
+    ) -> list[tuple[GenericBoardTensor, list[GenericPolicyTensor]]]:
         """
         Input:
             board: current board

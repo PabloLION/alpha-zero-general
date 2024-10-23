@@ -17,7 +17,7 @@ GenericPolicyTensor: TypeAlias = ndarray[
 ]
 
 
-@dataclass
+@dataclass(frozen=True)  # freeze to check for immutability in refactor
 class MctsArgs:
     numMCTSSims: int
     cpuct: float

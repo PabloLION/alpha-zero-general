@@ -108,8 +108,8 @@ class MCTS:
         if s not in self.Ps:
             # leaf node
             self.Ps[s], v = self.nnet.predict(canonical_board)
-            valids = self.game.get_valid_moves(canonical_board, 1)
-            self.Ps[s] = self.Ps[s] * valids  # masking invalid moves
+            valid = self.game.get_valid_moves(canonical_board, 1)
+            self.Ps[s] = self.Ps[s] * valid  # masking invalid moves
             sum_Ps_s: float = sum(self.Ps[s])
             if sum_Ps_s > 0:
                 self.Ps[s] /= sum_Ps_s  # renormalize
@@ -119,20 +119,20 @@ class MCTS:
                 # NB! All valid moves may be masked if either your NNet architecture is insufficient or you've get overfitting or something else.
                 # If you have got dozens or hundreds of these messages you should pay attention to your NNet and/or training process.
                 log.error("All valid moves were masked, doing a workaround.")
-                self.Ps[s] = self.Ps[s] + valids
+                self.Ps[s] = self.Ps[s] + valid
                 self.Ps[s] /= sum(self.Ps[s])
 
-            self.Vs[s] = valids
+            self.Vs[s] = valid
             self.Ns[s] = 0
             return -v
 
-        valids = self.Vs[s]
+        valid = self.Vs[s]
         cur_best = -float("inf")
         best_act = -1
 
         # pick the action with the highest upper confidence bound
         for a in range(self.game.get_action_size()):
-            if valids[a]:
+            if valid[a]:
                 if (s, a) in self.Qsa:
                     u = self.Qsa[(s, a)] + self.args.cpuct * self.Ps[s][a] * math.sqrt(
                         self.Ns[s]
