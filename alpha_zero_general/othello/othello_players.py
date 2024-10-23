@@ -2,8 +2,6 @@ import subprocess
 
 import numpy as np
 
-from alpha_zero_general.game import GenericGame
-
 
 class RandomPlayer:
     def __init__(self, game):

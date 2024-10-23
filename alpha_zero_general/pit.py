@@ -10,7 +10,6 @@ from alpha_zero_general.othello.othello_players import (
     RandomPlayer,
 )
 from alpha_zero_general.othello.pytorch.n_net import NNetWrapper as NNet
-from alpha_zero_general.utils import dotdict
 
 """
 use this script to play any two agents against each other, or play manually with

@@ -4,7 +4,6 @@ from pytest_mock import MockerFixture
 from alpha_zero_general.coach import Coach, CoachArgs
 from alpha_zero_general.connect4.connect4_game import Connect4Game
 from alpha_zero_general.connect4.keras.n_net import NNetWrapper as nn
-from alpha_zero_general.utils import dotdict
 
 
 class TestCoach:

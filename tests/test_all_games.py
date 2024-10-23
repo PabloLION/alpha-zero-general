@@ -50,7 +50,6 @@ from alpha_zero_general.tictactoe_3d.keras.n_net import (
 from alpha_zero_general.tictactoe_3d.tic_tac_toe_game import (
     TicTacToeGame as TicTacToe3DGame,
 )
-from alpha_zero_general.utils import dotdict
 
 
 def execute_game_test(game: GenericGame, neural_net: type[NeuralNet]):

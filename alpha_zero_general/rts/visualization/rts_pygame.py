@@ -1,9 +1,6 @@
 import ctypes
 import sys
-from typing import Any, Optional, Tuple
-
-import numpy as np
-import pygame
+from typing import Any
 
 sys.path.append("../..")
 from alpha_zero_general import GenericBoardTensor
@@ -46,7 +43,7 @@ def message_display(game_display, text, position, text_size, color=(0, 0, 0)) ->
 
 def init_visuals(
     world_width: int, world_height: int, verbose=True
-) -> Optional[Tuple[Any, Any]]:
+) -> tuple[Any, Any] | None:
     """
     Creates canvas to draw upon and creates tick
     :param world_width: ...

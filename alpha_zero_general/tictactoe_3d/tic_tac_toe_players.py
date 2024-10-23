@@ -1,7 +1,5 @@
 import numpy as np
 
-from alpha_zero_general.game import GenericGame
-
 """
 Random and Human-ineracting players for the game of TicTacToe.
 

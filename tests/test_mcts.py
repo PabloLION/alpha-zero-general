@@ -6,7 +6,6 @@ from alpha_zero_general import MctsArgs
 from alpha_zero_general.connect4.connect4_game import Connect4Game
 from alpha_zero_general.connect4.keras.n_net import NNetWrapper as nn
 from alpha_zero_general.mcts import MCTS
-from alpha_zero_general.utils import dotdict
 
 
 class TestMCTS:

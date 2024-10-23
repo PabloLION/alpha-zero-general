@@ -7,7 +7,6 @@ import pygame
 from pygame.rect import Rect
 
 from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.game import GenericGame
 from alpha_zero_general.rts.src.config import (
     A_TYPE_IDX,
     ACTS,

@@ -1,8 +1,7 @@
 import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.game import GenericGame
-from alpha_zero_general.tafl.Digits import int2base
+from alpha_zero_general.tafl.digits import int2base
 
 
 class RandomTaflPlayer:

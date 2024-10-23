@@ -1,7 +1,6 @@
 from tensorflow.keras.layers import (
     Activation,
     BatchNormalization,
-    Conv2D,
     Dense,
     Dropout,
     Flatten,
