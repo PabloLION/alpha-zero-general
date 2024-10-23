@@ -89,7 +89,7 @@ class OthelloGame(GenericGame):
     def string_representation(self, board):
         return np.array2string(board)
 
-    def stringRepresentationReadable(self, board):
+    def string_representationReadable(self, board):
         board_s = "".join(
             self.square_content[square] for row in board for square in row
         )

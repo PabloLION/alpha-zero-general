@@ -4,7 +4,7 @@ from typing import Any
 import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.dotsandboxes.keras.dots_and_boxes_n_net import (
+from alpha_zero_general.dots_and_boxes.keras.dots_and_boxes_n_net import (
     DotsAndBoxesNNet as onnet,
 )
 from alpha_zero_general.neural_net import NeuralNet

@@ -138,7 +138,7 @@ class SantoriniGame(GenericGame):
     def get_game_ended(self, board, player):
         """
         Assumes player is about to move. THIS IS NOT COMPATIBLE with the prior implementation of Arena.py
-        which returned self.game.getGameEnded(board, 1).
+        which returned self.game.get_game_ended(board, 1).
         Input:
             board: current board
             player: current player (1 or -1)
@@ -483,7 +483,7 @@ class SantoriniGame(GenericGame):
     def string_representation(self, board):
         return np.array2string(board)
 
-    def stringRepresentationReadable(self, board):
+    def string_representationReadable(self, board):
         # Do not think this works.
         board_s = "".join(
             self.square_content[square] for row in board for square in row

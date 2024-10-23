@@ -23,8 +23,8 @@ import numpy as np
 from alpha_zero_general.arena import Arena
 from alpha_zero_general.connect4.connect4_game import Connect4Game
 from alpha_zero_general.connect4.keras.n_net import NNetWrapper as Connect4KerasNNet
-from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
-from alpha_zero_general.dotsandboxes.keras.n_net import (
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
+from alpha_zero_general.dots_and_boxes.keras.n_net import (
     NNetWrapper as DotsAndBoxesKerasNNet,
 )
 from alpha_zero_general.game import GenericGame

@@ -51,7 +51,7 @@ class GreedySantoriniPlayer:
         for a in range(self.game.get_action_size()):
             if valids[a] == 0:
                 continue
-            nextBoard, _ = self.game.getNextState(board, 1, a)
+            nextBoard, _ = self.game.get_next_state(board, 1, a)
             score = self.game.getScore(nextBoard, 1)
             candidates += [(-score, a)]
         candidates.sort()

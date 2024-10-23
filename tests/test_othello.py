@@ -9,7 +9,7 @@ class TestOthelloGame:
     def setup(self):
         self.game = OthelloGame(8)
 
-    def test_getInitBoard(self):
+    def test_get_init_board(self):
         board = self.game.get_init_board()
         assert board.shape == (8, 8)
         assert board[3, 4] == 1
@@ -23,7 +23,7 @@ class TestOthelloGame:
     def test_get_action_size(self):
         assert self.game.get_action_size() == 65
 
-    def test_getNextState(self):
+    def test_get_next_state(self):
         board = self.game.get_init_board()
         next_board, next_player = self.game.get_next_state(board, 1, 19)
         assert next_board[2, 3] == 1
@@ -39,7 +39,7 @@ class TestOthelloGame:
         assert valid_moves[37] == 1
         assert valid_moves[44] == 1
 
-    def test_getGameEnded(self):
+    def test_get_game_ended(self):
         board = self.game.get_init_board()
         assert self.game.get_game_ended(board, 1) == 0
 
@@ -48,13 +48,13 @@ class TestOthelloGame:
         canonical_board = self.game.get_canonical_form(board, 1)
         assert np.array_equal(board, canonical_board)
 
-    def test_getSymmetries(self):
+    def test_get_symmetries(self):
         board = self.game.get_init_board()
         pi = [1 / 65] * 65
         symmetries = self.game.get_symmetries(board, pi)
         assert len(symmetries) == 8
 
-    def test_stringRepresentation(self):
+    def test_string_representation(self):
         board = self.game.get_init_board()
         board_str = self.game.string_representation(board)
         assert isinstance(board_str, bytes)

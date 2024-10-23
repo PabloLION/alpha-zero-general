@@ -9,7 +9,7 @@ class TestConnect4Game:
     def setup_method(self):
         self.game = Connect4Game()
 
-    def test_getInitBoard(self):
+    def test_get_init_board(self):
         board = self.game.get_init_board()
         assert board.shape == (6, 7)
         assert np.all(board == 0)
@@ -20,7 +20,7 @@ class TestConnect4Game:
     def test_get_action_size(self):
         assert self.game.get_action_size() == 7
 
-    def test_getNextState(self):
+    def test_get_next_state(self):
         board = self.game.get_init_board()
         next_board, next_player = self.game.get_next_state(board, 1, 0)
         assert next_board[5, 0] == 1
@@ -31,7 +31,7 @@ class TestConnect4Game:
         valid_moves = self.game.get_valid_moves(board, 1)
         assert np.all(valid_moves == 1)
 
-    def test_getGameEnded(self):
+    def test_get_game_ended(self):
         board = self.game.get_init_board()
         assert self.game.get_game_ended(board, 1) == 0
 
@@ -40,13 +40,13 @@ class TestConnect4Game:
         canonical_board = self.game.get_canonical_form(board, 1)
         assert np.array_equal(board, canonical_board)
 
-    def test_getSymmetries(self):
+    def test_get_symmetries(self):
         board = self.game.get_init_board()
         pi = [1 / 7] * 7
         symmetries = self.game.get_symmetries(board, pi)
         assert len(symmetries) == 2
 
-    def test_stringRepresentation(self):
+    def test_string_representation(self):
         # TODO: need a `get hash`
         board = self.game.get_init_board()
         board_str = self.game.string_representation(board)

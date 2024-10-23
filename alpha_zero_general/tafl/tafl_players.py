@@ -52,7 +52,7 @@ class GreedyTaflPlayer:
         for a in range(self.game.get_action_size()):
             if valids[a] == 0:
                 continue
-            nextBoard, _ = self.game.getNextState(board, board.getPlayerToMove(), a)
+            nextBoard, _ = self.game.get_next_state(board, board.getPlayerToMove(), a)
             score = self.game.getScore(nextBoard, board.getPlayerToMove())
             candidates += [(-score, a)]
         candidates.sort()

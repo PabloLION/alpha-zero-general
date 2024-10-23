@@ -9,7 +9,7 @@ class TestTicTacToeGame:
     def setup_method(self):
         self.game = TicTacToeGame()
 
-    def test_getInitBoard(self):
+    def test_get_init_board(self):
         board = self.game.get_init_board()
         expected_board = np.zeros((3, 3))
         assert np.array_equal(board, expected_board)
@@ -20,7 +20,7 @@ class TestTicTacToeGame:
     def test_get_action_size(self):
         assert self.game.get_action_size() == 10
 
-    def test_getNextState(self):
+    def test_get_next_state(self):
         board = self.game.get_init_board()
         next_board, next_player = self.game.get_next_state(board, 1, 0)
         expected_board = np.array([[1, 0, 0], [0, 0, 0], [0, 0, 0]])
@@ -33,7 +33,7 @@ class TestTicTacToeGame:
         expected_valid_moves = np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 0])
         assert np.array_equal(valid_moves, expected_valid_moves)
 
-    def test_getGameEnded(self):
+    def test_get_game_ended(self):
         # player 1 won due to first row
         board = np.array([[1, 1, 1], [0, -1, -1], [0, 0, 0]])
         assert self.game.get_game_ended(board, 1) == 1
@@ -67,13 +67,13 @@ class TestTicTacToeGame:
         expected_board = np.array([[-1, 1, 0], [0, -1, 1], [0, 0, -1]])
         assert np.array_equal(canonical_board, expected_board)
 
-    def test_getSymmetries(self):
+    def test_get_symmetries(self):
         board = np.array([[1, 0, -1], [0, 1, 0], [-1, 0, 1]])
         pi = [0.1] * 9 + [0]
         symmetries = self.game.get_symmetries(board, pi)
         assert len(symmetries) == 8
 
-    def test_stringRepresentation(self):
+    def test_string_representation(self):
         board = np.array([[1, 0, -1], [0, 1, 0], [-1, 0, 1]])
         board_string = self.game.string_representation(board)
         expected_string = np.array2string(board)

@@ -427,7 +427,7 @@ class Configuration:
                 # how many turns until game end - this gets reduced when each turn is executed
                 self.TIMEOUT = timeout
             else:
-                # sets initial tick to 0 and then in getGameEnded it gets incremented unitl number 8191
+                # sets initial tick to 0 and then in get_game_ended it gets incremented unitl number 8191
                 self.TIMEOUT = 0
             # ##################################
             # ########## ATTACKING #############

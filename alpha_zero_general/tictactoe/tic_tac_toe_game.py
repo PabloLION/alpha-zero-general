@@ -10,7 +10,7 @@ from alpha_zero_general.tictactoe.tic_tac_toe_logic import Board
 
 """
 Game class implementation for the game of TicTacToe.
-Based on the OthelloGame then getGameEnded() was adapted to new rules.
+Based on the OthelloGame then get_game_ended() was adapted to new rules.
 
 Author: Evgeny Tyurin, github.com/evg-tyurin
 Date: Jan 5, 2018.

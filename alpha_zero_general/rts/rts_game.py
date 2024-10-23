@@ -19,7 +19,7 @@ from alpha_zero_general.rts.src.config_class import CONFIG
 RTSGame.pyefined rules for RTS game TD2020
 Includes: 
 - init - contains board configuration
-- getGameEnded - contains end game checking
+- get_game_ended - contains end game checking
 """
 
 

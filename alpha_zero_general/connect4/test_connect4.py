@@ -40,7 +40,7 @@ def test_simple_moves():
          [ 0.  0.  0.  0.  1.  0.  0.]
          [ 1.  0.  0. -1.  1. -1. -1.]]"""
     )
-    assert expected == game.stringRepresentation(board)
+    assert expected == game.string_representation(board)
 
 
 def test_overfull_column():
@@ -75,7 +75,7 @@ def test_symmetries():
     """Tests symetric board are produced."""
     board, player, game = init_board_from_moves([0, 0, 1, 0, 6])
     pi = [0.1, 0.2, 0.3]
-    (board1, pi1), (board2, pi2) = game.getSymmetries(board, pi)
+    (board1, pi1), (board2, pi2) = game.get_symmetries(board, pi)
     assert [0.1, 0.2, 0.3] == pi1 and [0.3, 0.2, 0.1] == pi2
 
     expected_board1 = textwrap.dedent(
@@ -87,7 +87,7 @@ def test_symmetries():
          [-1.  0.  0.  0.  0.  0.  0.]
          [ 1.  1.  0.  0.  0.  0.  1.]]"""
     )
-    assert expected_board1 == game.stringRepresentation(board1)
+    assert expected_board1 == game.string_representation(board1)
 
     expected_board2 = textwrap.dedent(
         """\
@@ -98,7 +98,7 @@ def test_symmetries():
          [ 0.  0.  0.  0.  0.  0. -1.]
          [ 1.  0.  0.  0.  0.  1.  1.]]"""
     )
-    assert expected_board2 == game.stringRepresentation(board2)
+    assert expected_board2 == game.string_representation(board2)
 
 
 def test_game_ended():
@@ -267,7 +267,7 @@ def test_game_ended():
 
     for np_pieces, player, expected_end_state in array_end_state_pairs:
         board, player, game = init_board_from_array(np_pieces, player)
-        end_state = game.getGameEnded(board, player)
+        end_state = game.get_game_ended(board, player)
         assert expected_end_state == end_state, "expected=%s, actual=%s, board=\n%s" % (
             expected_end_state,
             end_state,
@@ -276,11 +276,11 @@ def test_game_ended():
 
 
 def test_immutable_move():
-    """Test original board is not mutated whtn getNextState() called."""
+    """Test original board is not mutated whtn get_next_state() called."""
     board, player, game = init_board_from_moves([1, 2, 3, 3, 4])
-    original_board_string = game.stringRepresentation(board)
+    original_board_string = game.string_representation(board)
 
-    new_np_pieces, new_player = game.getNextState(board, 3, -1)
+    new_np_pieces, new_player = game.get_next_state(board, 3, -1)
 
-    assert original_board_string == game.stringRepresentation(board)
-    assert original_board_string != game.stringRepresentation(new_np_pieces)
+    assert original_board_string == game.string_representation(board)
+    assert original_board_string != game.string_representation(new_np_pieces)

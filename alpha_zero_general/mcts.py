@@ -29,7 +29,7 @@ class MCTS:
     Nsa: dict[tuple[str, int], int]  # #times edge s,a was visited
     Ns: dict[str, int]  # #_times board s was visited
     Ps: dict[str, GenericPolicyTensor]  # policy tensor (returned by neural net)
-    Es: dict[str, float]  # game.getGameEnded ended for board s
+    Es: dict[str, float]  # game.get_game_ended ended for board s
     Vs: dict[str, GenericBooleanBoardTensor]  # game.get_valid_moves for board s
 
     def __init__(self, game: GenericGame, nnet: NeuralNet, args: MctsArgs) -> None:

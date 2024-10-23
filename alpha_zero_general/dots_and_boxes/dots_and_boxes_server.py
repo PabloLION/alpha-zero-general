@@ -3,9 +3,9 @@ import os
 import numpy as np
 from flask import Flask, Response, request
 
-from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
-from alpha_zero_general.dotsandboxes.dots_and_boxes_players import GreedyRandomPlayer
-from alpha_zero_general.dotsandboxes.keras.n_net import NNetWrapper as nn
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_players import GreedyRandomPlayer
+from alpha_zero_general.dots_and_boxes.keras.n_net import NNetWrapper as nn
 from alpha_zero_general.MCTS import MCTS
 from alpha_zero_general.utils import dotdict
 

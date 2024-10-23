@@ -1,7 +1,7 @@
 import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.dotsandboxes.dots_and_boxes_logic import Board
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_logic import Board
 from alpha_zero_general.game import GenericGame
 
 

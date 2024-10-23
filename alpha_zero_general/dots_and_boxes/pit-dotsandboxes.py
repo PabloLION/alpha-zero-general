@@ -3,13 +3,13 @@ import os
 import numpy as np
 
 from alpha_zero_general.arena import Arena
-from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
-from alpha_zero_general.dotsandboxes.dots_and_boxes_players import (
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_players import (
     GreedyRandomPlayer,
     HumanDotsAndBoxesPlayer,
     RandomPlayer,
 )
-from alpha_zero_general.dotsandboxes.keras.n_net import NNetWrapper
+from alpha_zero_general.dots_and_boxes.keras.n_net import NNetWrapper
 from alpha_zero_general.MCTS import MCTS
 from alpha_zero_general.utils import dotdict
 

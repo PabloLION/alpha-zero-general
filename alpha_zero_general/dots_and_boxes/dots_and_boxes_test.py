@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
 
 
 class DotsAndBoxesTests(unittest.TestCase):
@@ -14,7 +14,7 @@ class DotsAndBoxesTests(unittest.TestCase):
         self.assertEqual(13, DotsAndBoxesGame(n=2).get_action_size())
         self.assertEqual(25, DotsAndBoxesGame(n=3).get_action_size())
 
-    def testGetNextState(self):
+    def testget_next_state(self):
         g = DotsAndBoxesGame(n=2)
 
         board = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
@@ -50,7 +50,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testGetNextStateScoreN2Player2(self):
+    def testget_next_stateScoreN2Player2(self):
         g = DotsAndBoxesGame(n=2)
 
         board = np.array([[1, 0, 0], [1, 0, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0]])
@@ -64,7 +64,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testGetNextStateScoreN2(self):
+    def testget_next_stateScoreN2(self):
         g = DotsAndBoxesGame(n=2)
 
         board = np.array([[1, 0, 0], [1, 0, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0]])
@@ -89,7 +89,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testGetNextStateScoreN3(self):
+    def testget_next_stateScoreN3(self):
         g = DotsAndBoxesGame(n=3)
 
         board = np.array(
@@ -309,7 +309,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testGetGameEnded(self):
+    def testget_game_ended(self):
         g = DotsAndBoxesGame(n=2)
 
         board = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
