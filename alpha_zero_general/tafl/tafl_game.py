@@ -63,7 +63,7 @@ class TaflGame(GenericGame):
         self, board: GenericBoardTensor, player: int
     ) -> GenericBoardTensor:
         # return a fixed size binary vector
-        # Note: Ignoreing the passed in player variable since we are not inverting colors for getCanonicalForm and Arena calls with constant 1.
+        # Note: Ignoreing the passed in player variable since we are not inverting colors for get_canonical_form and Arena calls with constant 1.
         valids = [0] * self.get_action_size()
         b = board.get_copy()
         legal_moves = b.get_legal_moves(board.get_player_to_move())

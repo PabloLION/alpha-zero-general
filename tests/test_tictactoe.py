@@ -58,7 +58,7 @@ class TestTicTacToeGame:
         assert self.game.get_game_ended(board, -1) == 1e-4
         # #TODO: why 1e-4? also floating number is dangerous in python.
 
-    def test_getCanonicalForm(self):
+    def test_get_canonical_form(self):
         board = np.array([[1, -1, 0], [0, 1, -1], [0, 0, 1]])
         canonical_board = self.game.get_canonical_form(board, 1)
         expected_board = np.array([[1, -1, 0], [0, 1, -1], [0, 0, 1]])

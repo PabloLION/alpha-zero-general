@@ -43,7 +43,7 @@ class TestOthelloGame:
         board = self.game.get_init_board()
         assert self.game.get_game_ended(board, 1) == 0
 
-    def test_getCanonicalForm(self):
+    def test_get_canonical_form(self):
         board = self.game.get_init_board()
         canonical_board = self.game.get_canonical_form(board, 1)
         assert np.array_equal(board, canonical_board)
@@ -57,4 +57,4 @@ class TestOthelloGame:
     def test_string_representation(self):
         board = self.game.get_init_board()
         board_str = self.game.string_representation(board)
-        assert isinstance(board_str, bytes)
+        assert isinstance(board_str, str)
