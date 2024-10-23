@@ -3,8 +3,8 @@ import logging
 import coloredlogs
 
 from alpha_zero_general.Coach import Coach
-from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
-from alpha_zero_general.dotsandboxes.keras.NNet import NNetWrapper as nn
+from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
+from alpha_zero_general.dotsandboxes.keras.n_net import NNetWrapper as nn
 from alpha_zero_general.utils import dotdict
 
 log = logging.getLogger(__name__)

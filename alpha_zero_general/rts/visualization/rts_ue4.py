@@ -9,8 +9,8 @@ import tensorflow as tf
 from TFPluginAPI import TFPluginAPI
 
 from alpha_zero_general.MCTS import MCTS
-from alpha_zero_general.rts.keras.NNet import NNetWrapper as NNet
-from alpha_zero_general.rts.RTSGame import RTSGame
+from alpha_zero_general.rts.keras.n_net import NNetWrapper as NNet
+from alpha_zero_general.rts.rts_game import RTSGame
 from alpha_zero_general.rts.src.config import ACTS_REV, NUM_ACTS
 from alpha_zero_general.rts.src.encoders import OneHotEncoder
 from alpha_zero_general.utils import dotdict

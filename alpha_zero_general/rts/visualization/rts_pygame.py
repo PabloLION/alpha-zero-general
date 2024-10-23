@@ -3,6 +3,7 @@ import sys
 from typing import Any, Optional, Tuple
 
 import numpy as np
+import pygame
 
 sys.path.append("../..")
 from alpha_zero_general.rts.src.config import (

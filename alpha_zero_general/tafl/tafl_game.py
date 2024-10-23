@@ -6,8 +6,8 @@ sys.path.append("..")
 import numpy as np
 
 from alpha_zero_general.game import Game
-from alpha_zero_general.tafl.Digits import int2base
-from alpha_zero_general.tafl.GameVariants import (
+from alpha_zero_general.tafl.digits import int2base
+from alpha_zero_general.tafl.game_variants import (
     AleaEvangelii,
     ArdRi,
     Brandubh,
@@ -15,7 +15,7 @@ from alpha_zero_general.tafl.GameVariants import (
     Tablut,
     Tawlbwrdd,
 )
-from alpha_zero_general.tafl.TaflLogic import Board
+from alpha_zero_general.tafl.tafl_logic import Board
 from alpha_zero_general.type import BoardMatrix
 
 

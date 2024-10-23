@@ -8,7 +8,7 @@ from collections import namedtuple
 
 import numpy as np
 
-from alpha_zero_general.connect4.Connect4Game import Connect4Game
+from alpha_zero_general.connect4.connect4_game import Connect4Game
 
 # Tuple of (Board, Player, Game) to simplify testing.
 BPGTuple = namedtuple("BPGTuple", "board player game")
@@ -134,10 +134,11 @@ def test_game_ended():
         (
             np.array(
                 [
-                    [0, 0, 0, 0, 1, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 1, 0, 0, 0],
                     [0, 0, 1, 0, 0, 0, 0],
                     [0, 1, 0, 0, 0, 0, 0],
+                    [1, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0],
                 ]
             ),
@@ -147,11 +148,11 @@ def test_game_ended():
         (
             np.array(
                 [
-                    [0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 1, 0, 0, 0, 0],
-                    [0, 0, 0, 1, 0, 0, 0],
                     [0, 0, 0, 0, 1, 0, 0],
-                    [0, 0, 0, 0, 0, 1, 0],
+                    [0, 0, 0, 1, 0, 0, 0],
+                    [0, 0, 1, 0, 0, 0, 0],
+                    [0, 1, 0, 0, 0, 0, 0],
+                    [1, 0, 0, 0, 0, 0, 0],
                 ]
             ),
             -1,

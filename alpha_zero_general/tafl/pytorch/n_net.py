@@ -9,8 +9,8 @@ sys.path.append("../../")
 import torch
 import torch.optim as optim
 
-from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.tafl.pytorch.TaflNNet import TaflNNet as onnet
+from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.tafl.pytorch.tafl_n_net import TaflNNet as onnet
 from alpha_zero_general.utils import AverageMeter, dotdict
 
 args = dotdict(

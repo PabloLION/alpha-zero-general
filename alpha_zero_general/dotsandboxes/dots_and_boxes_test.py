@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from alpha_zero_general.dotsandboxes.DotsAndBoxesGame import DotsAndBoxesGame
+from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
 
 
 class DotsAndBoxesTests(unittest.TestCase):
