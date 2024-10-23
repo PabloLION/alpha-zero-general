@@ -32,17 +32,17 @@ class TestCoach:
 
     def test_executeEpisode(self, mocker: MockerFixture):
         self.coach.mcts.getActionProb = mocker.MagicMock(return_value=[1])
-        self.coach.game.getNextState = mocker.MagicMock(
-            return_value=(self.game.getInitBoard(), 1)
+        self.coach.game.get_next_state = mocker.MagicMock(
+            return_value=(self.game.get_init_board(), 1)
         )
-        self.coach.game.getGameEnded = mocker.MagicMock(return_value=1)
+        self.coach.game.get_game_ended = mocker.MagicMock(return_value=1)
         trainExamples = self.coach.executeEpisode()
         assert len(trainExamples) == 1
         assert trainExamples[0][2] == 1
 
     def test_learn(self, mocker: MockerFixture):
         self.coach.executeEpisode = mocker.MagicMock(
-            return_value=[(self.game.getInitBoard(), 1, [1], 1)]
+            return_value=[(self.game.get_init_board(), 1, [1], 1)]
         )
         self.coach.nnet.train = mocker.MagicMock()
         self.coach.nnet.save_checkpoint = mocker.MagicMock()

@@ -10,50 +10,50 @@ class TestGobangGame:
         self.game = GobangGame()
 
     def test_getInitBoard(self):
-        board = self.game.getInitBoard()
+        board = self.game.get_init_board()
         assert board.shape == (15, 15)
         assert np.all(board == 0)
 
     def test_getBoardSize(self):
-        assert self.game.getBoardSize() == (15, 15)
+        assert self.game.get_board_size() == (15, 15)
 
     def test_getActionSize(self):
-        assert self.game.getActionSize() == 226
+        assert self.game.get_action_size() == 226
 
     def test_getNextState(self):
-        board = self.game.getInitBoard()
-        next_board, next_player = self.game.getNextState(board, 1, 0)
+        board = self.game.get_init_board()
+        next_board, next_player = self.game.get_next_state(board, 1, 0)
         assert next_board[0, 0] == 1
         assert next_player == -1
 
     def test_getValidMoves(self):
-        board = self.game.getInitBoard()
-        valid_moves = self.game.getValidMoves(board, 1)
+        board = self.game.get_init_board()
+        valid_moves = self.game.get_valid_moves(board, 1)
         assert np.sum(valid_moves) == 225
         assert valid_moves[-1] == 0
 
     def test_getGameEnded(self):
-        board = self.game.getInitBoard()
-        assert self.game.getGameEnded(board, 1) == 0
+        board = self.game.get_init_board()
+        assert self.game.get_game_ended(board, 1) == 0
         board[0, :5] = 1
-        assert self.game.getGameEnded(board, 1) == 1
+        assert self.game.get_game_ended(board, 1) == 1
         board[0, :5] = -1
-        assert self.game.getGameEnded(board, -1) == -1
+        assert self.game.get_game_ended(board, -1) == -1
 
     def test_getCanonicalForm(self):
-        board = self.game.getInitBoard()
-        canonical_board = self.game.getCanonicalForm(board, 1)
+        board = self.game.get_init_board()
+        canonical_board = self.game.get_canonical_form(board, 1)
         assert np.array_equal(board, canonical_board)
-        canonical_board = self.game.getCanonicalForm(board, -1)
+        canonical_board = self.game.get_canonical_form(board, -1)
         assert np.array_equal(board, -canonical_board)
 
     def test_getSymmetries(self):
-        board = self.game.getInitBoard()
+        board = self.game.get_init_board()
         pi = [0] * 225 + [1]
-        symmetries = self.game.getSymmetries(board, pi)
+        symmetries = self.game.get_symmetries(board, pi)
         assert len(symmetries) == 8
 
     def test_stringRepresentation(self):
-        board = self.game.getInitBoard()
-        board_str = self.game.stringRepresentation(board)
+        board = self.game.get_init_board()
+        board_str = self.game.string_representation(board)
         assert isinstance(board_str, bytes)

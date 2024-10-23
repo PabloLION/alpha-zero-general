@@ -17,9 +17,9 @@ BPGTuple = namedtuple("BPGTuple", "board player game")
 def init_board_from_moves(moves, height=None, width=None):
     """Returns a BPGTuple based on series of specified moved."""
     game = Connect4Game(height=height, width=width)
-    board, player = game.getInitBoard(), 1
+    board, player = game.get_init_board(), 1
     for move in moves:
-        board, player = game.getNextState(board, player, move)
+        board, player = game.get_next_state(board, player, move)
     return BPGTuple(board, player, game)
 
 

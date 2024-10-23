@@ -57,26 +57,26 @@ class Coach:
                            the player eventually won the game, else -1.
         """
         trainExamples: list[TrainExample] = []
-        board = self.game.getInitBoard()
+        board = self.game.get_init_board()
         self.curPlayer = 1
         episodeStep = 0
 
         while True:
             episodeStep += 1
-            canonicalBoard = self.game.getCanonicalForm(board, self.curPlayer)
+            canonicalBoard = self.game.get_canonical_form(board, self.curPlayer)
             temp = int(episodeStep < self.args.tempThreshold)
 
             pi = self.mcts.getActionProb(canonicalBoard, temp=temp)
-            sym = self.game.getSymmetries(canonicalBoard, pi)
+            sym = self.game.get_symmetries(canonicalBoard, pi)
             for b, p in sym:
                 trainExamples.append((b, self.curPlayer, p, None))
 
             action = np.random.choice(len(pi), p=pi)
-            board, self.curPlayer = self.game.getNextState(
+            board, self.curPlayer = self.game.get_next_state(
                 board, self.curPlayer, action
             )
 
-            r = self.game.getGameEnded(board, self.curPlayer)
+            r = self.game.get_game_ended(board, self.curPlayer)
 
             if r != 0:
                 return [
@@ -172,7 +172,9 @@ class Coach:
         folder = self.args.checkpoint
         if not os.path.exists(folder):
             os.makedirs(folder)
-        filename = os.path.join(folder, self.get_checkpoint_file(iteration) + ".examples")
+        filename = os.path.join(
+            folder, self.get_checkpoint_file(iteration) + ".examples"
+        )
         with open(filename, "wb+") as f:
             Pickler(f).dump(self.trainExamplesHistory)
         f.closed

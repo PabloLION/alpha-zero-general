@@ -23,14 +23,14 @@ class TestNeuralNet:
         )
 
     def test_train(self):
-        examples = [(self.game.getInitBoard(), [1] * self.game.getActionSize(), 1)]
+        examples = [(self.game.get_init_board(), [1] * self.game.get_action_size(), 1)]
         self.nnet.train(examples)
         assert True  # If no exception is raised, the test passes
 
     def test_predict(self):
-        board = self.game.getInitBoard()
+        board = self.game.get_init_board()
         pi, v = self.nnet.predict(board)
-        assert len(pi) == self.game.getActionSize()
+        assert len(pi) == self.game.get_action_size()
         assert -1 <= v <= 1
 
     def test_save_checkpoint(self):

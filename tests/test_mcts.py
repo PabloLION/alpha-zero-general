@@ -17,10 +17,10 @@ class TestMCTS:
         self.mcts = MCTS(self.game, self.nnet, self.args)
 
     def test_getActionProb(self):
-        board = self.game.getInitBoard()
-        canonicalBoard = self.game.getCanonicalForm(board, 1)
+        board = self.game.get_init_board()
+        canonicalBoard = self.game.get_canonical_form(board, 1)
         probs = self.mcts.getActionProb(canonicalBoard, temp=1)
-        assert len(probs) == self.game.getActionSize()
+        assert len(probs) == self.game.get_action_size()
         assert np.isclose(sum(probs), 1)
 
     def test_search(self, mocker: MockerFixture):
@@ -28,7 +28,7 @@ class TestMCTS:
             "alpha_zero_general.connect4.keras.NNetWrapper.predict",
             return_value=(np.array([1 / 7] * 7), 0),
         )
-        board = self.game.getInitBoard()
-        canonicalBoard = self.game.getCanonicalForm(board, 1)
+        board = self.game.get_init_board()
+        canonicalBoard = self.game.get_canonical_form(board, 1)
         v = self.mcts.search(canonicalBoard)
         assert -1 <= v <= 1

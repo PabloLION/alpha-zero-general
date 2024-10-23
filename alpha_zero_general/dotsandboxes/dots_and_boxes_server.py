@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 from flask import Flask, Response, request
+
 from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
 from alpha_zero_general.dotsandboxes.dots_and_boxes_players import GreedyRandomPlayer
 from alpha_zero_general.dotsandboxes.keras.n_net import NNetWrapper as nn
@@ -17,7 +18,7 @@ g = None
 # curl -d "board=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" -X POST http://localhost:8888/predict
 @app.route("/predict", methods=["POST"])
 def predict():
-    board = np.fromstring(request.form["board"], sep=",").reshape(g.getBoardSize())
+    board = np.fromstring(request.form["board"], sep=",").reshape(g.get_board_size())
 
     use_alpha_zero = True
     if use_alpha_zero:

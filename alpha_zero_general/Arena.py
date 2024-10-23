@@ -44,25 +44,25 @@ class Arena:
         """
         players = [self.player2, None, self.player1]
         curPlayer = 1
-        board = self.game.getInitBoard()
+        board = self.game.get_init_board()
         it = 0
 
         for player in players[0], players[2]:
             if hasattr(player, "startGame"):
                 player.startGame()
 
-        while self.game.getGameEnded(board, curPlayer) == 0:
+        while self.game.get_game_ended(board, curPlayer) == 0:
             it += 1
             if verbose:
                 assert self.display
                 print("Turn ", str(it), "Player ", str(curPlayer))
                 self.display(board)
             action = players[curPlayer + 1](
-                self.game.getCanonicalForm(board, curPlayer)
+                self.game.get_canonical_form(board, curPlayer)
             )
 
-            valids = self.game.getValidMoves(
-                self.game.getCanonicalForm(board, curPlayer), 1
+            valids = self.game.get_valid_moves(
+                self.game.get_canonical_form(board, curPlayer), 1
             )
 
             if valids[action] == 0:
@@ -75,7 +75,7 @@ class Arena:
             if hasattr(opponent, "notify"):
                 opponent.notify(board, action)
 
-            board, curPlayer = self.game.getNextState(board, curPlayer, action)
+            board, curPlayer = self.game.get_next_state(board, curPlayer, action)
 
         for player in players[0], players[2]:
             if hasattr(player, "endGame"):
@@ -87,10 +87,10 @@ class Arena:
                 "Game over: Turn ",
                 str(it),
                 "Result ",
-                str(self.game.getGameEnded(board, 1)),
+                str(self.game.get_game_ended(board, 1)),
             )
             self.display(board)
-        return curPlayer * self.game.getGameEnded(board, curPlayer)
+        return curPlayer * self.game.get_game_ended(board, curPlayer)
 
     def play_games(self, num: int, verbose: bool = False) -> tuple[int, int, int]:
         """
