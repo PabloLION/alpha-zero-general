@@ -121,9 +121,12 @@ class GenericGame(ABC):
 
     @abstractmethod
     def get_symmetries(
-        self, board: GenericBoardTensor, pi: list[GenericPolicyTensor]
-    ) -> list[tuple[GenericBoardTensor, list[GenericPolicyTensor]]]:
+        self, board: GenericBoardTensor, pi: GenericPolicyTensor
+    ) -> list[tuple[GenericBoardTensor, GenericPolicyTensor]]:
         """
+        #TODO:
+            - GenericPolicyTensor?
+
         Input:
             board: current board
             pi: policy vector of size self.get_action_size()

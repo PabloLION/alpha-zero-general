@@ -1,11 +1,12 @@
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, NamedTuple, Union
+from typing import Any, NamedTuple
 
 from numpy import ndarray
 
-Player = Callable[[Union[ndarray[Any, Any], list[list[int]]]], int]
-Display = Callable[[Union[ndarray[Any, Any], list[list[int]]]], None]
-TrainExample = tuple[Union[ndarray[Any, Any], list[list[int]]], int, list[float], float]
+Player = Callable[[ndarray[Any, Any] | list[list[int]]], int]
+Display = Callable[[ndarray[Any, Any] | list[list[int]]], None]
+TrainExample = tuple[ndarray[Any, Any] | list[list[int]], int, list[float], float]
 TrainExamplesHistory = list[list[TrainExample]]
 CheckpointFile = Path
 TrainExamplesFile = Path

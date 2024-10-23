@@ -1,7 +1,7 @@
 import logging
 import math
 
-from numpy import argwhere, array, random
+from numpy import argwhere, array, random, zeros
 
 from alpha_zero_general import (
     GenericBoardTensor,
@@ -45,10 +45,18 @@ class MCTS:
 
     def get_action_prob(
         self, canonical_board: GenericBoardTensor, temp: int = 1
-    ) -> list[float]:
+    ) -> GenericPolicyTensor:
         """
         This function performs numMCTSSims simulations of MCTS starting from
         canonicalBoard.
+
+        Args:
+            canonical_board: a board that is a canonical form of the current
+                                board state.
+            temp: temperature parameter in (0, 1] that controls the level of
+                    exploration of the MCTS. A higher value will encourage the
+                    AI to explore new actions while a lower value will make it
+                    greedy.
 
         Returns:
             probs: a policy vector where the probability of the ith action is
@@ -68,13 +76,13 @@ class MCTS:
         if temp == 0:
             best_as = argwhere(counts == max(counts)).flatten()
             best_a = random.choice(best_as)
-            prob: list[float] = [0] * len(counts)
+            prob: GenericPolicyTensor = zeros(len(counts))
             prob[best_a] = 1
             return prob
 
         counts = [x ** (1.0 / temp) for x in counts]
         counts_sum = float(sum(counts))
-        prob = [x / counts_sum for x in counts]
+        prob = array([x / counts_sum for x in counts])
         return prob
 
     def search(self, canonical_board: GenericBoardTensor) -> float:

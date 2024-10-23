@@ -2,8 +2,9 @@ import logging
 
 from tqdm import tqdm
 
+from alpha_zero_general import PolicyMakerAsPlayer
 from alpha_zero_general.game import GenericGame
-from alpha_zero_general.type import Display, Player
+from alpha_zero_general.type import Display
 
 log = logging.getLogger(__name__)
 
@@ -15,10 +16,10 @@ class Arena:
 
     def __init__(
         self,
-        player1: Player,
-        player2: Player,
+        player1: PolicyMakerAsPlayer,
+        player2: PolicyMakerAsPlayer,
         game: GenericGame,
-        display: Display = None,
+        display: Display | None = None,
     ):
         """
         Input:

@@ -1,10 +1,11 @@
 import logging
 import os
 from collections import deque
+from collections.abc import Callable
 from dataclasses import dataclass
 from pickle import Pickler, Unpickler
 from random import shuffle
-from typing import Any, Callable, NamedTuple, TypeAlias
+from typing import Any, NamedTuple, TypeAlias
 
 import numpy as np
 from numpy import random
@@ -17,7 +18,6 @@ from alpha_zero_general.mcts import MCTS, GenericPolicyTensor
 
 log = logging.getLogger(__name__)
 
-Player = Callable[[Any], int]
 Display = Callable[[Any], None]
 Board = Any
 ExampleValue: TypeAlias = float
@@ -66,6 +66,7 @@ class CoachArgs:
     loadFolderFile: tuple[str, str]
     numItersForTrainExamplesHistory: int
     maxlenOfQueue: int
+    load_folder_file: tuple[str, str]
 
     def to_mcts_args(self) -> MctsArgs:
         return MctsArgs(
@@ -163,12 +164,12 @@ class Coach:
 
                 for _ in tqdm(range(self.args.numEps), desc="Self Play"):
                     self.mcts = MCTS(
-                        self.game, self.nnet, self.args
+                        self.game, self.nnet, self.args.to_mcts_args()
                     )  # reset search tree
                     iteration_train_examples += self.execute_episode()
 
                 # save the iteration examples to the history
-                self.train_examples_history.append(iteration_train_examples)
+                self.train_examples_history.append(list(iteration_train_examples))
 
             if (
                 len(self.train_examples_history)
@@ -195,18 +196,25 @@ class Coach:
             self.pnet.load_checkpoint(
                 folder=self.args.checkpoint, filename="temp.pth.tar"
             )
-            pmcts = MCTS(self.game, self.pnet, self.args)
+            pmcts = MCTS(self.game, self.pnet, self.args.to_mcts_args())
+
+            def get_p1_policy(board: GenericBoardTensor) -> int:
+                return int(np.argmax(a=pmcts.get_action_prob(board, temp=0)))
 
             self.nnet.train(train_examples)
-            nmcts = MCTS(self.game, self.nnet, self.args)
+            nmcts = MCTS(self.game, self.nnet, self.args.to_mcts_args())
+
+            def get_p2_policy(board: GenericBoardTensor) -> int:
+                return int(np.argmax(nmcts.get_action_prob(board, temp=0)))
 
             log.info("PITTING AGAINST PREVIOUS VERSION")
+
             arena = Arena(
-                lambda x: np.argmax(pmcts.getActionProb(x, temp=0)),
-                lambda x: np.argmax(nmcts.getActionProb(x, temp=0)),
+                get_p1_policy,
+                get_p2_policy,
                 self.game,
             )
-            pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
+            pwins, nwins, draws = arena.play_games(self.args.arenaCompare)
 
             log.info("NEW/PREV WINS : %d / %d ; DRAWS : %d" % (nwins, pwins, draws))
             if (

@@ -44,6 +44,7 @@ class MainArgs:
             loadFolderFile=self.load_folder_file,
             numItersForTrainExamplesHistory=self.n_iters_for_train_examples_history,
             maxlenOfQueue=self.maxlen_of_queue,
+            load_folder_file=self.load_folder_file,
         )
 
 
