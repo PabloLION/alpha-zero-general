@@ -4,7 +4,7 @@ import numpy as np
 
 from alpha_zero_general import MctsArgs
 from alpha_zero_general.rts.src.encoders import NumericEncoder, OneHotEncoder
-from alpha_zero_general.utils import dotdict
+from alpha_zero_general.utils import DotDict
 
 # ####################################################################################
 # ###################### INITIAL CONFIGS AND OUTPUTS ##################################
@@ -50,7 +50,7 @@ TIME_IDX = 5
 
 
 # Dictionary for actors
-d_a_type = dotdict(
+d_a_type = DotDict(
     {
         "Gold": 1,
         "Work": 2,
@@ -61,7 +61,7 @@ d_a_type = dotdict(
 )
 
 # Reverse dictionary for actors
-d_type_rev = dotdict(
+d_type_rev = DotDict(
     {
         1: "Gold",
         2: "Work",
@@ -76,7 +76,7 @@ d_type_rev = dotdict(
 # ##################################
 
 # Dictionary for actions and which actor can execute them
-d_acts = dotdict(
+d_acts = DotDict(
     {
         1: [],  # Gold
         2: [
@@ -141,7 +141,7 @@ d_acts = dotdict(
 )
 
 # Reverse dictionary for actions
-d_acts_int = dotdict(
+d_acts_int = DotDict(
     {
         1: [],  # Gold
         2: [
@@ -249,7 +249,7 @@ NUM_ACTS = len(ACTS)
 # ####################################################################################
 
 # User shortcuts that player can use using Pygame
-d_user_shortcuts = dotdict(
+d_user_shortcuts = DotDict(
     {
         " ": 0,  # idle
         "w": 1,  # up
@@ -286,7 +286,7 @@ d_user_shortcuts = dotdict(
 )
 
 # Reverse dictionary for user shortcuts
-d_user_shortcuts_rev = dotdict(
+d_user_shortcuts_rev = DotDict(
     {
         0: " ",  # idle
         1: "w",  # up
@@ -323,7 +323,7 @@ d_user_shortcuts_rev = dotdict(
 )
 
 # Colors of actors displayed in Pygame
-d_a_color = dotdict(
+d_a_color = DotDict(
     {
         1: (230, 0, 50),  # Gold
         2: (0, 165, 208),  # Work
@@ -442,7 +442,7 @@ class Configuration:
                 self.DAMAGE = 10000
 
             # Maximum health that actor can have - this is also initial health that actor has.
-            self.a_max_health = dotdict(
+            self.a_max_health = DotDict(
                 a_max_health
                 or {
                     1: 10,  # Gold
@@ -454,7 +454,7 @@ class Configuration:
             )
 
             # Cost of actor to produce (key - actor type, value - number of gold coins to pay)
-            self.a_cost = dotdict(
+            self.a_cost = DotDict(
                 a_cost
                 or {
                     1: 0,  # Gold
@@ -464,7 +464,7 @@ class Configuration:
                     5: 7,  # Hall
                 }
             )
-            self.acts_enabled = dotdict(
+            self.acts_enabled = DotDict(
                 acts_enabled
                 or {
                     "idle": False,
@@ -917,7 +917,7 @@ class Configuration:
             self.initial_board_config = []
             for board_tile in initial_board_config:
                 self.initial_board_config.append(
-                    dotdict(
+                    DotDict(
                         {
                             "x": board_tile.x,
                             "y": board_tile.y,
@@ -948,7 +948,7 @@ class Configuration:
                 )
         else:
             self.initial_board_config = initial_board_config or [
-                dotdict(
+                DotDict(
                     {
                         "x": int(self.grid_size / 2) - 1,
                         "y": int(self.grid_size / 2),
@@ -960,7 +960,7 @@ class Configuration:
                         "timeout": self.player1_config.TIMEOUT,
                     }
                 ),
-                dotdict(
+                DotDict(
                     {
                         "x": int(self.grid_size / 2),
                         "y": int(self.grid_size / 2),
@@ -972,7 +972,7 @@ class Configuration:
                         "timeout": self.player2_config.TIMEOUT,
                     }
                 ),
-                dotdict(
+                DotDict(
                     {
                         "x": int(self.grid_size / 2) - 1,
                         "y": int(self.grid_size / 2) - 1,
@@ -984,7 +984,7 @@ class Configuration:
                         "timeout": self.player1_config.TIMEOUT,
                     }
                 ),
-                dotdict(
+                DotDict(
                     {
                         "x": int(self.grid_size / 2),
                         "y": int(self.grid_size / 2) - 1,

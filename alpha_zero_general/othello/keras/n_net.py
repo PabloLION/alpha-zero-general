@@ -5,9 +5,9 @@ import numpy as np
 
 from alpha_zero_general.neural_net import NeuralNet
 from alpha_zero_general.othello.keras.othello_n_net import OthelloNNet as onnet
-from alpha_zero_general.utils import dotdict
+from alpha_zero_general.utils import DotDict
 
-args = dotdict(
+args = DotDict(
     {
         "lr": 0.001,
         "dropout": 0.3,

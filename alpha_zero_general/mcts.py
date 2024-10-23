@@ -62,7 +62,7 @@ class MCTS:
             probs: a policy vector where the probability of the ith action is
                    proportional to Nsa[(s,a)]**(1./temp)
         """
-        for _ in range(self.args.numMCTSSims):
+        for _ in range(self.args.num_mcts_sims):
             self.search(canonical_board)
 
         s = self.game.string_representation(canonical_board)

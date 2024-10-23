@@ -8,7 +8,7 @@ sys.path.append("..")
 
 from alpha_zero_general.neural_net import NeuralNet
 from alpha_zero_general.tictactoe.keras.tic_tac_toe_n_net import TicTacToeNNet as onnet
-from alpha_zero_general.utils import dotdict
+from alpha_zero_general.utils import DotDict
 
 """
 NeuralNet wrapper class for the TicTacToeNNet.
@@ -19,7 +19,7 @@ Date: Jan 5, 2018.
 Based on (copy-pasted from) the NNet by SourKream and Surag Nair.
 """
 
-args = dotdict(
+args = DotDict(
     {
         "lr": 0.001,
         "dropout": 0.3,

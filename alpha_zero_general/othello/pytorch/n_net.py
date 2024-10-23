@@ -8,9 +8,9 @@ from tqdm import tqdm
 
 from alpha_zero_general.neural_net import NeuralNet
 from alpha_zero_general.othello.pytorch.othello_n_net import OthelloNNet as onnet
-from alpha_zero_general.utils import AverageMeter, dotdict
+from alpha_zero_general.utils import AverageMeter, DotDict
 
-args = dotdict(
+args = DotDict(
     {
         "lr": 0.001,
         "dropout": 0.3,

@@ -53,8 +53,8 @@ class Arena:
         it = 0
 
         for player in players[0], players[2]:
-            if hasattr(player, "startGame"):
-                player.startGame()
+            if hasattr(player, "start_game"):
+                player.start_game()
 
         while self.game.get_game_ended(board, current_player) == 0:
             it += 1

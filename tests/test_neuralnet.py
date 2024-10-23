@@ -2,7 +2,7 @@ import pytest
 
 from alpha_zero_general.connect4.connect4_game import Connect4Game
 from alpha_zero_general.connect4.keras.n_net import NNetWrapper as nn
-from alpha_zero_general.utils import dotdict
+from alpha_zero_general.utils import DotDict
 
 
 class TestNeuralNet:
@@ -10,7 +10,7 @@ class TestNeuralNet:
     def setup_method(self):
         self.game = Connect4Game()
         self.nnet = nn(self.game)
-        self.args = dotdict(
+        self.args = DotDict(
             {
                 "lr": 0.001,
                 "dropout": 0.3,

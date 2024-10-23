@@ -14,7 +14,7 @@ from alpha_zero_general.rts.keras.n_net import NNetWrapper as NNet
 from alpha_zero_general.rts.rts_game import RTSGame
 from alpha_zero_general.rts.src.config import ACTS_REV, NUM_ACTS
 from alpha_zero_general.rts.src.encoders import OneHotEncoder
-from alpha_zero_general.utils import dotdict
+from alpha_zero_general.utils import DotDict
 
 """
 rts_ue4.py
@@ -71,7 +71,7 @@ class TD2020LearnAPI(TFPluginAPI):
         initial_board_config = []
         for encoded_actor in encoded_actors:
             initial_board_config.append(
-                dotdict(
+                DotDict(
                     {
                         "x": encoded_actor["x"],
                         "y": encoded_actor["y"],

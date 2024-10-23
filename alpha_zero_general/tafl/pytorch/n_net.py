@@ -11,9 +11,9 @@ import torch.optim as optim
 
 from alpha_zero_general.neural_net import NeuralNet
 from alpha_zero_general.tafl.pytorch.tafl_n_net import TaflNNet as onnet
-from alpha_zero_general.utils import AverageMeter, dotdict
+from alpha_zero_general.utils import AverageMeter, DotDict
 
-args = dotdict(
+args = DotDict(
     {
         "lr": 0.001,
         "dropout": 0.3,

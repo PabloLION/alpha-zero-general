@@ -23,7 +23,7 @@ from alpha_zero_general.rts.visualization.rts_pygame import (
     message_display,
     update_graphics,
 )
-from alpha_zero_general.utils import dotdict
+from alpha_zero_general.utils import DotDict
 
 """
 RTSPlayers.py
@@ -104,7 +104,7 @@ class HumanRTSPlayer:
                 print("----------")
 
     @staticmethod
-    def select_object(board: GenericBoardTensor, click_location: tuple) -> dotdict:
+    def select_object(board: GenericBoardTensor, click_location: tuple) -> DotDict:
         """
         Selects object on PyGame canvas using mouse click
         :param board: game state board
@@ -131,8 +131,8 @@ class HumanRTSPlayer:
 
                 dist = sqrt((actor_x - click_x) ** 2 + (actor_y - click_y) ** 2)
                 if dist <= actor_size:
-                    return dotdict({"x": x, "y": y})
-        return dotdict({"x": -1, "y": -1})
+                    return DotDict({"x": x, "y": y})
+        return DotDict({"x": -1, "y": -1})
 
     def _manage_input(self, board: GenericBoardTensor) -> list:
         """
