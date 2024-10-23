@@ -99,5 +99,5 @@ def test_rts_keras():
     execute_game_test(RTSGame(), RTSKerasNNet)
 
 
-def test_dotsandboxes_keras():
+def test_dots_and_boxes_keras():
     execute_game_test(DotsAndBoxesGame(3), DotsAndBoxesKerasNNet)
