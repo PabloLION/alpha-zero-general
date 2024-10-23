@@ -1,6 +1,8 @@
 from typing import Any
 
-from alpha_zero_general.game import Game
+from alpha_zero_general import GenericPolicyTensor
+from alpha_zero_general.game import GenericGame
+from alpha_zero_general.mcts import GenericPolicyTensor
 
 
 class NeuralNet:
@@ -13,7 +15,7 @@ class NeuralNet:
     See othello/NNet.py for an example implementation.
     """
 
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         raise NotImplementedError(
             "The __init__ method must be implemented by the subclass"
         )
@@ -31,7 +33,7 @@ class NeuralNet:
         """
         raise NotImplementedError("train method must be implemented by the subclass")
 
-    def predict(self, board: Any) -> tuple:
+    def predict(self, board: Any) -> tuple[GenericPolicyTensor, float]:
         """
         Input:
             board: current board in its canonical form.

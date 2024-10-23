@@ -5,7 +5,7 @@ import sys
 sys.path.append("..")
 import numpy as np
 
-from alpha_zero_general.game import Game
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.tictactoe.tic_tac_toe_logic import Board
 
 """
@@ -19,7 +19,7 @@ Based on the OthelloGame by Surag Nair.
 """
 
 
-class TicTacToeGame(Game):
+class TicTacToeGame(GenericGame):
     def __init__(self, n=3):
         self.n = n
 

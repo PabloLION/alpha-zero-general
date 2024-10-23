@@ -9,7 +9,7 @@ import numpy as np
 from tqdm import tqdm
 
 from alpha_zero_general.arena import Arena
-from alpha_zero_general.game import Game
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.mcts import MCTS
 
 log = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ class Coach:
     in Game and NeuralNet. args are specified in main.py.
     """
 
-    def __init__(self, game: Game, nnet: Any, args: Any):
+    def __init__(self, game: GenericGame, nnet: Any, args: Any):
         self.game = game
         self.nnet = nnet
         self.pnet = self.nnet.__class__(self.game)  # the competitor network

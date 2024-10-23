@@ -3,11 +3,11 @@ from typing import Any
 
 import numpy as np
 
+from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.dotsandboxes.keras.dots_and_boxes_n_net import (
     DotsAndBoxesNNet as onnet,
 )
 from alpha_zero_general.neural_net import NeuralNet
-from alpha_zero_general.type import BoardMatrix
 from alpha_zero_general.utils import dotdict
 
 args = dotdict(
@@ -22,7 +22,7 @@ args = dotdict(
 )
 
 
-def normalize_score(board: BoardMatrix) -> None:
+def normalize_score(board: GenericBoardTensor) -> None:
     p1_score = board[:, 0, -1]
     p2_score = board[:, 1, -1]
     score = p1_score - p2_score
@@ -47,7 +47,9 @@ class NNetWrapper(NeuralNet):
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
 
-    def train(self, examples: list[tuple[BoardMatrix, list[float], float]]) -> None:
+    def train(
+        self, examples: list[tuple[GenericBoardTensor, list[float], float]]
+    ) -> None:
         """
         examples: list of examples, each example is of form (board, pi, v)
         """
@@ -65,7 +67,7 @@ class NNetWrapper(NeuralNet):
             epochs=args.epochs,
         )
 
-    def predict(self, board: BoardMatrix) -> tuple[np.ndarray, float]:
+    def predict(self, board: GenericBoardTensor) -> tuple[np.ndarray, float]:
         """
         board: np array with board
         """

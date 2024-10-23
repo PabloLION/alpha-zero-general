@@ -1,15 +1,16 @@
 import numpy as np
-from alpha_zero_general.type import BoardMatrix
+
+from alpha_zero_general import GenericBoardTensor
 
 
 class Board:
     def __init__(self, n: int = 5):
         "Set up initial board configuration."
         self.n = n
-        self.pieces: BoardMatrix = np.zeros((2 * n + 1, n + 1))
+        self.pieces: GenericBoardTensor = np.zeros((2 * n + 1, n + 1))
 
     # add [][] indexer syntax to the Board
-    def __getitem__(self, index: int) -> BoardMatrix:
+    def __getitem__(self, index: int) -> GenericBoardTensor:
         return self.pieces[index]
 
     def increase_score(self, score: int, player: int) -> None:
@@ -24,7 +25,7 @@ class Board:
     def toggle_pass(self, state: bool = False) -> None:
         self.pieces[2, -1] = state
 
-    def get_legal_moves(self, color: int = 1) -> BoardMatrix:
+    def get_legal_moves(self, color: int = 1) -> GenericBoardTensor:
         """Returns all the legal moves
         @param color not used and came from previous version.
         """

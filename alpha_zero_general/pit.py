@@ -1,6 +1,7 @@
 import numpy as np
 
 import alpha_zero_general.arena as Arena
+from alpha_zero_general import MctsArgs
 from alpha_zero_general.mcts import MCTS
 from alpha_zero_general.othello.othello_game import OthelloGame
 from alpha_zero_general.othello.othello_players import (
@@ -9,7 +10,6 @@ from alpha_zero_general.othello.othello_players import (
     RandomPlayer,
 )
 from alpha_zero_general.othello.pytorch.n_net import NNetWrapper as NNet
-from alpha_zero_general.type import MctsArgs
 from alpha_zero_general.utils import dotdict
 
 """

@@ -1,15 +1,15 @@
 import numpy as np
 
+from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.dotsandboxes.dots_and_boxes_logic import Board
-from alpha_zero_general.game import Game
-from alpha_zero_general.type import BoardMatrix
+from alpha_zero_general.game import GenericGame
 
 
-class DotsAndBoxesGame(Game):
+class DotsAndBoxesGame(GenericGame):
     def __init__(self, n: int = 3):
         self.n = n
 
-    def get_init_board(self) -> BoardMatrix:
+    def get_init_board(self) -> GenericBoardTensor:
         # return initial board (numpy board)
         b = Board(self.n)
         return np.array(b.pieces)
@@ -23,8 +23,8 @@ class DotsAndBoxesGame(Game):
         return 2 * (self.n + 1) * self.n + 1
 
     def get_next_state(
-        self, board: BoardMatrix, player: int, action: int
-    ) -> tuple[BoardMatrix, int]:
+        self, board: GenericBoardTensor, player: int, action: int
+    ) -> tuple[GenericBoardTensor, int]:
         # if player takes action on board, return next (board,player)
         # action must be a valid move
         b = Board(self.n)
@@ -37,13 +37,15 @@ class DotsAndBoxesGame(Game):
 
         return b.pieces, -player
 
-    def get_valid_moves(self, board: BoardMatrix, player: int) -> BoardMatrix:
+    def get_valid_moves(
+        self, board: GenericBoardTensor, player: int
+    ) -> GenericBoardTensor:
         # return a fixed size binary vector
         b = Board(self.n)
         b.pieces = np.copy(board)
         return b.get_legal_moves(player)
 
-    def get_game_ended(self, board: BoardMatrix, player: int) -> int:
+    def get_game_ended(self, board: GenericBoardTensor, player: int) -> int:
         # return 0 if not ended, 1 if player 1 won, -1 if player 1 lost
         b = Board(self.n)
         b.pieces = np.copy(board)
@@ -57,7 +59,9 @@ class DotsAndBoxesGame(Game):
             player_1_won = b.pieces[0][-1] > b.pieces[1][-1]
             return 1 * player if player_1_won else -1 * player
 
-    def get_canonical_form(self, board: BoardMatrix, player: int) -> BoardMatrix:
+    def get_canonical_form(
+        self, board: GenericBoardTensor, player: int
+    ) -> GenericBoardTensor:
         board = np.copy(board)
         if player == -1:
             # swap score
@@ -67,8 +71,8 @@ class DotsAndBoxesGame(Game):
         return board
 
     def get_symmetries(
-        self, board: BoardMatrix, pi: list[float]
-    ) -> list[tuple[BoardMatrix, list[float]]]:
+        self, board: GenericBoardTensor, pi: list[float]
+    ) -> list[tuple[GenericBoardTensor, list[float]]]:
         # mirror, rotational
 
         horizontal = np.copy(board[: self.n + 1, : self.n])
@@ -114,12 +118,12 @@ class DotsAndBoxesGame(Game):
             pi_vertical = aux
         return l
 
-    def string_representation(self, board: BoardMatrix) -> str:
+    def string_representation(self, board: GenericBoardTensor) -> str:
         # 8x8 numpy array (canonical board)
         return board.tostring()
 
     @staticmethod
-    def display(board: BoardMatrix) -> None:
+    def display(board: GenericBoardTensor) -> None:
         n = board.shape[1]
         for i in range(n):
             for j in range(n - 1):

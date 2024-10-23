@@ -5,7 +5,8 @@ import sys
 sys.path.append("..")
 import numpy as np
 
-from alpha_zero_general.game import Game
+from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.tafl.digits import int2base
 from alpha_zero_general.tafl.game_variants import (
     AleaEvangelii,
@@ -16,15 +17,14 @@ from alpha_zero_general.tafl.game_variants import (
     Tawlbwrdd,
 )
 from alpha_zero_general.tafl.tafl_logic import Board
-from alpha_zero_general.type import BoardMatrix
 
 
-class TaflGame(Game):
+class TaflGame(GenericGame):
     def __init__(self, name):
         self.name = name
         self.get_init_board()
 
-    def get_init_board(self) -> BoardMatrix:
+    def get_init_board(self) -> GenericBoardTensor:
         board = Board(Brandubh())
         if self.name == "Brandubh":
             board = Board(Brandubh())
@@ -50,8 +50,8 @@ class TaflGame(Game):
         return self.n**4
 
     def get_next_state(
-        self, board: BoardMatrix, player: int, action: int
-    ) -> tuple[BoardMatrix, int]:
+        self, board: GenericBoardTensor, player: int, action: int
+    ) -> tuple[GenericBoardTensor, int]:
         # if player takes action on board, return next (board,player)
         # action must be a valid move
         b = board.getCopy()
@@ -59,7 +59,9 @@ class TaflGame(Game):
         b.execute_move(move, player)
         return (b, -player)
 
-    def get_valid_moves(self, board: BoardMatrix, player: int) -> BoardMatrix:
+    def get_valid_moves(
+        self, board: GenericBoardTensor, player: int
+    ) -> GenericBoardTensor:
         # return a fixed size binary vector
         # Note: Ignoreing the passed in player variable since we are not inverting colors for getCanonicalForm and Arena calls with constant 1.
         valids = [0] * self.get_action_size()
@@ -72,18 +74,20 @@ class TaflGame(Game):
             valids[x1 + y1 * self.n + x2 * self.n**2 + y2 * self.n**3] = 1
         return np.array(valids)
 
-    def get_game_ended(self, board: BoardMatrix, player: int) -> int:
+    def get_game_ended(self, board: GenericBoardTensor, player: int) -> int:
         # return 0 if not ended, if player 1 won, -1 if player 1 lost
         return board.done * player
 
-    def get_canonical_form(self, board: BoardMatrix, player: int) -> BoardMatrix:
+    def get_canonical_form(
+        self, board: GenericBoardTensor, player: int
+    ) -> GenericBoardTensor:
         b = board.getCopy()
         # rules and objectives are different for the different players, so inverting board results in an invalid state.
         return b
 
     def get_symmetries(
-        self, board: BoardMatrix, pi: list[float]
-    ) -> list[tuple[BoardMatrix, list[float]]]:
+        self, board: GenericBoardTensor, pi: list[float]
+    ) -> list[tuple[GenericBoardTensor, list[float]]]:
         return [(board, pi)]
         # mirror, rotational
         # assert(len(pi) == self.n**4)
@@ -100,17 +104,17 @@ class TaflGame(Game):
         #        l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         # return l
 
-    def string_representation(self, board: BoardMatrix) -> str:
+    def string_representation(self, board: GenericBoardTensor) -> str:
         # print("->",str(board))
         return str(board)
 
-    def getScore(self, board: BoardMatrix, player: int) -> int:
+    def getScore(self, board: GenericBoardTensor, player: int) -> int:
         if board.done:
             return 1000 * board.done * player
         return board.countDiff(player)
 
 
-def display(board: BoardMatrix) -> None:
+def display(board: GenericBoardTensor) -> None:
     render_chars = {
         "-1": "b",
         "0": " ",

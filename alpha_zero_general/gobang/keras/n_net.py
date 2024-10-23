@@ -3,9 +3,9 @@ from typing import Any
 
 import numpy as np
 
+from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.gobang.keras.gobang_n_net import GobangNNet as onnet
 from alpha_zero_general.neural_net import NeuralNet
-from alpha_zero_general.type import BoardMatrix
 from alpha_zero_general.utils import dotdict
 
 args = dotdict(
@@ -26,7 +26,9 @@ class NNetWrapper(NeuralNet):
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
 
-    def train(self, examples: list[tuple[BoardMatrix, list[float], float]]) -> None:
+    def train(
+        self, examples: list[tuple[GenericBoardTensor, list[float], float]]
+    ) -> None:
         """
         examples: list of examples, each example is of form (board, pi, v)
         """
@@ -41,7 +43,7 @@ class NNetWrapper(NeuralNet):
             epochs=args.epochs,
         )
 
-    def predict(self, board: BoardMatrix) -> tuple[np.ndarray, float]:
+    def predict(self, board: GenericBoardTensor) -> tuple[np.ndarray, float]:
         """
         board: np array with board
         """

@@ -1,14 +1,14 @@
 import numpy as np
 
-from alpha_zero_general.game import Game
-from alpha_zero_general.type import BoardMatrix
+from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.game import GenericGame
 
 
 class RandomPlayer:
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         self.game = game
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         a = np.random.randint(self.game.get_action_size())
         valids = self.game.get_valid_moves(board, 1)
         while valids[a] != 1:
@@ -18,10 +18,10 @@ class RandomPlayer:
 
 # Will play at random, unless there's a chance to score a square
 class GreedyRandomPlayer:
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         self.game = game
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         valids = self.game.get_valid_moves(board, 1)
         previous_score = board[0, -1]
         for action in np.nonzero(valids)[0]:
@@ -36,10 +36,10 @@ class GreedyRandomPlayer:
 
 
 class HumanDotsAndBoxesPlayer:
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         self.game = game
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         if board[2][-1] == 1:
             # We have to pass
             return self.game.get_action_size() - 1
