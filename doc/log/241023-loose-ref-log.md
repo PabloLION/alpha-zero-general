@@ -1,0 +1,27 @@
+- [x] .no-git
+- [x] .TicTacToeNNet
+- [x] isort
+- [x] util *
+- [x] unused imports
+- [x] keras types
+- [ ] add type arguments for all `np.ndarray` in the project. If needed, merge the similar ones into one single type and put it in type.py.
+- [ ] `from alpha_zero_general.type import Any`
+- [x] Fix deps
+  - ImportError while importing test module '/Users/pablo/LocalDocs/repo/eye-on/suragnair/alpha-zero-general/tests/test_all_games.py'.
+- [x] Do not write all dependency like we do in requirements. Instead, only control the top-level dependencies via pyproject.toml. The rest should be installed automatically.
+- [ ] use correct default param like
+- [x] Why do we need BoardState
+- [ ] type protocols and abstract classes
+- [ ] project level config
+  - [ ] and `from alpha_zero_general.rts.src.config_class import CONFIG`
+- `array2string(board)` instead of `board.tostring()`
+- better file save paths, remove `os` (security)
+- [ ] enum type for `Player` and `Piece`
+- [ ] rm folder `chore`
+- [ ] use pathlib for paths
+- [ ] `import sys` and `sys.path.append("..")`
+- [ ] `np.array2string(board)` as hash has performance issues
+- [ ] related to last get str representation
+  - __str__ and __repr__ are two methods.
+  - to use it as hash, use `__hash__` is better
+- [ ] format off for data list, like in `test_symmetries_n3`

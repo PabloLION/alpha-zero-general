@@ -1,0 +1,87 @@
+[tool.poetry]
+name = "alpha-zero-general"
+version = "0.1.0"
+description = ""
+authors = ["PabloLION <36828324+PabloLION@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+test = "pytest:main"
+format = "black:main"
+lint = "scripts.lint:run_lint"
+
+
+[tool.poetry.dependencies]
+python = "^3.11"
+coloredlogs = "15.0.1"
+h5py = "^3.12.1"
+keras = "3.6.0"          # not sure if it's top-level or not
+numpy = "^2.0.0"         # not sure if it's top-level or not
+tensorflow = "2.18.0rc2"
+torch = "^2.5.0"
+tqdm = "4.64.0"
+pygame = "^2.6.1"
+flask = "^3.0.3"
+ipython = "^8.28.0"
+
+[tool.poetry.group.dev.dependencies]
+autoflake = "^2.3.1"
+black = "^24.10.0"
+flake8 = "^7.1.1"
+flake8-black = "^0.3.6"
+flake8-bugbear = "^24.8.19"
+flake8-comprehensions = "^3.15.0"
+flake8-docstrings = "^1.7.0"
+flake8-isort = "^6.1.1"
+isort = "^5.13.2"
+packaging = "^24.1"
+pylint = "^3.3.1"
+pytest = "^8.3.3"
+pytest-mock = "^3.14.0"
+types-tensorflow = "^2.17.0.20240920"
+typing-extensions = "4.12.2"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.black]
+line-length = 88 # Set the maximum allowed line length
+# Target Python version(s) will be inferred from the environment
+include = '\.pyi?$' # Specify files to include
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+''' # Specify files or directories to exclude
+
+[tool.flake8]
+extend-ignore = ['E203'] # , 'E501']
+# E501 is for line length, which is handled by black
+max-line-length = 88
+docstring-convention = "numpy"
+max-complexity = 10
+
+[tool.isort]
+profile = "black"
+
+[tool.pylint]
+ignore = ["migrations", "tests"]
+disable = [
+  "C0114", # missing-module-docstring
+  "C0115", # missing-class-docstring
+  "C0116", # missing-function-docstring
+]
+max-line-length = 79
+ignored-modules = [
+  "tensorflow.keras", # Dynamic imports in tf confuses static analyzers like Pylint
+  "TFPluginAPI",      # Code was for TensorFlow-Unreal 0.8.0 (no PyPI). need test.
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

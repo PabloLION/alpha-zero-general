@@ -1,3 +1,6 @@
+# dev
+.no-git/
+
 *.pyc
 .DS_Store
 
@@ -10,4 +13,3 @@ checkpoints/
 
 # For PyCharm users
 .idea/
-
