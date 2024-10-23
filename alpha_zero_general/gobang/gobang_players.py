@@ -1,14 +1,14 @@
 import numpy as np
 
-from alpha_zero_general.game import Game
-from alpha_zero_general.type import BoardMatrix
+from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.game import GenericGame
 
 
 class RandomPlayer:
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         self.game = game
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         a = np.random.randint(self.game.get_action_size())
         valids = self.game.get_valid_moves(board, 1)
         while valids[a] != 1:
@@ -17,10 +17,10 @@ class RandomPlayer:
 
 
 class HumanGobangPlayer:
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         self.game = game
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         # display(board)
         valid = self.game.get_valid_moves(board, 1)
         for i in range(len(valid)):
@@ -40,10 +40,10 @@ class HumanGobangPlayer:
 
 
 class GreedyGobangPlayer:
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         self.game = game
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         valids = self.game.get_valid_moves(board, 1)
         candidates = []
         for a in range(self.game.get_action_size()):

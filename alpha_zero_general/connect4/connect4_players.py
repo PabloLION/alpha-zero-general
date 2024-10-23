@@ -1,14 +1,14 @@
 import numpy as np
 
-from alpha_zero_general.game import Game
-from alpha_zero_general.type import BoardMatrix
+from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.game import GenericGame
 
 
 class RandomPlayer:
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         self.game = game
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         a = np.random.randint(self.game.get_action_size())
         valids = self.game.get_valid_moves(board, 1)
         while valids[a] != 1:
@@ -17,10 +17,10 @@ class RandomPlayer:
 
 
 class HumanConnect4Player:
-    def __init__(self, game: Game):
+    def __init__(self, game: GenericGame):
         self.game = game
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         valid_moves = self.game.get_valid_moves(board, 1)
         print("\nMoves:", [i for (i, valid) in enumerate(valid_moves) if valid])
 
@@ -36,12 +36,12 @@ class HumanConnect4Player:
 class OneStepLookaheadConnect4Player:
     """Simple player who always takes a win if presented, or blocks a loss if obvious, otherwise is random."""
 
-    def __init__(self, game: Game, verbose: bool = True):
+    def __init__(self, game: GenericGame, verbose: bool = True):
         self.game = game
         self.player_num = 1
         self.verbose = verbose
 
-    def play(self, board: BoardMatrix) -> int:
+    def play(self, board: GenericBoardTensor) -> int:
         valid_moves = self.game.get_valid_moves(board, self.player_num)
         win_move_set = set()
         fallback_move_set = set()

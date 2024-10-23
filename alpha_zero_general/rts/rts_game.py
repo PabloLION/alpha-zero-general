@@ -2,7 +2,8 @@ from typing import Tuple
 
 import numpy as np
 
-from alpha_zero_general.game import Game
+from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.rts.src.Board import Board
 from alpha_zero_general.rts.src.config import (
     A_TYPE_IDX,
@@ -13,7 +14,6 @@ from alpha_zero_general.rts.src.config import (
     TIME_IDX,
 )
 from alpha_zero_general.rts.src.config_class import CONFIG
-from alpha_zero_general.type import BoardMatrix
 
 """ USE_TIMEOUT, MAX_TIME, d_a_type, a_max_health, INITIAL_GOLD, TIMEOUT, visibility"""
 
@@ -26,7 +26,7 @@ Includes:
 
 
 # noinspection PyPep8Naming,PyMethodMayBeStatic
-class RTSGame(Game):
+class RTSGame(GenericGame):
     def __init__(self, n: int = CONFIG.grid_size) -> None:
         self.n = n
 
@@ -39,7 +39,7 @@ class RTSGame(Game):
         """
         self.initial_board_config = board_config
 
-    def get_init_board(self) -> BoardMatrix:
+    def get_init_board(self) -> GenericBoardTensor:
         """
         :return: Returns new board from initial_board_config. That config can be dynamically changed as game progresses.
         """
@@ -69,8 +69,8 @@ class RTSGame(Game):
         return self.n * self.n * NUM_ACTS + 1
 
     def get_next_state(
-        self, board: BoardMatrix, player: int, action: int
-    ) -> Tuple[BoardMatrix, int]:
+        self, board: GenericBoardTensor, player: int, action: int
+    ) -> Tuple[GenericBoardTensor, int]:
         """
         Gets next state for board. It also updates tick for board as game tick iterations are transfered within board as 6. parameter
         :param board: current board
@@ -102,7 +102,7 @@ class RTSGame(Game):
 
         return b.pieces, -player
 
-    def get_valid_moves(self, board: BoardMatrix, player: int):
+    def get_valid_moves(self, board: GenericBoardTensor, player: int):
         valids = []
         b = Board(self.n)
         b.pieces = np.copy(board)
@@ -125,7 +125,7 @@ class RTSGame(Game):
         return np.array(valids)
 
     # noinspection PyUnusedLocal
-    def get_game_ended(self, board: BoardMatrix, player) -> float:
+    def get_game_ended(self, board: GenericBoardTensor, player) -> float:
         """
         Ok, this function is where it gets complicated...
         See, its  hard to decide when to finish rts game, as players might not have enough time to execute wanted actions, but in the other hand, if players are left to play for too long, games become very long, or even 'infinitely' long
@@ -186,12 +186,12 @@ class RTSGame(Game):
         # continue game
         return 0
 
-    def get_canonical_form(self, board: BoardMatrix, player: int):
+    def get_canonical_form(self, board: GenericBoardTensor, player: int):
         b = np.copy(board)
         b[:, :, P_NAME_IDX] = b[:, :, P_NAME_IDX] * player
         return b
 
-    def get_symmetries(self, board: BoardMatrix, pi):
+    def get_symmetries(self, board: GenericBoardTensor, pi):
         # mirror, rotational
         assert len(pi) == self.n * self.n * NUM_ACTS + 1  # 1 for pass
         pi_board = np.reshape(pi[:-1], (self.n, self.n, NUM_ACTS))
@@ -206,10 +206,10 @@ class RTSGame(Game):
                 return_list += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return return_list
 
-    def string_representation(self, board: BoardMatrix):
+    def string_representation(self, board: GenericBoardTensor):
         return board.tostring()
 
-    def getScore(self, board: BoardMatrix, player: int):
+    def getScore(self, board: GenericBoardTensor, player: int):
         """
         Uses one of 3 elo functions that determine better player
         :param board: game state

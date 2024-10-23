@@ -2,11 +2,11 @@ from __future__ import print_function
 
 import numpy as np
 
-from alpha_zero_general.game import Game
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.othello.othello_logic import Board
 
 
-class OthelloGame(Game):
+class OthelloGame(GenericGame):
     square_content = {-1: "X", +0: "-", +1: "O"}
 
     @staticmethod

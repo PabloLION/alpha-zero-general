@@ -27,7 +27,7 @@ from alpha_zero_general.dotsandboxes.dots_and_boxes_game import DotsAndBoxesGame
 from alpha_zero_general.dotsandboxes.keras.n_net import (
     NNetWrapper as DotsAndBoxesKerasNNet,
 )
-from alpha_zero_general.game import Game
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.gobang.gobang_game import GobangGame
 from alpha_zero_general.gobang.keras.n_net import NNetWrapper as GobangKerasNNet
 from alpha_zero_general.mcts import MCTS
@@ -52,7 +52,7 @@ from alpha_zero_general.tictactoe_3d.tic_tac_toe_game import (
 from alpha_zero_general.utils import dotdict
 
 
-def execute_game_test(game: Game, neural_net: type[NeuralNet]):
+def execute_game_test(game: GenericGame, neural_net: type[NeuralNet]):
     random_play = RandomPlayer(game).play
 
     args = dotdict({"numMCTSSims": 25, "cpuct": 1.0})

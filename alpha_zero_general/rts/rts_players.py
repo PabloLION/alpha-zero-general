@@ -6,7 +6,8 @@ from typing import List
 import pygame
 from pygame.rect import Rect
 
-from alpha_zero_general.game import Game
+from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.rts.src.config import (
     A_TYPE_IDX,
     ACTS,
@@ -24,7 +25,6 @@ from alpha_zero_general.rts.visualization.rts_pygame import (
     update_graphics,
 )
 from alpha_zero_general.utils import dotdict
-from alpha_zero_general.type import BoardMatrix
 
 """
 RTSPlayers.py
@@ -38,7 +38,7 @@ class RandomPlayer:
     def __init__(self, game):
         self.game = game
 
-    def play(self, board: BoardMatrix):
+    def play(self, board: GenericBoardTensor):
         a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, 1)
         while valids[a] != 1:
@@ -51,7 +51,7 @@ class HumanRTSPlayer:
         self.game = game
         self.USER_PLAYER = 1  # used by Human Player - this does not change if human pit player is 1 or -1
 
-    def play(self, board: BoardMatrix) -> List:
+    def play(self, board: GenericBoardTensor) -> List:
         """
         Manages input using PyGame canvas/ console input
         :param board: current board
@@ -88,7 +88,7 @@ class HumanRTSPlayer:
 
         return a
 
-    def display_valid_moves(self, board: BoardMatrix, valid) -> None:
+    def display_valid_moves(self, board: GenericBoardTensor, valid) -> None:
         """
         Displays all valid moves in console for specific board
         :param board: board to display moves upon
@@ -105,7 +105,7 @@ class HumanRTSPlayer:
                 print("----------")
 
     @staticmethod
-    def select_object(board: BoardMatrix, click_location: tuple) -> dotdict:
+    def select_object(board: GenericBoardTensor, click_location: tuple) -> dotdict:
         """
         Selects object on PyGame canvas using mouse click
         :param board: game state board
@@ -135,7 +135,7 @@ class HumanRTSPlayer:
                     return dotdict({"x": x, "y": y})
         return dotdict({"x": -1, "y": -1})
 
-    def _manage_input(self, board: BoardMatrix) -> list:
+    def _manage_input(self, board: GenericBoardTensor) -> list:
         """
         Manages click and keyboard selections on PyGame canvas
         :param board: game state
@@ -352,7 +352,7 @@ class GreedyRTSPlayer:
     def __init__(self, game):
         self.game = game
 
-    def play(self, board: BoardMatrix):
+    def play(self, board: GenericBoardTensor):
         valids = self.game.getValidMoves(board, 1)
 
         print("sum valids", sum(valids))

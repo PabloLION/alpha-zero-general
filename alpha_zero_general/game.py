@@ -1,4 +1,9 @@
-class Game:
+from abc import ABC, abstractmethod
+
+from alpha_zero_general import GenericBoardTensor, GenericBooleanBoardTensor
+
+
+class GenericGame(ABC):
     """
     This class specifies the base Game class. To define your own game, subclass
     this class and implement the functions below. This works when the game is
@@ -9,12 +14,14 @@ class Game:
     See othello/OthelloGame.py for an example implementation.
     """
 
-    def __init__(self):
+    @abstractmethod
+    def __init__(self) -> None:
         raise NotImplementedError(
             "The __init__ method must be implemented by the subclass"
         )
 
-    def get_init_board(self):
+    @abstractmethod
+    def get_init_board(self) -> GenericBoardTensor:
         """
         Returns:
             start_board: a representation of the board (ideally this is the form
@@ -22,21 +29,26 @@ class Game:
         """
         raise NotImplementedError("get_init_board must be implemented by the subclass")
 
-    def get_board_size(self):
+    @abstractmethod
+    def get_board_size(self) -> tuple[int, ...]:
         """
         Returns:
-            (x, y): a tuple of board dimensions
+            (x, y, ...): a tuple of board dimensions
         """
         raise NotImplementedError("get_board_size must be implemented by the subclass")
 
-    def get_action_size(self):
+    @abstractmethod
+    def get_action_size(self) -> int:
         """
         Returns:
             action_size: number of all possible actions
         """
         raise NotImplementedError("get_action_size must be implemented by the subclass")
 
-    def get_next_state(self, board, player, action):
+    @abstractmethod
+    def get_next_state(
+        self, board: GenericBoardTensor, player: int, action: int
+    ) -> tuple[GenericBoardTensor, int]:
         """
         Input:
             board: current board
@@ -49,7 +61,10 @@ class Game:
         """
         raise NotImplementedError("get_next_state must be implemented by the subclass")
 
-    def get_valid_moves(self, board, player):
+    @abstractmethod
+    def get_valid_moves(
+        self, board: GenericBoardTensor, player: int
+    ) -> GenericBooleanBoardTensor:
         """
         Input:
             board: current board
@@ -62,7 +77,8 @@ class Game:
         """
         raise NotImplementedError("get_valid_moves must be implemented by the subclass")
 
-    def get_game_ended(self, board, player):
+    @abstractmethod
+    def get_game_ended(self, board: GenericBoardTensor, player: int) -> int:
         """
         Input:
             board: current board
@@ -74,7 +90,10 @@ class Game:
         """
         raise NotImplementedError("get_game_ended must be implemented by the subclass")
 
-    def get_canonical_form(self, board, player):
+    @abstractmethod
+    def get_canonical_form(
+        self, board: GenericBoardTensor, player: int
+    ) -> GenericBoardTensor:
         """
         Input:
             board: current board
@@ -92,7 +111,10 @@ class Game:
             "get_canonical_form must be implemented by the subclass"
         )
 
-    def get_symmetries(self, board, pi):
+    @abstractmethod
+    def get_symmetries(
+        self, board: GenericBoardTensor, pi: list[float]
+    ) -> list[tuple[GenericBoardTensor, list[float]]]:
         """
         Input:
             board: current board
@@ -105,7 +127,8 @@ class Game:
         """
         raise NotImplementedError("get_symmetries must be implemented by the subclass")
 
-    def string_representation(self, board):
+    @abstractmethod
+    def string_representation(self, board: GenericBoardTensor) -> str:
         """
         Input:
             board: current board

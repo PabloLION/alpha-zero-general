@@ -1,6 +1,6 @@
 import numpy as np
 
-from alpha_zero_general.type import BoardDataType, BoardMatrix, WinState
+from alpha_zero_general.type import BoardDataType, GenericBoardTensor, WinState
 
 
 class Connect4Board:
@@ -13,7 +13,7 @@ class Connect4Board:
         height: int,
         width: int,
         win_length: int,
-        np_pieces: BoardMatrix | None = None,
+        np_pieces: GenericBoardTensor | None = None,
     ):
         "Set up initial board configuration."
         self.height = height
@@ -35,7 +35,7 @@ class Connect4Board:
         self.np_pieces[available_idx[-1]][column] = player
 
     def get_valid_moves(self) -> np.ndarray:
-        # here we should have new types for Connect4BoardMatrix / Tensor and
+        # here we should have new types for Connect4GenericBoardTensor / Tensor and
         # Connect4BoardFirstRowTensor #TODO
         "Any zero value in top row in a valid move"
         return self.np_pieces[0] == 0
@@ -58,13 +58,13 @@ class Connect4Board:
         # Game is not ended yet.
         return WinState(False, None)
 
-    def with_np_pieces(self, np_pieces: BoardMatrix) -> "Connect4Board":
+    def with_np_pieces(self, np_pieces: GenericBoardTensor) -> "Connect4Board":
         """Create copy of board with specified pieces."""
         if np_pieces is None:
             np_pieces = self.np_pieces
         return Connect4Board(self.height, self.width, self.win_length, np_pieces)
 
-    def _is_diagonal_winner(self, player_pieces: BoardMatrix) -> bool:
+    def _is_diagonal_winner(self, player_pieces: GenericBoardTensor) -> bool:
         """Checks if player_pieces contains a diagonal win."""
         win_length = self.win_length
         for i in range(len(player_pieces) - win_length + 1):
@@ -76,7 +76,7 @@ class Connect4Board:
                     return True
         return False
 
-    def _is_straight_winner(self, player_pieces: BoardMatrix) -> bool:
+    def _is_straight_winner(self, player_pieces: GenericBoardTensor) -> bool:
         """Checks if player_pieces contains a vertical or horizontal win."""
         run_lengths = [
             player_pieces[:, i : i + self.win_length].sum(axis=1)

@@ -1,7 +1,7 @@
 import numpy as np
 
+from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.tafl.game_variants import Tafl
-from alpha_zero_general.type import BoardMatrix
 
 
 class Board:

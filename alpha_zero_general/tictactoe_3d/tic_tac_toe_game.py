@@ -5,7 +5,7 @@ import sys
 sys.path.append("..")
 import numpy as np
 
-from alpha_zero_general.game import Game
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.tictactoe_3d.tic_tac_toe_logic import Board
 
 """
@@ -18,7 +18,7 @@ Based on the TicTacToeGame by Evgeny Tyurin.
 """
 
 
-class TicTacToeGame(Game):
+class TicTacToeGame(GenericGame):
     def __init__(self, n):
         self.n = n
 

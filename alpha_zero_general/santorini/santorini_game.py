@@ -5,11 +5,11 @@ import sys
 sys.path.append("..")
 import numpy as np
 
-from alpha_zero_general.game import Game
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.santorini.santorini_logic import Board
 
 
-class SantoriniGame(Game):
+class SantoriniGame(GenericGame):
     """
     Many of thes functions are based on those from OthelloGame.py:
         https://github.com/suragnair/alpha-zero-general/blob/master/othello/OthelloGame.py
