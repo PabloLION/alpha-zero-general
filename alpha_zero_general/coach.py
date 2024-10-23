@@ -60,7 +60,7 @@ class CoachArgs:
     max_len_of_queue: int
     num_mcts_sims: int
     arena_compare: int
-    cpuct: float
+    c_puct: float
     checkpoint: str
     load_model: bool
     load_folder_file: tuple[str, str]
@@ -71,7 +71,7 @@ class CoachArgs:
     def to_mcts_args(self) -> MctsArgs:
         return MctsArgs(
             num_mcts_sims=self.num_mcts_sims,
-            cpuct=self.cpuct,
+            c_puct=self.c_puct,
         )
 
 
@@ -97,15 +97,15 @@ class Coach:
         Executes one episode of self-play, starting with player 1.
 
         As the game is played, each turn is added as a training example to
-        trainExamples. The game is played till the game ends. After the game
+        train_examples. The game is played till the game ends. After the game
         ends, the outcome of the game is used to assign values to each example
-        in trainExamples.
+        in train_examples.
 
         It uses a temp=1 if episodeStep < tempThreshold, and thereafter
         uses temp=0.
 
         Returns:
-            trainExamples: a list of examples of the form
+            train_examples: a list of examples of the form
                         (canonical_board, current_player, pi, v)
                         pi is the MCTS informed policy vector, v is +1 if
                         the player eventually won the game, else -1.
@@ -148,7 +148,7 @@ class Coach:
         """
         Performs numIters iterations with numEps episodes of self-play in each
         iteration. After every iteration, it retrains neural network with
-        examples in trainExamples (which has a maximum length of maxlenofQueue).
+        examples in train_examples (which has a maximum length of maxlenofQueue).
         It then pits the new neural network against the old one and accepts it
         only if it wins >= updateThreshold fraction of games.
         """
@@ -176,7 +176,7 @@ class Coach:
                 > self.args.num_iters_for_train_examples_history
             ):
                 log.warning(
-                    f"Removing the oldest entry in trainExamples. len(trainExamplesHistory) = {len(self.train_examples_history)}"
+                    f"Removing the oldest entry in train_examples. len(train_examplesHistory) = {len(self.train_examples_history)}"
                 )
                 self.train_examples_history.pop(0)
             # backup history to a file
@@ -254,12 +254,12 @@ class Coach:
         )
         examples_file = model_file + ".examples"
         if not os.path.isfile(examples_file):
-            log.warning(f'File "{examples_file}" with trainExamples not found!')
+            log.warning(f'File "{examples_file}" with train_examples not found!')
             r = input("Continue? [y|n]")
             if r != "y":
                 return
         else:
-            log.info("File with trainExamples found. Loading it...")
+            log.info("File with train_examples found. Loading it...")
             with open(examples_file, "rb") as f:
                 self.train_examples_history = Unpickler(f).load()
             log.info("Loading done!")

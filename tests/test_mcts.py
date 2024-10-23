@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 from pytest_mock import MockerFixture
 
+from alpha_zero_general import MctsArgs
 from alpha_zero_general.connect4.connect4_game import Connect4Game
 from alpha_zero_general.connect4.keras.n_net import NNetWrapper as nn
 from alpha_zero_general.mcts import MCTS
@@ -13,7 +14,7 @@ class TestMCTS:
     def setup_method(self):
         self.game = Connect4Game()
         self.nnet = nn(self.game)
-        self.args = dotdict({"numMCTSSims": 10, "cpuct": 1})
+        self.args = MctsArgs(num_mcts_sims=10, c_puct=1)
         self.mcts = MCTS(self.game, self.nnet, self.args)
 
     def test_get_action_prob(self):

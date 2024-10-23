@@ -2,6 +2,7 @@ import os
 
 import numpy as np
 
+from alpha_zero_general import MctsArgs
 from alpha_zero_general.rts.src.encoders import NumericEncoder, OneHotEncoder
 from alpha_zero_general.utils import dotdict
 
@@ -9,6 +10,7 @@ from alpha_zero_general.utils import dotdict
 # ###################### INITIAL CONFIGS AND OUTPUTS ##################################
 # ####################################################################################
 
+DEFAULT_MCTS_ARG = MctsArgs(num_mcts_sims=2, c_puct=1.0)
 # specifically choose TF cpu if needed. This will have no effect if GPU is not present
 USE_TF_CPU = False
 
@@ -501,8 +503,8 @@ class Configuration:
             self.player2_model_file = player2_model_file
             self.player1_onehot_encoder = player1_onehot_encoder
             self.player2_onehot_encoder = player2_onehot_encoder
-            self.player1_config = player1_config or {"numMCTSSims": 2, "cpuct": 1.0}
-            self.player2_config = player2_config or {"numMCTSSims": 2, "cpuct": 1.0}
+            self.player1_config = player1_config or DEFAULT_MCTS_ARG
+            self.player2_config = player2_config or DEFAULT_MCTS_ARG
             self.num_games = num_games
 
         def create_players(self, game):
@@ -561,7 +563,7 @@ class Configuration:
                     encoder = NumericEncoder()
                 n1 = NNet(g, encoder)
                 n1.load_checkpoint(".\\..\\temp\\", player_model_file)
-                args1 = dotdict(player_config or {"numMCTSSims": 2, "cpuct": 1.0})
+                args1 = player_config or DEFAULT_MCTS_ARG
                 mcts1 = MCTS(g, n1, args1)
                 self.play = lambda x: np.argmax(mcts1.get_action_prob(x, temp=0))
 
@@ -575,7 +577,7 @@ class Configuration:
             maxlen_of_queue,
             num_mcts_sims,
             arena_compare,
-            cpuct,
+            c_puct,
             checkpoint,
             load_model,
             load_folder_file,
@@ -583,16 +585,15 @@ class Configuration:
             save_train_examples,
             load_train_examples,
         ):
-            self.numIters = num_iters  # total number of games played from start to finish is numIters * numEps
-            self.numEps = num_eps  # How may game is played in this episode
-            self.tempThreshold = temp_threshold
-            self.updateThreshold = update_threshold  # Percentage that new model has to surpass by win rate to replace old model
-            self.maxlenOfQueue = maxlen_of_queue
-            self.numMCTSSims = num_mcts_sims  # How many MCTS tree searches are performing (mind that this MCTS doesnt use simulations)
-            self.arenaCompare = (
-                arena_compare  # How many comparisons are made between old and new model
-            )
-            self.cpuct = cpuct  # search parameter for MCTS
+            self.num_iters = num_iters  # total number of games played from start to finish is numIters * numEps
+            self.num_eps = num_eps  # How may game is played in this episode
+            self.temp_threshold = temp_threshold
+            self.update_threshold = update_threshold  # Percentage that new model has to surpass by win rate to replace old model
+            self.maxlen_of_queue = maxlen_of_queue
+            self.num_mcts_sims = num_mcts_sims  # How many MCTS tree searches are performing (mind that this MCTS doesnt use simulations)
+            self.arena_compare = arena_compare
+            # arena_compare: How many comparisons are made between old and new model
+            self.c_puct = c_puct  # search parameter for MCTS
 
             self.checkpoint = checkpoint
             self.load_model = load_model  # Load training examples from file - WARNING - this is disabled in RTSPlayers.py because of memory errors received when loading data from file
@@ -655,7 +656,7 @@ class Configuration:
         maxlen_of_queue: int = 6400,
         num_mcts_sims: int = 10,
         arena_compare: int = 10,
-        cpuct: float = 1,
+        c_puct: float = 1,
         checkpoint: str = ".\\..\\temp\\",
         load_model: bool = False,
         load_folder_file: tuple[str, str] = (".\\..\\temp\\", "checkpoint_13.pth.tar"),
@@ -795,7 +796,7 @@ class Configuration:
         :param maxlen_of_queue: How many train examples can be stored in each iteration
         :param num_mcts_sims: How many MCTS sims are executed in each game episode while learning
         :param arena_compare: How many comparations of newer and older model should be made before evaluating which is better
-        :param cpuct: Exploration parameter for MCTS
+        :param c_puct: Exploration parameter for MCTS
         :param checkpoint: folder where checkpoints should be saved while learning
         :param load_model: If model is loaded from checkpoint on learning start
         :param load_folder_file: tuple(folder, file) where model is loaded from
@@ -805,8 +806,8 @@ class Configuration:
 
         :param player1_type: What type should player 1 be ("nnet", "random", "greedy", "human")
         :param player2_type: What type should player 2 be ("nnet", "random", "greedy", "human")
-        :param player1_config: If "nnet" player is chosen, config can be provided {'numMCTSSims': 2, 'cpuct': 1.0}
-        :param player2_config: If "nnet" player is chosen, config can be provided {'numMCTSSims': 2, 'cpuct': 1.0}
+        :param player1_config: If "nnet" player is chosen, use the default MCTS config
+        :param player2_config: If "nnet" player is chosen, use the default MCTS config
         :param num_games: How many games should be played for pit config
 
         :param use_one_hot_encoder: If oneHot encoder should be used for both players while learning. (While pitting see configs encoder_player1, onehot_encoder_player2)
@@ -882,7 +883,7 @@ class Configuration:
             maxlen_of_queue=maxlen_of_queue,
             num_mcts_sims=num_mcts_sims,
             arena_compare=arena_compare,
-            cpuct=cpuct,
+            c_puct=c_puct,
             checkpoint=checkpoint,
             load_model=load_model,
             load_folder_file=load_folder_file,

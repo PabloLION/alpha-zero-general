@@ -20,6 +20,7 @@
 
 import numpy as np
 
+from alpha_zero_general import MctsArgs
 from alpha_zero_general.arena import Arena
 from alpha_zero_general.connect4.connect4_game import Connect4Game
 from alpha_zero_general.connect4.keras.n_net import NNetWrapper as Connect4KerasNNet
@@ -55,7 +56,7 @@ from alpha_zero_general.utils import dotdict
 def execute_game_test(game: GenericGame, neural_net: type[NeuralNet]):
     random_play = RandomPlayer(game).play
 
-    args = dotdict({"numMCTSSims": 25, "cpuct": 1.0})
+    args = MctsArgs(num_mcts_sims=25, c_puct=1.0)
     mcts = MCTS(game, neural_net(game), args)
     n1p = lambda x: np.argmax(mcts.get_action_prob(x, temp=0))
 

@@ -1,7 +1,9 @@
+# #TODO: rename this file to pit_dots_and_boxes.py
 import os
 
 import numpy as np
 
+from alpha_zero_general import MctsArgs
 from alpha_zero_general.arena import Arena
 from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
 from alpha_zero_general.dots_and_boxes.dots_and_boxes_players import (
@@ -10,8 +12,9 @@ from alpha_zero_general.dots_and_boxes.dots_and_boxes_players import (
     RandomPlayer,
 )
 from alpha_zero_general.dots_and_boxes.keras.n_net import NNetWrapper
-from alpha_zero_general.MCTS import MCTS
-from alpha_zero_general.utils import dotdict
+from alpha_zero_general.mcts import MCTS
+
+NUM_MCTS_SIMS = 50
 
 g = DotsAndBoxesGame(n=3)
 
@@ -24,13 +27,12 @@ rp2 = RandomPlayer(g).play
 grp1 = GreedyRandomPlayer(g).play
 grp2 = GreedyRandomPlayer(g).play
 
-num_mcts_sims = 50
 n1 = NNetWrapper(g)
 n1.load_checkpoint(
     os.path.join("../", "pretrained_models", "dotsandboxes", "keras", "3x3"),
     "best.pth.tar",
 )
-args1 = dotdict({"numMCTSSims": num_mcts_sims, "cpuct": 1.0})
+args1 = MctsArgs(num_mcts_sims=NUM_MCTS_SIMS, c_puct=1.0)
 mcts1 = MCTS(g, n1, args1)
 n1p = lambda x: np.argmax(mcts1.get_action_prob(x, temp=0))
 
@@ -39,14 +41,14 @@ n2.load_checkpoint(
     os.path.join("../", "pretrained_models", "dotsandboxes", "keras", "3x3"),
     "best.pth.tar",
 )
-args2 = dotdict({"numMCTSSims": num_mcts_sims, "cpuct": 1.0})
+args2 = MctsArgs(num_mcts_sims=NUM_MCTS_SIMS, c_puct=1.0)
 mcts2 = MCTS(g, n2, args2)
 n2p = lambda x: np.argmax(mcts2.get_action_prob(x, temp=0))
 
 # Play AlphaZero versus Human
 p1 = n1p
 p2 = hp1
-arena = Arena(p1, p2, g, display=DotsAndBoxesGame.display)
+arena = Arena(p1, p2, g, DotsAndBoxesGame.display)
 oneWon, twoWon, draws = arena.play_games(2, verbose=True)
 print("oneWon: {}, twoWon: {}, draws: {}".format(oneWon, twoWon, draws))
 

@@ -8,6 +8,7 @@ import tensorflow as tf
 # noinspection PyUnresolvedReferences
 from TFPluginAPI import TFPluginAPI  # this is the API for UE4 plugin, not on PyPI
 
+from alpha_zero_general import MctsArgs
 from alpha_zero_general.mcts import MCTS
 from alpha_zero_general.rts.keras.n_net import NNetWrapper as NNet
 from alpha_zero_general.rts.rts_game import RTSGame
@@ -48,7 +49,7 @@ class TD2020LearnAPI(TFPluginAPI):
                 self.g = RTSGame()
                 n1 = NNet(self.g, OneHotEncoder())
                 n1.load_checkpoint(current_directory, "best.pth.tar")
-                args = dotdict({"numMCTSSims": 2, "cpuct": 1.0})
+                args = MctsArgs()(num_mcts_sims=2, c_puct=1.0)
                 self.mcts = MCTS(self.g, n1, args)
 
                 self.graph_var = graph

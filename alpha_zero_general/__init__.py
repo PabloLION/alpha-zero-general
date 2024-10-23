@@ -25,4 +25,4 @@ PolicyMakerAsPlayer: TypeAlias = Callable[[GenericPolicyTensor], int]
 @dataclass(frozen=True)  # freeze to check for immutability in refactor
 class MctsArgs:
     num_mcts_sims: int
-    cpuct: float
+    c_puct: float

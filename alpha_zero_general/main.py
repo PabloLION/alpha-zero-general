@@ -16,35 +16,33 @@ coloredlogs.install(  # type: ignore
 
 @dataclass(frozen=True)  # freeze to check for immutability in refactor
 class MainArgs:
-    n_iter: int = 1000
-    n_eps: int = 100
+    num_iter: int = 1000
+    num_eps: int = 100
     temp_threshold: int = 15
     update_threshold: float = 0.6
-    maxlen_of_queue: int = 200000
+    max_len_of_queue: int = 200000
     n_mcts_sims: int = 25
     arena_compare: int = 40
-    cpuct: int = 1
+    c_puct: int = 1
     checkpoint: str = "./temp/"
     load_model: bool = False
     load_folder_file: tuple[str, str] = ("/dev/models/8x100x50", "best.pth.tar")
-    n_iters_for_train_examples_history: int = 20
+    num_iters_for_train_examples_history: int = 20
 
     def to_coach_args(self) -> CoachArgs:
         return CoachArgs(
-            numIters=self.n_iter,
-            numEps=self.n_eps,
-            tempThreshold=self.temp_threshold,
-            updateThreshold=self.update_threshold,
-            maxLenOfQueue=self.maxlen_of_queue,
-            numMCTSSims=self.n_mcts_sims,
-            arenaCompare=self.arena_compare,
-            cpuct=self.cpuct,
+            num_iters=self.num_iter,
+            num_eps=self.num_eps,
+            temp_threshold=self.temp_threshold,
+            update_threshold=self.update_threshold,
+            max_len_of_queue=self.max_len_of_queue,
+            num_mcts_sims=self.n_mcts_sims,
+            arena_compare=self.arena_compare,
+            c_puct=self.c_puct,
             checkpoint=self.checkpoint,
-            loadModel=self.load_model,
-            loadFolderFile=self.load_folder_file,
-            numItersForTrainExamplesHistory=self.n_iters_for_train_examples_history,
-            maxlenOfQueue=self.maxlen_of_queue,
+            load_model=self.load_model,
             load_folder_file=self.load_folder_file,
+            num_iters_for_train_examples_history=self.num_iters_for_train_examples_history,
         )
 
 
@@ -72,7 +70,7 @@ def main() -> None:
     c = Coach(g, nnet, args.to_coach_args())
 
     if args.load_model:
-        log.info("Loading 'trainExamples' from file...")
+        log.info("Loading 'train_examples' from file...")
         c.load_train_examples()
 
     log.info("Starting the learning process 🎉")

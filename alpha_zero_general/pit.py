@@ -39,7 +39,7 @@ else:
     n1.load_checkpoint(
         "./pretrained_models/othello/pytorch/", "8x8_100checkpoints_best.pth.tar"
     )
-args1 = MctsArgs(numMCTSSims=50, cpuct=1.0)
+args1 = MctsArgs(numMCTSSims=50, c_puct=1.0)
 mcts1 = MCTS(g, n1, args1)
 
 
@@ -54,7 +54,7 @@ else:
     n2.load_checkpoint(
         "./pretrained_models/othello/pytorch/", "8x8_100checkpoints_best.pth.tar"
     )
-    args2 = dotdict({"numMCTSSims": 50, "cpuct": 1.0})
+    args2 = MctsArgs(num_mcts_sims=50, c_puct=1.0)
     mcts2 = MCTS(g, n2, args2)
     n2p = lambda x: np.argmax(mcts2.get_action_prob(x, temp=0))
 

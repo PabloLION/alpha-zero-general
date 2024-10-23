@@ -26,6 +26,6 @@ if __name__ == "__main__":
     # Create coach instance that starts teaching nnet on newly created game using self-play
     c = Coach(g, nnet, CONFIG.learn_args)
     if CONFIG.learn_args.load_model:
-        print("Load trainExamples from file")
+        print("Load train_examples from file")
         c.loadTrainExamples()
     c.learn()
