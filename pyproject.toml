@@ -15,10 +15,14 @@ lint = "scripts.lint:run_lint"
 python = "^3.11"
 coloredlogs = "15.0.1"
 h5py = "^3.12.1"
-keras = "3.6.0"        # not sure if it's top-level or not
-numpy = "^2.0.0"       # not sure if it's top-level or not
+keras = "3.6.0"          # not sure if it's top-level or not
+numpy = "^2.0.0"         # not sure if it's top-level or not
+tensorflow = "2.18.0rc2"
 torch = "^2.5.0"
 tqdm = "4.64.0"
+pygame = "^2.6.1"
+flask = "^3.0.3"
+ipython = "^8.28.0"
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "^2.3.1"
@@ -64,6 +68,19 @@ max-complexity = 10
 
 [tool.isort]
 profile = "black"
+
+[tool.pylint]
+ignore = ["migrations", "tests"]
+disable = [
+  "C0114", # missing-module-docstring
+  "C0115", # missing-class-docstring
+  "C0116", # missing-function-docstring
+]
+max-line-length = 79
+ignored-modules = [
+  "tensorflow.keras", # Dynamic imports in tf confuses static analyzers like Pylint
+  "TFPluginAPI",      # Code was for TensorFlow-Unreal 0.8.0 (no PyPI). need test.
+]
 
 [build-system]
 requires = ["poetry-core"]

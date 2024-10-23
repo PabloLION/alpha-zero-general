@@ -1,9 +1,16 @@
 from typing import Any
 
-from tensorflow.keras.activations import *
-from tensorflow.keras.layers import *
-from tensorflow.keras.models import *
-from tensorflow.keras.optimizers import *
+from tensorflow.keras.activations import relu
+from tensorflow.keras.layers import (
+    BatchNormalization,
+    Conv2D,
+    Dense,
+    Flatten,
+    Input,
+    Reshape,
+)
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
 
 
 def relu_bn(inputs: Any) -> Any:

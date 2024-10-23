@@ -6,8 +6,10 @@ import numpy as np
 
 sys.path.append("..")
 
-from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.tictactoe_3d.keras.TicTacToeNNet import TicTacToeNNet as onnet
+from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.tictactoe_3d.keras.tic_tac_toe_n_net import (
+    TicTacToeNNet as onnet,
+)
 from alpha_zero_general.utils import dotdict
 
 """

@@ -1,8 +1,17 @@
 from typing import Any
 
-from tensorflow.keras.layers import *
-from tensorflow.keras.models import *
-from tensorflow.keras.optimizers import *
+from tensorflow.keras.layers import (
+    Activation,
+    BatchNormalization,
+    Conv2D,
+    Dense,
+    Dropout,
+    Flatten,
+    Input,
+    Reshape,
+)
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
 
 
 class GobangNNet:

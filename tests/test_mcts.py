@@ -2,9 +2,9 @@ import numpy as np
 import pytest
 from pytest_mock import MockerFixture
 
-from alpha_zero_general.connect4.Connect4Game import Connect4Game
-from alpha_zero_general.connect4.keras.NNet import NNetWrapper as nn
-from alpha_zero_general.MCTS import MCTS
+from alpha_zero_general.connect4.connect4_game import Connect4Game
+from alpha_zero_general.connect4.keras.n_net import NNetWrapper as nn
+from alpha_zero_general.mcts import MCTS
 from alpha_zero_general.utils import dotdict
 
 

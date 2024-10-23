@@ -1,8 +1,8 @@
 import pytest
 
-from alpha_zero_general.Arena import Arena
-from alpha_zero_general.connect4.Connect4Game import Connect4Game
-from alpha_zero_general.connect4.Connect4Players import RandomPlayer
+from alpha_zero_general.arena import Arena
+from alpha_zero_general.connect4.connect4_game import Connect4Game
+from alpha_zero_general.connect4.connect4_players import RandomPlayer
 
 
 class TestArena:

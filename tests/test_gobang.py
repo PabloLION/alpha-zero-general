@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from alpha_zero_general.gobang.GobangGame import GobangGame
+from alpha_zero_general.gobang.gobang_game import GobangGame
 
 
 class TestGobangGame:

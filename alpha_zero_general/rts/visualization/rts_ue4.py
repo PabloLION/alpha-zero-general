@@ -6,9 +6,9 @@ import tensorflow as tf
 
 # noinspection PyUnresolvedReferences
 # noinspection PyUnresolvedReferences
-from TFPluginAPI import TFPluginAPI
+from TFPluginAPI import TFPluginAPI  # this is the API for UE4 plugin, not on PyPI
 
-from alpha_zero_general.MCTS import MCTS
+from alpha_zero_general.mcts import MCTS
 from alpha_zero_general.rts.keras.n_net import NNetWrapper as NNet
 from alpha_zero_general.rts.rts_game import RTSGame
 from alpha_zero_general.rts.src.config import ACTS_REV, NUM_ACTS

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from alpha_zero_general.connect4.Connect4Game import Connect4Game
+from alpha_zero_general.connect4.connect4_game import Connect4Game
 
 
 class TestConnect4Game:

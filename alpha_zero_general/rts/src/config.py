@@ -530,7 +530,7 @@ class Configuration:
             onehot_encoder: bool,
             player_model_file: str,
         ):
-            from alpha_zero_general.rts.RTSPlayers import (
+            from alpha_zero_general.rts.rts_players import (
                 GreedyRTSPlayer,
                 HumanRTSPlayer,
                 RandomPlayer,
@@ -554,9 +554,8 @@ class Configuration:
 
         class _PitNNetPlayer:
             def __init__(self, g, player_config, onehot_encoder, player_model_file):
-                from MCTS import MCTS
-
-                from alpha_zero_general.rts.keras.NNet import NNetWrapper as NNet
+                from alpha_zero_general.mcts import MCTS
+                from alpha_zero_general.rts.keras.n_net import NNetWrapper as NNet
 
                 if onehot_encoder:
                     encoder = OneHotEncoder()

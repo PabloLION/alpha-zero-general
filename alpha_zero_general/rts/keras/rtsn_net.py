@@ -1,10 +1,18 @@
 import os
 
-import tensorflow.keras
-from tensorflow.keras.layers import *
-from tensorflow.keras.optimizers import *
-
 from tensorflow.keras import Input, Model
+from tensorflow.keras.layers import (
+    Activation,
+    BatchNormalization,
+    Conv2D,
+    Dense,
+    Dropout,
+    Flatten,
+    Input,
+    Reshape,
+)
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
 
 from alpha_zero_general.rts.src.config import SHOW_TENSORFLOW_GPU, USE_TF_CPU
 

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from alpha_zero_general.othello.OthelloGame import OthelloGame
+from alpha_zero_general.othello.othello_game import OthelloGame
 
 
 class TestOthelloGame:
