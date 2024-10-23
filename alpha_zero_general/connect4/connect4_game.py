@@ -1,7 +1,7 @@
 from numpy import array2string, copy
 
-from alpha_zero_general.connect4.Connect4Logic import Connect4Board
-from alpha_zero_general.Game import Game
+from alpha_zero_general.connect4.connect4_logic import Connect4Board
+from alpha_zero_general.game import Game
 from alpha_zero_general.type import BoardMatrix
 
 DEFAULT_CONNECT4_BOARD_HEIGHT = 6

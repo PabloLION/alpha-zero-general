@@ -2,6 +2,7 @@ import numpy as np
 from alpha_zero_general.type import BoardMatrix
 
 from alpha_zero_general.tafl.Digits import int2base
+from alpha_zero_general.game import Game
 
 
 class RandomTaflPlayer:

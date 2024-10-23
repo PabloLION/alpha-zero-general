@@ -1,6 +1,6 @@
 import numpy as np
 
-from alpha_zero_general.tafl.GameVariants import Tafl
+from alpha_zero_general.tafl.game_variants import Tafl
 from alpha_zero_general.type import BoardMatrix
 
 

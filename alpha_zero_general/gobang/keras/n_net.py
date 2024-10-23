@@ -3,8 +3,8 @@ from typing import Any
 
 import numpy as np
 
-from alpha_zero_general.gobang.keras.GobangNNet import GobangNNet as onnet
-from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.gobang.keras.gobang_n_net import GobangNNet as onnet
+from alpha_zero_general.neural_net import NeuralNet
 from alpha_zero_general.type import BoardMatrix
 from alpha_zero_general.utils import dotdict
 

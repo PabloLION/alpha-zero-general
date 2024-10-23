@@ -2,8 +2,8 @@ import logging
 import math
 
 from alpha_zero_general.type import BoardMatrix
-from alpha_zero_general.Game import Game
-from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.game import Game
+from alpha_zero_general.neural_net import NeuralNet
 from alpha_zero_general.type import MctsArgs
 
 EPS = 1e-8

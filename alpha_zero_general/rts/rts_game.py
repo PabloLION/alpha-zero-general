@@ -2,7 +2,7 @@ from typing import Tuple
 
 import numpy as np
 
-from alpha_zero_general.Game import Game
+from alpha_zero_general.game import Game
 from alpha_zero_general.rts.src.Board import Board
 from alpha_zero_general.rts.src.config import (
     A_TYPE_IDX,

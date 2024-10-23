@@ -3,8 +3,8 @@ import time
 
 import numpy as np
 
-from alpha_zero_general.NeuralNet import NeuralNet
-from alpha_zero_general.othello.keras.OthelloNNet import OthelloNNet as onnet
+from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.othello.keras.othello_n_net import OthelloNNet as onnet
 from alpha_zero_general.utils import dotdict
 
 args = dotdict(

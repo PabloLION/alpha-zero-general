@@ -5,14 +5,14 @@ import time
 import numpy as np
 
 from alpha_zero_general.connect4.connect4_game import Connect4Game
-from alpha_zero_general.NeuralNet import NeuralNet
+from alpha_zero_general.neural_net import NeuralNet
 from alpha_zero_general.type import BoardMatrix
 from alpha_zero_general.utils import dotdict
 
 log = logging.getLogger(__name__)
 
 
-from alpha_zero_general.connect4.keras.connect4_nnet import Connect4NNet as onnet
+from alpha_zero_general.connect4.keras.connect4_n_net import Connect4NNet as onnet
 
 args = dotdict(
     {

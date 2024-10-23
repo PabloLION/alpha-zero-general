@@ -2,8 +2,8 @@ from __future__ import print_function
 
 import numpy as np
 
-from alpha_zero_general.Game import Game
-from alpha_zero_general.gobang.GobangLogic import Board
+from alpha_zero_general.game import Game
+from alpha_zero_general.gobang.gobang_logic import Board
 from alpha_zero_general.type import BoardMatrix
 
 
@@ -21,7 +21,7 @@ class GobangGame(Game):
         # (a,b) tuple
         return (self.n, self.n)
 
-    def get_action_size(self) -> int:
+    def get_action_size() -> int:
         # return number of actions
         return self.n * self.n + 1
 

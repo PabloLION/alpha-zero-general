@@ -2,7 +2,7 @@ import logging
 
 from tqdm import tqdm
 
-from alpha_zero_general.Game import Game
+from alpha_zero_general.game import Game
 from alpha_zero_general.type import Display, Player
 
 log = logging.getLogger(__name__)

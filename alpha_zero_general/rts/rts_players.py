@@ -7,6 +7,7 @@ import numpy as np
 import pygame
 from pygame.rect import Rect
 
+from alpha_zero_general.game import Game
 from alpha_zero_general.rts.src.config import (
     A_TYPE_IDX,
     ACTS,
@@ -123,7 +124,7 @@ class HumanRTSPlayer:
             for x in range(n):
                 actor_location = (
                     int(x * canvas_scale + canvas_scale / 2 + canvas_scale),
-                    int(y * canvas_scale + canvas_scale / 2) + canvas_scale,
+                    int(y * canvas_scale / 2) + canvas_scale,
                 )
                 actor_x, actor_y = actor_location
                 actor_size = int(canvas_scale / 3)

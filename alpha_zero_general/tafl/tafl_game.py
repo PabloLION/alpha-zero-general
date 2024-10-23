@@ -5,7 +5,7 @@ import sys
 sys.path.append("..")
 import numpy as np
 
-from alpha_zero_general.Game import Game
+from alpha_zero_general.game import Game
 from alpha_zero_general.tafl.Digits import int2base
 from alpha_zero_general.tafl.GameVariants import (
     AleaEvangelii,
