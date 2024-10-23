@@ -1,5 +1,10 @@
-class AverageMeter(object):
+class AverageMeter:
     """From https://github.com/pytorch/examples/blob/master/imagenet/main.py"""
+
+    val: float
+    avg: float
+    sum: float
+    count: int
 
     def __init__(self):
         self.val = 0
@@ -10,7 +15,7 @@ class AverageMeter(object):
     def __repr__(self):
         return f"{self.avg:.2e}"
 
-    def update(self, val, n=1):
+    def update(self, val: float, n: int = 1) -> None:
         self.val = val
         self.sum += val * n
         self.count += n

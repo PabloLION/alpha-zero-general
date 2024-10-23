@@ -1,9 +1,7 @@
 import os
-import sys
 
 import numpy as np
 
-sys.path.append("../..")
 from alpha_zero_general.rts.src.encoders import NumericEncoder, OneHotEncoder
 from alpha_zero_general.utils import dotdict
 
