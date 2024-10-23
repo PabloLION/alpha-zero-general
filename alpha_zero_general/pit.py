@@ -38,7 +38,7 @@ else:
     n1.load_checkpoint(
         "./pretrained_models/othello/pytorch/", "8x8_100checkpoints_best.pth.tar"
     )
-args1 = MctsArgs(numMCTSSims=50, c_puct=1.0)
+args1 = MctsArgs(num_mcts_sims=50, c_puct=1.0)
 mcts1 = MCTS(g, n1, args1)
 
 

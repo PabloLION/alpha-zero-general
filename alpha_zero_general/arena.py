@@ -85,8 +85,8 @@ class Arena:
             )
 
         for player in players[0], players[2]:
-            if hasattr(player, "endGame"):
-                player.endGame()
+            if hasattr(player, "end_game"):
+                player.end_game()
 
         if verbose:
             assert self.display

@@ -151,3 +151,18 @@ class GenericGame(ABC):
         raise NotImplementedError(
             "string_representation must be implemented by the subclass"
         )
+
+    @abstractmethod
+    def __hash__(self) -> int:
+        """
+        Use hash to store game in dictionary, instead of string representation.
+        This hash should include these parameters:
+            - board size
+            - current player
+            - board state
+            - game specific parameters
+
+        Returns:
+            hash: hash of the game
+        """
+        raise NotImplementedError("__hash__ must be implemented by the subclass")

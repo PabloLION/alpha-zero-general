@@ -47,7 +47,7 @@ class MCTS:
         self, canonical_board: GenericBoardTensor, temp: int = 1
     ) -> GenericPolicyTensor:
         """
-        This function performs numMCTSSims simulations of MCTS starting from
+        This function performs num_mcts_sims simulations of MCTS starting from
         canonicalBoard.
 
         Args:

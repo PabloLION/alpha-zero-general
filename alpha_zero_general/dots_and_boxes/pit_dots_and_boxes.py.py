@@ -1,4 +1,3 @@
-# #TODO: rename this file to pit_dots_and_boxes.py
 import os
 
 import numpy as np
