@@ -59,8 +59,8 @@ class GreedyOthelloPlayer:
         for a in range(self.game.get_action_size()):
             if valids[a] == 0:
                 continue
-            nextBoard, _ = self.game.get_next_state(board, 1, a)
-            score = self.game.getScore(nextBoard, 1)
+            next_board, _ = self.game.get_next_state(board, 1, a)
+            score = self.game.get_score(next_board, 1)
             candidates += [(-score, a)]
         candidates.sort()
         return candidates[0][1]
@@ -77,33 +77,33 @@ class GTPOthelloPlayer:
         1: "black",
     }
 
-    def __init__(self, game, gtpClient):
+    def __init__(self, game, gtp_client):
         """
         Input:
             game: the game instance
-            gtpClient: list with the command line arguments to start the GTP client with.
+            gtp_client: list with the command line arguments to start the GTP client with.
                        The first argument should be the absolute path to the executable.
         """
         self.game = game
-        self.gtpClient = gtpClient
+        self.gtp_client = gtp_client
 
-    def startGame(self):
+    def start_game(self):
         """
         Should be called before the game starts in order to setup the board.
         """
-        self._currentPlayer = 1  # Arena does not notify players about their colour so we need to keep track here
+        self._current_player = 1  # Arena does not notify players about their colour so we need to keep track here
         self._process = subprocess.Popen(
-            self.gtpClient, bufsize=0, stdin=subprocess.PIPE, stdout=subprocess.PIPE
+            self.gtp_client, bufsize=0, stdin=subprocess.PIPE, stdout=subprocess.PIPE
         )
-        self._sendCommand("boardsize " + str(self.game.n))
-        self._sendCommand("clear_board")
+        self._send_command("boardsize " + str(self.game.n))
+        self._send_command("clear_board")
 
-    def endGame(self):
+    def end_game(self):
         """
         Should be called after the game ends in order to clean-up the used resources.
         """
         if hasattr(self, "_process") and self._process is not None:
-            self._sendCommand("quit")
+            self._send_command("quit")
             # Waits for the client to terminate gracefully for 10 seconds. If it does not - kills it.
             try:
                 self._process.wait(10)
@@ -115,36 +115,36 @@ class GTPOthelloPlayer:
         """
         Should be called after the opponent turn. This way we can update the GTP client with the opponent move.
         """
-        color = GTPOthelloPlayer.player_colors[self._currentPlayer]
-        move = self._convertActionToMove(action)
-        self._sendCommand("play {} {}".format(color, move))
-        self._switchPlayers()
+        color = GTPOthelloPlayer.player_colors[self._current_player]
+        move = self._convert_action_to_move(action)
+        self._send_command("play {} {}".format(color, move))
+        self._switch_players()
 
     def play(self, board):
-        color = GTPOthelloPlayer.player_colors[self._currentPlayer]
-        move = self._sendCommand("genmove {}".format(color))
-        action = self._convertMoveToAction(move)
-        self._switchPlayers()
+        color = GTPOthelloPlayer.player_colors[self._current_player]
+        move = self._send_command("genmove {}".format(color))
+        action = self._convert_move_to_action(move)
+        self._switch_players()
         return action
 
-    def _switchPlayers(self):
-        self._currentPlayer = -self._currentPlayer
+    def _switch_players(self):
+        self._current_player = -self._current_player
 
-    def _convertActionToMove(self, action):
+    def _convert_action_to_move(self, action):
         if action < self.game.n**2:
             row, col = int(action / self.game.n), int(action % self.game.n)
             return "{}{}".format(chr(ord("A") + col), row + 1)
         else:
             return "PASS"
 
-    def _convertMoveToAction(self, move):
+    def _convert_move_to_action(self, move):
         if move != "PASS":
             col, row = ord(move[0]) - ord("A"), int(move[1:])
             return (row - 1) * self.game.n + col
         else:
             return self.game.n**2
 
-    def _sendCommand(self, cmd):
+    def _send_command(self, cmd):
         self._process.stdin.write(cmd.encode() + b"\n")
 
         response = ""

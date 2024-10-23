@@ -54,7 +54,7 @@ class TaflGame(GenericGame):
     ) -> tuple[GenericBoardTensor, int]:
         # if player takes action on board, return next (board,player)
         # action must be a valid move
-        b = board.getCopy()
+        b = board.get_copy()
         move = int2base(action, self.n, 4)
         b.execute_move(move, player)
         return (b, -player)
@@ -65,12 +65,12 @@ class TaflGame(GenericGame):
         # return a fixed size binary vector
         # Note: Ignoreing the passed in player variable since we are not inverting colors for getCanonicalForm and Arena calls with constant 1.
         valids = [0] * self.get_action_size()
-        b = board.getCopy()
-        legalMoves = b.get_legal_moves(board.getPlayerToMove())
-        if len(legalMoves) == 0:
+        b = board.get_copy()
+        legal_moves = b.get_legal_moves(board.get_player_to_move())
+        if len(legal_moves) == 0:
             valids[-1] = 1
             return np.array(valids)
-        for x1, y1, x2, y2 in legalMoves:
+        for x1, y1, x2, y2 in legal_moves:
             valids[x1 + y1 * self.n + x2 * self.n**2 + y2 * self.n**3] = 1
         return np.array(valids)
 
@@ -81,7 +81,7 @@ class TaflGame(GenericGame):
     def get_canonical_form(
         self, board: GenericBoardTensor, player: int
     ) -> GenericBoardTensor:
-        b = board.getCopy()
+        b = board.get_copy()
         # rules and objectives are different for the different players, so inverting board results in an invalid state.
         return b
 
@@ -108,10 +108,10 @@ class TaflGame(GenericGame):
         # print("->",str(board))
         return str(board)
 
-    def getScore(self, board: GenericBoardTensor, player: int) -> int:
+    def get_score(self, board: GenericBoardTensor, player: int) -> int:
         if board.done:
             return 1000 * board.done * player
-        return board.countDiff(player)
+        return board.count_diff(player)
 
 
 def display(board: GenericBoardTensor) -> None:
@@ -126,7 +126,7 @@ def display(board: GenericBoardTensor) -> None:
         "22": "x",
     }
     print("---------------------")
-    image = board.getImage()
+    image = board.get_image()
 
     print("  ", " ".join(str(i) for i in range(len(image))))
     for i in range(len(image) - 1, -1, -1):

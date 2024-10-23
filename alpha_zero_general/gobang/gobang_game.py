@@ -46,11 +46,11 @@ class GobangGame(GenericGame):
         valids = [0] * self.get_action_size()
         b = Board(self.n)
         b.pieces = np.copy(board)
-        legalMoves = b.get_legal_moves(player)
-        if len(legalMoves) == 0:
+        legal_moves = b.get_legal_moves(player)
+        if len(legal_moves) == 0:
             valids[-1] = 1
             return np.array(valids)
-        for x, y in legalMoves:
+        for x, y in legal_moves:
             valids[self.n * x + y] = 1
         return np.array(valids)
 

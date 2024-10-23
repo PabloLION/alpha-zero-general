@@ -10,7 +10,7 @@ class OthelloGame(GenericGame):
     square_content = {-1: "X", +0: "-", +1: "O"}
 
     @staticmethod
-    def getSquarePiece(piece):
+    def get_square_piece(piece):
         return OthelloGame.square_content[piece]
 
     def __init__(self, n):
@@ -45,11 +45,11 @@ class OthelloGame(GenericGame):
         valids = [0] * self.get_action_size()
         b = Board(self.n)
         b.pieces = np.copy(board)
-        legalMoves = b.get_legal_moves(player)
-        if len(legalMoves) == 0:
+        legal_moves = b.get_legal_moves(player)
+        if len(legal_moves) == 0:
             valids[-1] = 1
             return np.array(valids)
-        for x, y in legalMoves:
+        for x, y in legal_moves:
             valids[self.n * x + y] = 1
         return np.array(valids)
 
@@ -62,7 +62,7 @@ class OthelloGame(GenericGame):
             return 0
         if b.has_legal_moves(-player):
             return 0
-        if b.countDiff(player) > 0:
+        if b.count_diff(player) > 0:
             return 1
         return -1
 
@@ -89,16 +89,16 @@ class OthelloGame(GenericGame):
     def string_representation(self, board):
         return np.array2string(board)
 
-    def string_representationReadable(self, board):
+    def string_representation_readable(self, board):
         board_s = "".join(
             self.square_content[square] for row in board for square in row
         )
         return board_s
 
-    def getScore(self, board, player):
+    def get_score(self, board, player):
         b = Board(self.n)
         b.pieces = np.copy(board)
-        return b.countDiff(player)
+        return b.count_diff(player)
 
     @staticmethod
     def display(board):

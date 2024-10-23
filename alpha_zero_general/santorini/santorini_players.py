@@ -20,7 +20,7 @@ class HumanSantoriniPlayer:
 
     def play(self, board):
         # display(board)
-        valids, all_moves, all_moves_binary = self.game.get_valid_movesHuman(board, 1)
+        valids, all_moves, all_moves_binary = self.game.get_valid_moves_human(board, 1)
 
         for i in range(len(all_moves)):
             if all_moves_binary[i]:
@@ -51,8 +51,8 @@ class GreedySantoriniPlayer:
         for a in range(self.game.get_action_size()):
             if valids[a] == 0:
                 continue
-            nextBoard, _ = self.game.get_next_state(board, 1, a)
-            score = self.game.getScore(nextBoard, 1)
+            next_board, _ = self.game.get_next_state(board, 1, a)
+            score = self.game.get_score(next_board, 1)
             candidates += [(-score, a)]
         candidates.sort()
 

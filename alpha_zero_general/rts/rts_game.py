@@ -30,7 +30,7 @@ class RTSGame(GenericGame):
 
         self.initial_board_config = CONFIG.initial_board_config
 
-    def setInitBoard(self, board_config) -> None:
+    def set_init_board(self, board_config) -> None:
         """
         Sets initial_board_config. This function can be used dynamically to change board configuration. It is currently being used by rts_ue4.py, to set board configuration from ue4 game state
         :param board_config: new initial board configuration
@@ -144,8 +144,8 @@ class RTSGame(GenericGame):
 
         if USE_TIMEOUT:
             if board[0, 0, TIME_IDX] < 1:
-                score_player1 = self.getScore(board, player)
-                score_player2 = self.getScore(board, -player)
+                score_player1 = self.get_score(board, player)
+                score_player2 = self.get_score(board, -player)
 
                 if score_player1 == score_player2:
                     return 0.001
@@ -207,7 +207,7 @@ class RTSGame(GenericGame):
     def string_representation(self, board: GenericBoardTensor):
         return np.array2string(board)
 
-    def getScore(self, board: GenericBoardTensor, player: int):
+    def get_score(self, board: GenericBoardTensor, player: int):
         """
         Uses one of 3 elo functions that determine better player
         :param board: game state

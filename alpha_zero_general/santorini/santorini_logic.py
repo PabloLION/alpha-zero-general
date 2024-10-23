@@ -92,17 +92,17 @@ class Board:
                 self.pieces[0][offset][offset - 1] = -1
                 self.pieces[0][offset - 1][offset] = -2
         else:  # self.n is odd
-            boardCenter = int((self.n - 1) / 2)
+            board_center = int((self.n - 1) / 2)
             if np.random.randint(0, 2) % 2 == 0:
-                self.pieces[0][boardCenter - 1][boardCenter] = -1
-                self.pieces[0][boardCenter + 1][boardCenter] = -2
-                self.pieces[0][boardCenter][boardCenter - 1] = +1
-                self.pieces[0][boardCenter][boardCenter + 1] = +2
+                self.pieces[0][board_center - 1][board_center] = -1
+                self.pieces[0][board_center + 1][board_center] = -2
+                self.pieces[0][board_center][board_center - 1] = +1
+                self.pieces[0][board_center][board_center + 1] = +2
             else:
-                self.pieces[0][boardCenter - 1][boardCenter] = +1
-                self.pieces[0][boardCenter + 1][boardCenter] = +2
-                self.pieces[0][boardCenter][boardCenter - 1] = -1
-                self.pieces[0][boardCenter][boardCenter + 1] = -2
+                self.pieces[0][board_center - 1][board_center] = +1
+                self.pieces[0][board_center + 1][board_center] = +2
+                self.pieces[0][board_center][board_center - 1] = -1
+                self.pieces[0][board_center][board_center + 1] = -2
 
     # add [][] indexer syntax to the Board
     def __getitem__(self, index):
@@ -111,7 +111,7 @@ class Board:
         """
         return self.pieces[index]
 
-    def getCharacterLocations(self, player):
+    def get_character_locations(self, player):
         """
         Returns a list of both character's locations as tuples for the player
         """
@@ -134,7 +134,7 @@ class Board:
         moves = []
 
         # Get all the squares with pieces of the given color.
-        piece_locations = self.getCharacterLocations(color)
+        piece_locations = self.get_character_locations(color)
         for piece_location in piece_locations:
             moves.extend(self.get_moves_for_location(piece_location)[0])
         return moves
@@ -151,7 +151,7 @@ class Board:
         all_moves_binary = []
 
         # Get all the squares with pieces of the given color.
-        piece_locations = self.getCharacterLocations(color)
+        piece_locations = self.get_character_locations(color)
 
         for piece_location in piece_locations:
             moves, a_moves, a_moves_binary = self.get_moves_for_location(piece_location)
@@ -168,7 +168,7 @@ class Board:
         moves = []
 
         # Get all the squares with pieces of the given color.
-        piece_locations = self.getCharacterLocations(color)
+        piece_locations = self.get_character_locations(color)
         for piece_location in piece_locations:
             moves.extend(self.get_moves_for_location(piece_location)[2])
 

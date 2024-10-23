@@ -30,7 +30,7 @@ class SantoriniGame(GenericGame):
     ]
 
     @staticmethod
-    def getSquarePiece(piece):
+    def get_square_piece(piece):
         return SantoriniGame.square_content[piece]
 
     def __init__(self, board_length=5, true_random_placement=False):
@@ -53,7 +53,7 @@ class SantoriniGame(GenericGame):
         # if player takes action on board, return next (board,player)
         # action must be a valid move
 
-        piece_locations = self.getCharacterLocations(board, player)
+        piece_locations = self.get_character_locations(board, player)
 
         b = Board(self.n)
         b.pieces = np.copy(board)
@@ -110,14 +110,14 @@ class SantoriniGame(GenericGame):
         return np.array(b.get_legal_moves_binary(color))
         # Get all the squares with pieces of the given color.
 
-    def get_valid_movesHuman(self, board, player):
+    def get_valid_moves_human(self, board, player):
         b = Board(self.n)
         b.pieces = np.copy(board)
         color = player
 
         return b.get_all_moves(color)
 
-    def getCharacterLocations(self, board, player):
+    def get_character_locations(self, board, player):
         """
         Returns a list of both character's locations as tuples for the player
         """
@@ -149,8 +149,8 @@ class SantoriniGame(GenericGame):
 
         b = Board(self.n)
         b.pieces = np.copy(board)
-        player_pieces = self.getCharacterLocations(b.pieces, player)
-        opponent_pieces = self.getCharacterLocations(b.pieces, -1 * player)
+        player_pieces = self.get_character_locations(b.pieces, player)
+        opponent_pieces = self.get_character_locations(b.pieces, -1 * player)
 
         for piece in player_pieces:
             if b.pieces[1][piece] == 3:
@@ -173,7 +173,7 @@ class SantoriniGame(GenericGame):
 
         return board
 
-    def getRandomBoardSymmetry(self, board):
+    def get_random_board_symmetry(self, board):
         """
         Returns a random board symmetry.
         """
@@ -466,9 +466,10 @@ class SantoriniGame(GenericGame):
                                 0  3  5
                                 
         
-                             
+
+                              
         initial values at indices: [0, 1, 2, 3, 4, 5, 6, 7]
-                            --->[2, 4, 7, 1, 6, 0, 3, 5] under 1 CCW rotation
+                        --->[2, 4, 7, 1, 6, 0, 3, 5] under 1 CCW rotation
         
         
         
@@ -483,14 +484,14 @@ class SantoriniGame(GenericGame):
     def string_representation(self, board):
         return np.array2string(board)
 
-    def string_representationReadable(self, board):
+    def string_representation_readable(self, board):
         # Do not think this works.
         board_s = "".join(
             self.square_content[square] for row in board for square in row
         )
         return board_s
 
-    def getScore(self, board, player):
+    def get_score(self, board, player):
         """
         Only used by 'Greedy player'
         """
@@ -498,11 +499,11 @@ class SantoriniGame(GenericGame):
         b = Board(self.n)
         b.pieces = np.copy(board)
 
-        piece_locations = self.getCharacterLocations(board, player)
+        piece_locations = self.get_character_locations(board, player)
         char0 = piece_locations[0]
         char1 = piece_locations[1]
 
-        opponent_piece_locations = self.getCharacterLocations(board, -player)
+        opponent_piece_locations = self.get_character_locations(board, -player)
         opp_char0 = opponent_piece_locations[0]
         opp_char1 = opponent_piece_locations[1]
 

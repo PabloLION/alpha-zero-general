@@ -50,7 +50,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testget_next_stateScoreN2Player2(self):
+    def test_get_next_state_score_n2_player2(self):
         g = DotsAndBoxesGame(n=2)
 
         board = np.array([[1, 0, 0], [1, 0, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0]])
@@ -64,7 +64,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testget_next_stateScoreN2(self):
+    def test_get_next_state_score_n2(self):
         g = DotsAndBoxesGame(n=2)
 
         board = np.array([[1, 0, 0], [1, 0, 0], [0, 0, 0], [1, 0, 0], [0, 0, 0]])
@@ -89,7 +89,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testget_next_stateScoreN3(self):
+    def test_get_next_state_score_n3(self):
         g = DotsAndBoxesGame(n=3)
 
         board = np.array(
@@ -334,7 +334,7 @@ class DotsAndBoxesTests(unittest.TestCase):
         outcome = g.get_game_ended(board, -1)
         self.assertEquals(1, outcome)
 
-    def testSymmetriesN2(self):
+    def test_symmetries_n2(self):
         g = DotsAndBoxesGame(n=2)
         board = np.array([[0, 1, 0], [2, 3, 0], [4, 5, 0], [6, 7, 8], [9, 10, 11]])
         pi = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
@@ -436,7 +436,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testSymmetriesN2_score(self):
+    def test_symmetries_n2_score(self):
         g = DotsAndBoxesGame(n=2)
         board = np.array([[0, 1, 1], [2, 3, 2], [4, 5, 1], [6, 7, 8], [9, 10, 11]])
         pi = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
@@ -538,7 +538,7 @@ class DotsAndBoxesTests(unittest.TestCase):
             )
         )
 
-    def testSymmetriesN3(self):
+    def test_symmetries_n3(self):
         g = DotsAndBoxesGame(n=3)
         board = np.array(
             [

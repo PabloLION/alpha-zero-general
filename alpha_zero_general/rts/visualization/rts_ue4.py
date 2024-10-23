@@ -36,7 +36,7 @@ class TD2020LearnAPI(TFPluginAPI):
         self.session_var = None
         self.mcts = None
 
-    def onSetup(self):
+    def on_setup(self):
         """
         Sets up nnet configs and mcts. It loads model in ram. Session variable is saved, so it can be then used async in 'onJsonInput'
         """
@@ -56,17 +56,17 @@ class TD2020LearnAPI(TFPluginAPI):
 
                 self.setup = True
 
-    def onJsonInput(self, jsonInput):
+    def on_json_input(self, json_input):
         """
         Request for action for specific game state of specific player.
         Json input is recieved from UE4, providing game state in ue4. This game state must reflect same configuration as Python one.
         Keep in mind coordinate system orientation
-        :param jsonInput: initial board config and player, requesting action
+        :param json_input: initial board config and player, requesting action
         :return: recommended action using our nnet
         """
         if not self.setup:
             return
-        encoded_actors = jsonInput["data"]
+        encoded_actors = json_input["data"]
         initial_board_config = []
         for encoded_actor in encoded_actors:
             initial_board_config.append(
@@ -85,7 +85,7 @@ class TD2020LearnAPI(TFPluginAPI):
             )
 
         self.initial_board_config = initial_board_config
-        self.owning_player = jsonInput["player"]
+        self.owning_player = json_input["player"]
         ######
         with self.graph_var.as_default():
             with self.session_var.as_default():
@@ -107,7 +107,7 @@ class TD2020LearnAPI(TFPluginAPI):
                 print("Printing recommended action >>>>>>>>>>>>>>>>>>>>>>>>" + str(act))
         return act
 
-    def onBeginTraining(self):
+    def on_begin_training(self):
         pass
 
     def run(self, args):
@@ -133,5 +133,5 @@ class TD2020LearnAPI(TFPluginAPI):
 
 # required function to get our api
 # noinspection PyPep8Naming
-def getApi():
+def get_api():
     return TD2020LearnAPI.getInstance()

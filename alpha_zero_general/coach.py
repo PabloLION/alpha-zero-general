@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 Display = Callable[[Any], None]
 Board = Any
 ExampleValue: TypeAlias = float
-PlayerID: TypeAlias = int
+PlayerId: TypeAlias = int
 # LengthyTrainExample = tuple[
 #     GenericBoardTensor, PlayerID, GenericPolicyTensor, ExampleValue
 # ]
@@ -35,7 +35,7 @@ class RawTrainExample(NamedTuple):
     """
 
     board: GenericBoardTensor
-    current_player: PlayerID
+    current_player: PlayerId
     policy: GenericPolicyTensor
     neutral_value: ExampleValue  # from neutral perspective
 
@@ -53,24 +53,24 @@ TrainExamplesFile = str
 
 @dataclass(frozen=True)  # freeze to check for immutability in refactor
 class CoachArgs:
-    numIters: int
-    numEps: int
-    tempThreshold: int
-    updateThreshold: float
-    maxLenOfQueue: int
-    numMCTSSims: int
-    arenaCompare: int
+    num_iters: int
+    num_eps: int
+    temp_threshold: int
+    update_threshold: float
+    max_len_of_queue: int
+    num_mcts_sims: int
+    arena_compare: int
     cpuct: float
     checkpoint: str
-    loadModel: bool
-    loadFolderFile: tuple[str, str]
-    numItersForTrainExamplesHistory: int
-    maxlenOfQueue: int
+    load_model: bool
+    load_folder_file: tuple[str, str]
+    num_iters_for_train_examples_history: int
+    max_len_of_queue: int
     load_folder_file: tuple[str, str]
 
     def to_mcts_args(self) -> MctsArgs:
         return MctsArgs(
-            numMCTSSims=self.numMCTSSims,
+            num_mcts_sims=self.num_mcts_sims,
             cpuct=self.cpuct,
         )
 
@@ -90,7 +90,7 @@ class Coach:
         self.train_examples_history: TrainExampleHistory = (
             []
         )  # history of examples from args.numItersForTrainExamplesHistory latest iterations
-        self.skipFirstSelfPlay = False  # can be overriden in loadTrainExamples()
+        self.skip_first_self_play = False  # can be overriden in loadTrainExamples()
 
     def execute_episode(self) -> list[TrainExample]:
         """
@@ -119,7 +119,7 @@ class Coach:
         while True:
             episode_step += 1
             canonical_board = self.game.get_canonical_form(board, self.current_player)
-            temp = int(episode_step < self.args.tempThreshold)
+            temp = int(episode_step < self.args.temp_threshold)
 
             pi = self.mcts.get_action_prob(canonical_board, temp=temp)
             sym = self.game.get_symmetries(canonical_board, pi)
@@ -153,16 +153,16 @@ class Coach:
         only if it wins >= updateThreshold fraction of games.
         """
 
-        for i in range(1, self.args.numIters + 1):
+        for i in range(1, self.args.num_iters + 1):
             # bookkeeping
             log.info(f"Starting Iter #{i} ...")
             # examples of the iteration
-            if not self.skipFirstSelfPlay or i > 1:
+            if not self.skip_first_self_play or i > 1:
                 iteration_train_examples: deque[TrainExample] = deque(
-                    [], maxlen=self.args.maxlenOfQueue
+                    [], maxlen=self.args.max_len_of_queue
                 )
 
-                for _ in tqdm(range(self.args.numEps), desc="Self Play"):
+                for _ in tqdm(range(self.args.num_eps), desc="Self Play"):
                     self.mcts = MCTS(
                         self.game, self.nnet, self.args.to_mcts_args()
                     )  # reset search tree
@@ -173,7 +173,7 @@ class Coach:
 
             if (
                 len(self.train_examples_history)
-                > self.args.numItersForTrainExamplesHistory
+                > self.args.num_iters_for_train_examples_history
             ):
                 log.warning(
                     f"Removing the oldest entry in trainExamples. len(trainExamplesHistory) = {len(self.train_examples_history)}"
@@ -214,12 +214,12 @@ class Coach:
                 get_p2_policy,
                 self.game,
             )
-            pwins, nwins, draws = arena.play_games(self.args.arenaCompare)
+            pwins, nwins, draws = arena.play_games(self.args.arena_compare)
 
             log.info("NEW/PREV WINS : %d / %d ; DRAWS : %d" % (nwins, pwins, draws))
             if (
                 pwins + nwins == 0
-                or float(nwins) / (pwins + nwins) < self.args.updateThreshold
+                or float(nwins) / (pwins + nwins) < self.args.update_threshold
             ):
                 log.info("REJECTING NEW MODEL")
                 self.nnet.load_checkpoint(
@@ -252,17 +252,17 @@ class Coach:
         model_file = os.path.join(
             self.args.load_folder_file[0], self.args.load_folder_file[1]
         )
-        examplesFile = model_file + ".examples"
-        if not os.path.isfile(examplesFile):
-            log.warning(f'File "{examplesFile}" with trainExamples not found!')
+        examples_file = model_file + ".examples"
+        if not os.path.isfile(examples_file):
+            log.warning(f'File "{examples_file}" with trainExamples not found!')
             r = input("Continue? [y|n]")
             if r != "y":
                 return
         else:
             log.info("File with trainExamples found. Loading it...")
-            with open(examplesFile, "rb") as f:
+            with open(examples_file, "rb") as f:
                 self.train_examples_history = Unpickler(f).load()
             log.info("Loading done!")
 
             # examples based on the model were already collected (loaded)
-            self.skipFirstSelfPlay = True
+            self.skip_first_self_play = True

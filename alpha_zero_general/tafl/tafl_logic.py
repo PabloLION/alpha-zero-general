@@ -15,18 +15,18 @@ class Board:
         self.done = 0
 
     def __str__(self):
-        return str(self.getPlayerToMove()) + "".join(
-            str(r) for v in self.getImage() for r in v
+        return str(self.get_player_to_move()) + "".join(
+            str(r) for v in self.get_image() for r in v
         )
 
     # add [][] indexer syntax to the Board
     def __getitem__(self, index):
-        return np.array(self.getImage())[index]
+        return np.array(self.get_image())[index]
 
     def astype(self, t):
-        return np.array(self.getImage()).astype(t)
+        return np.array(self.get_image()).astype(t)
 
-    def getCopy(self):
+    def get_copy(self):
         gv = Tafl()
         gv.size = self.size
         gv.board = np.copy(np.array(self.board)).tolist()
@@ -36,7 +36,7 @@ class Board:
         b.done = self.done
         return b
 
-    def countDiff(self, color):
+    def count_diff(self, color):
         """Counts the # pieces of the given color
         (1 for white, -1 for black, 0 for empty spaces)"""
         count = 0
@@ -65,15 +65,15 @@ class Board:
         color gives the color pf the piece to play (1=white,-1=black)
         """
         x1, y1, x2, y2 = move
-        pieceno = self._getPieceNo(x1, y1)
-        legal = self._isLegalMove(pieceno, x2, y2)
+        pieceno = self._get_piece_no(x1, y1)
+        legal = self._is_legal_move(pieceno, x2, y2)
         if legal >= 0:
             # print("Accepted move: ",move)
-            self._moveByPieceNo(pieceno, x2, y2)
+            self._move_by_piece_no(pieceno, x2, y2)
         # else:
         # print("Illegal move:",move,legal)
 
-    def getImage(self):
+    def get_image(self):
         image = [[0 for col in range(self.width)] for row in range(self.height)]
         for item in self.board:
             image[item[1]][item[0]] = item[2] * 10
@@ -82,12 +82,12 @@ class Board:
                 image[piece[1]][piece[0]] = piece[2] + image[piece[1]][piece[0]]
         return image
 
-    def getPlayerToMove(self):
+    def get_player_to_move(self):
         return -(self.time % 2 * 2 - 1)
 
     ################## Internal methods ##################
 
-    def _isLegalMove(self, pieceno, x2, y2):
+    def _is_legal_move(self, pieceno, x2, y2):
         try:
             if x2 < 0 or y2 < 0 or x2 >= self.width or y2 > self.height:
                 return -1
@@ -137,7 +137,7 @@ class Board:
             print("error in islegalmove ", ex, pieceno, x2, y2)
             raise
 
-    def _getCaptures(self, pieceno, x2, y2):
+    def _get_captures(self, pieceno, x2, y2):
         # Assumes was already checked for legal move
         captures = []
         piece = self.pieces[pieceno]
@@ -158,8 +158,8 @@ class Board:
         return captures
 
     # returns code for invalid mode (<0) or number of pieces captured
-    def _moveByPieceNo(self, pieceno, x2, y2):
-        legal = self._isLegalMove(pieceno, x2, y2)
+    def _move_by_piece_no(self, pieceno, x2, y2):
+        legal = self._is_legal_move(pieceno, x2, y2)
         if legal != 0:
             return legal
 
@@ -168,16 +168,16 @@ class Board:
         piece = self.pieces[pieceno]
         piece[0] = x2
         piece[1] = y2
-        caps = self._getCaptures(pieceno, x2, y2)
+        caps = self._get_captures(pieceno, x2, y2)
         # print("Captures = ",caps)
         for c in caps:
             c[0] = -99
 
-        self.done = self._getWinLose()
+        self.done = self._get_win_lose()
 
         return len(caps)
 
-    def _getWinLose(self):
+    def _get_win_lose(self):
         if self.time > 50:
             return -1
         for apiece in self.pieces:
@@ -188,7 +188,7 @@ class Board:
                 return 0  # no winner
         return -1  # white lost
 
-    def _getPieceNo(self, x, y):
+    def _get_piece_no(self, x, y):
         for pieceno in range(len(self.pieces)):
             piece = self.pieces[pieceno]
             if piece[0] == x and piece[1] == y:
@@ -202,10 +202,10 @@ class Board:
             if piece[2] * player > 0:
                 # print("checking pieceno ",pieceno,piece)
                 for x in range(0, self.width):
-                    if self._isLegalMove(pieceno, x, piece[1]) >= 0:
+                    if self._is_legal_move(pieceno, x, piece[1]) >= 0:
                         moves.extend([[piece[0], piece[1], x, piece[1]]])
                 for y in range(0, self.height):
-                    if self._isLegalMove(pieceno, piece[0], y) >= 0:
+                    if self._is_legal_move(pieceno, piece[0], y) >= 0:
                         moves.extend([[piece[0], piece[1], piece[0], y]])
         # print("moves ",moves)
         return moves
