@@ -1,7 +1,7 @@
 import numpy as np
 
-import alpha_zero_general.Arena as Arena
-from alpha_zero_general.MCTS import MCTS
+import alpha_zero_general.arena as Arena
+from alpha_zero_general.mcts import MCTS
 from alpha_zero_general.othello.othello_game import OthelloGame
 from alpha_zero_general.othello.othello_players import (
     GreedyOthelloPlayer,
