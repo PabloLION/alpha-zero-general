@@ -14,8 +14,8 @@ from alpha_zero_general import (
     GenericBoardTensor,
     MctsArgs,
     RawTrainingExample,
-    TrainExample,
     TrainExampleHistory,
+    TrainingExample,
 )
 from alpha_zero_general.arena import Arena
 from alpha_zero_general.game import GenericGame

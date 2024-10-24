@@ -57,7 +57,7 @@ def execute_game_test(
     game: GenericGame[
         GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor
     ],
-    neural_net: type[NeuralNetInterface],
+    neural_net: NeuralNetInterface,
 ):
     random_play = RandomPlayer(game).play
 

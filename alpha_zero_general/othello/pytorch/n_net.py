@@ -23,7 +23,7 @@ args = DotDict(
 
 
 class NNetWrapper(NeuralNetInterface):
-    def __init__(self, game):
+    def __init__(self, game) -> None:
         self.nnet = onnet(game, args)
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()

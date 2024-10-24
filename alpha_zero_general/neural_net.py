@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Any, Generic
 
 from alpha_zero_general import (
@@ -23,6 +23,7 @@ class NeuralNetInterface(
     See othello/NNet.py for an example implementation.
     """
 
+    @abstractmethod
     def __init__(
         self, game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType]
     ):
@@ -30,19 +31,23 @@ class NeuralNetInterface(
             "The __init__ method must be implemented by the subclass"
         )
 
-    def train(self, examples: list[TrainingExample]) -> None:
+    @abstractmethod
+    def train(
+        self, examples: list[TrainingExample[BoardTensorType, PolicyTensorType]]
+    ) -> None:
         """
         Impure function, trains the neural network with examples obtained from
         self-play.
 
         Input:
-            examples: a list of TrainExample, where each example is of form
+            examples: a list of TrainingExample, where each example is of form
                 (board, pi, v). pi is the MCTS informed policy vector for
                 the given board, and v is its value. The examples has
                 board in its canonical form.
         """
         raise NotImplementedError("train method must be implemented by the subclass")
 
+    @abstractmethod
     def predict(self, board: Any) -> tuple[GenericPolicyTensor, float]:
         """
         Input:
@@ -55,6 +60,7 @@ class NeuralNetInterface(
         """
         raise NotImplementedError("predict method must be implemented by the subclass")
 
+    @abstractmethod
     def save_checkpoint(self, folder: str, filename: str) -> None:
         """
         Saves the current neural network (with its parameters) in
@@ -64,6 +70,7 @@ class NeuralNetInterface(
             "save_checkpoint method must be implemented by the subclass"
         )
 
+    @abstractmethod
     def load_checkpoint(self, folder: str, filename: str) -> None:
         """
         Loads parameters of the neural network from folder/filename
