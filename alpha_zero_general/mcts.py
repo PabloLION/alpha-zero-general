@@ -13,7 +13,8 @@ from alpha_zero_general.game import GenericGame
 from alpha_zero_general.neural_net import NeuralNet
 
 EPS = 1e-8
-RNG = random.default_rng()
+RANDOM_SEED = 32342
+RNG = random.default_rng(RANDOM_SEED)
 
 log = logging.getLogger(__name__)
 
@@ -51,6 +52,7 @@ class MCTS:
         self.policy_cache = {}
         self.game_value_cache = {}
         self.valid_moves_cache = {}
+        self.board_cache = {}
 
     def _cached_hash(self, canonical_board: GenericBoardTensor) -> int:
         """

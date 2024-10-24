@@ -1,6 +1,6 @@
 from typing import Any
 
-import tensorflow as tf
+from tensorflow import Tensor
 from tensorflow.keras.activations import relu
 from tensorflow.keras.layers import (
     Add,
@@ -11,99 +11,78 @@ from tensorflow.keras.layers import (
     Input,
     Reshape,
 )
+from tensorflow.keras.losses import CategoricalCrossentropy, MeanSquaredError
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
+from alpha_zero_general.connect4.connect4_game import Connect4Game
 
-def relu_bn(inputs: Any) -> Any:
-    relu1 = relu(inputs)
-    bn = BatchNormalization()(relu1)
-    return bn
-
-
-def residual_block(x: Any, filters: int, kernel_size: int = 3) -> Any:
-    y = Conv2D(kernel_size=kernel_size, strides=(1), filters=filters, padding="same")(x)
-
-    y = relu_bn(y)
-    y = Conv2D(kernel_size=kernel_size, strides=1, filters=filters, padding="same")(y)
-
-    y = BatchNormalization()(y)
-    out = Add()([x, y])
-    out = relu(out)
-
-    return out
-
-
-def value_head(input: Any) -> Any:
-    conv1 = Conv2D(kernel_size=1, strides=1, filters=1, padding="same")(input)
-
-    bn1 = BatchNormalization()(conv1)
-    bn1_relu = relu(bn1)
-
-    flat = Flatten()(bn1_relu)
-
-    dense1 = Dense(256)(flat)
-    dn_relu = relu(dense1)
-
-    dense2 = Dense(256)(dn_relu)
-
-    return dense2
-
-
-def policy_head(input: Any) -> Any:
-    conv1 = Conv2D(kernel_size=2, strides=1, filters=1, padding="same")(input)
-    bn1 = BatchNormalization()(conv1)
-    bn1_relu = relu(bn1)
-    flat = Flatten()(bn1_relu)
-    return flat
+# from tensorflow.python.ops.array_ops import Reshape
 
 
 class Connect4NNet:
-    def __init__(self, game: Any, args: Any):
+    model: Model  # type: ignore # Model is not subscriptable
+
+    def __init__(self, game: Connect4Game, args: Any):
         # game params
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
         self.args = args
 
-        # Neural Net
         # Inputs
-        self.input_boards = Input(shape=(self.board_x, self.board_y))
-        inputs = Reshape((self.board_x, self.board_y, 1))(self.input_boards)
+        self.input_boards = Input(shape=game.get_board_size())
+        # inputs: Tensor = cast(Tensor, expand_dims(self.input_boards, axis=-1))
 
-        bn1 = BatchNormalization()(inputs)
-        conv1 = Conv2D(args.num_channels, kernel_size=3, strides=1, padding="same")(bn1)
-        t = relu_bn(conv1)
+        inputs: Tensor = Reshape((self.board_x, self.board_y, 1))(self.input_boards)
 
+        # Network architecture
+        input_bn: Tensor = BatchNormalization()(inputs)
+        input_conv = Conv2D(
+            self.args.num_channels, kernel_size=3, strides=1, padding="same"
+        )(input_bn)
+        t: Tensor = relu(input_conv)
+        t = BatchNormalization()(t)
+
+        # Residual layers (inlined)
         for _ in range(self.args.num_residual_layers):
-            t = residual_block(t, filters=self.args.num_channels)
+            y = Conv2D(
+                filters=self.args.num_channels, kernel_size=3, strides=1, padding="same"
+            )(t)
+            y = relu(y)
+            y = BatchNormalization()(y)
+            y = Conv2D(
+                filters=self.args.num_channels, kernel_size=3, strides=1, padding="same"
+            )(y)
+            y = BatchNormalization()(y)
+            t = Add()([t, y])
+            t = relu(t)
 
-        self.pi = Dense(self.action_size, activation="softmax", name="pi")(
-            policy_head(t)
-        )
-        self.v = Dense(1, activation="tanh", name="v")(value_head(t))
+        # Policy head
+        policy_conv = Conv2D(filters=1, kernel_size=2, strides=1, padding="same")(t)
+        policy_bn = BatchNormalization()(policy_conv)
+        policy_relu = relu(policy_bn)
+        flat_policy = Flatten()(policy_relu)
+        self.pi = Dense(self.action_size, activation="softmax", name="pi")(flat_policy)
 
-        self.calculate_loss(self.pi, self.v)
+        # Value head
+        value_conv = Conv2D(filters=1, kernel_size=1, strides=1, padding="same")(t)
+        value_bn = BatchNormalization()(value_conv)
+        value_relu = relu(value_bn)
+        flat_value = Flatten()(value_relu)
+        dense_value_1 = Dense(256)(flat_value)
+        dense_value_1_relu = relu(dense_value_1)
+        self.v = Dense(1, activation="tanh", name="v")(dense_value_1_relu)
 
+        # Model definition
         self.model = Model(inputs=self.input_boards, outputs=[self.pi, self.v])
-        self.model.compile(loss=[self.loss_pi, self.loss_v], optimizer=Adam(args.lr))
 
-    def calculate_loss(self, target_pis, target_vs) -> None:
-        # outdated APIs
-        # self.target_pis = tf.placeholder(tf.float32, shape=[None, self.action_size])
-        # self.target_vs = tf.placeholder(tf.float32, shape=[None])
-        # self.loss_pi = tf.losses.softmax_cross_entropy(self.target_pis, self.pi)
-        # self.loss_v = tf.losses.mean_squared_error(
-        #     self.target_vs, tf.reshape(self.v, shape=[-1])
-        # )
+        # Compile the model with losses and optimizer
+        self.compile_model()
 
-        self.loss_pi = tf.keras.losses.CategoricalCrossentropy()(target_pis, self.pi)
-        self.loss_v = tf.keras.losses.MeanSquaredError()(
-            target_vs, tf.reshape(self.v, shape=[-1])
-        )
+    def compile_model(self) -> None:
+        # Loss functions for policy and value heads
+        loss_pi = CategoricalCrossentropy(from_logits=False)
+        loss_v = MeanSquaredError()
 
-        self.total_loss = self.loss_pi + self.loss_v
-        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
-        with tf.control_dependencies(update_ops):
-            self.train_step = tf.train.AdamOptimizer(self.args.lr).minimize(
-                self.total_loss
-            )
+        # Compile the model with Adam optimizer
+        self.model.compile(optimizer=Adam(self.args.lr), loss=[loss_pi, loss_v])  # type: ignore # Model not subscriptable
