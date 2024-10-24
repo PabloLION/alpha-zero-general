@@ -1,8 +1,7 @@
 import numpy as np
 
-from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general import GenericBoardTensor, WinState
 from alpha_zero_general.connect4 import Connect4BoardDataType, Connect4BoardTensor
-from alpha_zero_general.type import WinState
 
 
 class Connect4Board:

@@ -1,8 +1,21 @@
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, NamedTuple, TypeAlias
 
 from numpy import bool_, dtype, ndarray
+
+Player = Callable[[ndarray[Any, Any] | list[list[int]]], int]
+Display = Callable[[Any], None]
+# Display = Callable[[ndarray[Any, Any] | list[list[int]]], None]
+CheckpointFile = Path
+TrainExamplesFile = Path
+
+
+class WinState(NamedTuple):
+    is_ended: bool
+    winner: int | None
+
 
 GenericBoardDataType: TypeAlias = Any  # #TODO: TBD
 GenericBoardShapeType: TypeAlias = Any
@@ -28,7 +41,6 @@ class MctsArgs:
     c_puct: float
 
 
-Display = Callable[[Any], None]
 Board = Any
 BoardEvaluation: TypeAlias = float
 PlayerId: TypeAlias = int

@@ -26,5 +26,5 @@
   - to use it as hash, use `__hash__` is better
 - [ ] `fmt: off` for data list, like in `test_symmetries_n3`
 - [x] style/type-gymnastics
-- [ ] retire `alpha_zero_general.type`
+- [x] retire `alpha_zero_general.type`
 - [ ] rename `./alpha_zero_general/neural_net.py` to `neural_net_interface.py`

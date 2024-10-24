@@ -2,9 +2,8 @@ import logging
 
 from tqdm import tqdm
 
-from alpha_zero_general import PolicyMakerAsPlayer
+from alpha_zero_general import Display, PolicyMakerAsPlayer
 from alpha_zero_general.game import GenericGame
-from alpha_zero_general.type import Display
 
 log = logging.getLogger(__name__)
 
