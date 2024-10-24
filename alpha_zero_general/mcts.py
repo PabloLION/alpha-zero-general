@@ -1,6 +1,6 @@
 import logging
 import math
-from typing import Generic
+from typing import Generic, cast
 
 from numpy import argwhere, array, zeros
 
@@ -75,10 +75,10 @@ class MCTS(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
 
     def get_action_probabilities(
         self, canonical_board: BoardTensorType, temperature: int = 1
-    ) -> GenericPolicyTensor:
+    ) -> PolicyTensorType:
         """
         This function performs num_mcts_sims simulations of MCTS starting from
-        canonicalBoard.
+        canonical_board.
 
         Args:
             canonical_board: a board that is a canonical form of the current
@@ -107,14 +107,14 @@ class MCTS(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
         if temperature == 0:
             all_best_action = argwhere(a=counts == max(counts)).flatten()
             random_best_action = RNG.choice(all_best_action)
-            # prob: GenericPolicyTensor = zeros(len(counts))
-            prob: GenericPolicyTensor = zeros(len(counts))
+            # prob: PolicyTensorType = zeros(len(counts))
+            prob = cast(PolicyTensorType, zeros(len(counts)))
             prob[random_best_action] = 1
             return prob
 
         counts = [x ** (1.0 / temperature) for x in counts]
         counts_sum = float(sum(counts))
-        prob = array([x / counts_sum for x in counts])
+        prob = cast(PolicyTensorType, array([x / counts_sum for x in counts]))
         return prob
 
     def search(self, canonical_board: BoardTensorType) -> float:

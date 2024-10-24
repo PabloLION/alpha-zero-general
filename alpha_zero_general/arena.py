@@ -1,23 +1,25 @@
 import logging
+from typing import Generic
 
 from tqdm import tqdm
 
 from alpha_zero_general import Display, PolicyMakerAsPlayer
+from alpha_zero_general.coach import BoardTensorType, BooleanBoardType, PolicyTensorType
 from alpha_zero_general.game import GenericGame
 
 log = logging.getLogger(__name__)
 
 
-class Arena:
+class Arena(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
     """
     An Arena class where any 2 agents can be pit against each other.
     """
 
     def __init__(
         self,
-        player1: PolicyMakerAsPlayer,
-        player2: PolicyMakerAsPlayer,
-        game: GenericGame,
+        player1: PolicyMakerAsPlayer[BoardTensorType],
+        player2: PolicyMakerAsPlayer[BoardTensorType],
+        game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType],
         display: Display | None = None,
     ):
         """
@@ -33,10 +35,12 @@ class Arena:
         """
         self.player1 = player1
         self.player2 = player2
-        self.game = game
+        self.game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType] = (
+            game
+        )
         self.display = display
 
-    def play_game(self, verbose: bool = False) -> int:
+    def play_game(self, verbose: bool = False) -> float:
         """
         Executes one episode of a game.
 
@@ -46,7 +50,11 @@ class Arena:
             or
                 draw result returned from the game that is neither 1, -1, nor 0.
         """
-        players = [self.player2, None, self.player1]
+        players: list[PolicyMakerAsPlayer[BoardTensorType]] = [
+            self.player1,
+            None,
+            self.player2,
+        ]
         current_player = 1
         board = self.game.get_init_board()
         it = 0
@@ -61,7 +69,7 @@ class Arena:
                 assert self.display
                 print("Turn ", str(it), "Player ", str(current_player))
                 self.display(board)
-            action = players[current_player + 1](
+            action: int = players[current_player + 1](
                 self.game.get_canonical_form(board, current_player)
             )
 

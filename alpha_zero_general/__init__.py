@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
-from pathlib import Path
+
+# from pathlib import Path
 from typing import Any, Generic, NamedTuple, TypeAlias, TypeVar
 
 from numpy import bool_, dtype, ndarray, random
@@ -26,7 +27,7 @@ BooleanBoardType = TypeVar("BooleanBoardType", bound=GenericBooleanBoardTensor)
 PolicyTensorType = TypeVar("PolicyTensorType", bound=GenericPolicyTensor)
 
 
-PolicyMakerAsPlayer: TypeAlias = Callable[[GenericPolicyTensor], int]
+PolicyMakerAsPlayer: TypeAlias = Callable[[BoardTensorType], int]
 
 
 @dataclass(frozen=True)  # freeze to check for immutability in refactor
@@ -60,16 +61,16 @@ class TrainingExample(NamedTuple, Generic[BoardTensorType, PolicyTensorType]):
 
 
 TrainExampleHistory = list[list[TrainingExample[BoardTensorType, PolicyTensorType]]]
-CheckpointFile = str
-TrainExamplesFile = str
 
 # not categorized
 Player = Callable[[ndarray[Any, Any] | list[list[int]]], int]
 Display = Callable[[Any], None]
 # maybe Display = Callable[[ndarray[Any, Any] | list[list[int]]], None]
 # if possible, we should use GenericBoardTensor
-CheckpointFile = Path
-TrainExamplesFile = Path
+CheckpointFile = str
+TrainExamplesFile = str
+# CheckpointFile = Path
+# TrainExamplesFile = Path
 
 
 class WinState(NamedTuple):
