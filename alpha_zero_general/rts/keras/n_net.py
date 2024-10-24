@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 
-from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.neural_net import NeuralNetInterface
 from alpha_zero_general.rts.keras.rtsn_net import RTSNNet
 from alpha_zero_general.rts.src.config import VERBOSE_MODEL_FIT
 
@@ -16,7 +16,7 @@ funny error message from tf :) - tensorflow.python.framework.errors_impl.NotFoun
 
 
 # noinspection PyMissingConstructor
-class NNetWrapper(NeuralNet):
+class NNetWrapper(NeuralNetInterface):
     def __init__(self, game, encoder=None):
         """
         Creates nnet wrapper with game configuration and encoder

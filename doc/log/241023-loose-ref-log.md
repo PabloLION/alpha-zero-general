@@ -27,5 +27,6 @@
 - [ ] `fmt: off` for data list, like in `test_symmetries_n3`
 - [x] style/type-gymnastics
 - [x] retire `alpha_zero_general.type`
-- [ ] rename `./alpha_zero_general/neural_net.py` to `neural_net_interface.py`
+- [x] rename `./alpha_zero_general/neural_net.py` to `neural_net_interface.py`
 - [ ] maybe `game.py` should `Match` that aggregates `Board` and associates with `Rule`.
+- [ ] move to py312 (maybe?)

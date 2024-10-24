@@ -6,7 +6,7 @@ import numpy as np
 
 sys.path.append("../..")
 
-from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.neural_net import NeuralNetInterface
 from alpha_zero_general.tafl.keras.tafl_n_net import TaflNNet as onnet
 from alpha_zero_general.utils import DotDict
 
@@ -22,7 +22,7 @@ args = DotDict(
 )
 
 
-class NNetWrapper(NeuralNet):
+class NNetWrapper(NeuralNetInterface):
     def __init__(self, game):
         self.nnet = onnet(game, args)
         self.board_x, self.board_y = game.get_board_size()

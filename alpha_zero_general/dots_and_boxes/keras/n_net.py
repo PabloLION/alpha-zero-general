@@ -7,7 +7,7 @@ from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.dots_and_boxes.keras.dots_and_boxes_n_net import (
     DotsAndBoxesNNet as onnet,
 )
-from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.neural_net import NeuralNetInterface
 from alpha_zero_general.utils import DotDict
 
 args = DotDict(
@@ -41,7 +41,7 @@ def normalize_score(board: GenericBoardTensor) -> None:
     board[:, 1, -1] = 0
 
 
-class NNetWrapper(NeuralNet):
+class NNetWrapper(NeuralNetInterface):
     def __init__(self, game: Any):
         self.nnet = onnet(game, args)
         self.board_x, self.board_y = game.get_board_size()

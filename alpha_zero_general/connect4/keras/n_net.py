@@ -6,7 +6,7 @@ import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.connect4.connect4_game import Connect4Game
-from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.neural_net import NeuralNetInterface
 from alpha_zero_general.utils import DotDict
 
 log = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ args = DotDict(
 )
 
 
-class NNetWrapper(NeuralNet):
+class NNetWrapper(NeuralNetInterface):
 
     def __init__(self, game: Connect4Game):
         self.nnet = onnet(game, args)

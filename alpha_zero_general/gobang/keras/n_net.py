@@ -5,7 +5,7 @@ import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.gobang.keras.gobang_n_net import GobangNNet as onnet
-from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.neural_net import NeuralNetInterface
 from alpha_zero_general.utils import DotDict
 
 args = DotDict(
@@ -20,7 +20,7 @@ args = DotDict(
 )
 
 
-class NNetWrapper(NeuralNet):
+class NNetWrapper(NeuralNetInterface):
     def __init__(self, game: Any):
         self.nnet = onnet(game, args)
         self.board_x, self.board_y = game.get_board_size()

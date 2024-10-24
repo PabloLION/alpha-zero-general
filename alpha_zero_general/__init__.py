@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, NamedTuple, TypeAlias, TypeVar
+from typing import Any, Generic, NamedTuple, TypeAlias, TypeVar
 
 from numpy import bool_, dtype, ndarray, random
 
@@ -40,26 +40,26 @@ PlayerId: TypeAlias = int
 
 
 ## coach.py
-class RawTrainExample(NamedTuple):
+class RawTrainingExample(NamedTuple, Generic[BoardTensorType, PolicyTensorType]):
     """
     (canonical_board, current_player, pi, v)
     pi is the MCTS informed policy vector, v is +1 if
     the player eventually won the game, else -1.
     """
 
-    board: GenericBoardTensor
+    board: BoardTensorType
     current_player: PlayerId
-    policy: GenericPolicyTensor
+    policy: PolicyTensorType
     neutral_evaluation: BoardEvaluation  # from neutral perspective
 
 
-class TrainExample(NamedTuple):
-    board: GenericBoardTensor
-    policy: GenericPolicyTensor
+class TrainingExample(NamedTuple, Generic[BoardTensorType, PolicyTensorType]):
+    board: BoardTensorType
+    policy: PolicyTensorType
     evaluation: BoardEvaluation  # from player's perspective
 
 
-TrainExampleHistory = list[list[TrainExample]]
+TrainExampleHistory = list[list[TrainingExample[BoardTensorType, PolicyTensorType]]]
 CheckpointFile = str
 TrainExamplesFile = str
 

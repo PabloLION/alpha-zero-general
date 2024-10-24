@@ -1,5 +1,6 @@
 import logging
 import math
+from typing import Generic
 
 from numpy import argwhere, array, zeros
 
@@ -11,21 +12,24 @@ from alpha_zero_general import (
     GenericPolicyTensor,
     MctsArgs,
 )
-from alpha_zero_general.game import GenericGame
-from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.game import (
+    BoardTensorType,
+    BooleanBoardType,
+    GenericGame,
+    PolicyTensorType,
+)
+from alpha_zero_general.neural_net import NeuralNetInterface
 
 log = logging.getLogger(__name__)
 
 
-class MCTS:
+class MCTS(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
     """
     This class handles the MCTS tree.
     """
 
-    game: GenericGame[
-        GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor
-    ]
-    nn: NeuralNet
+    game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType]
+    nn: NeuralNetInterface[BoardTensorType, BooleanBoardType, PolicyTensorType]
     args: MctsArgs
 
     q_values_cache: dict[tuple[int, int], float]  # Q_sa, Q value of board_hash,action
@@ -44,10 +48,8 @@ class MCTS:
 
     def __init__(
         self,
-        game: GenericGame[
-            GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor
-        ],
-        nn: NeuralNet,
+        game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType],
+        nn: NeuralNetInterface[BoardTensorType, BooleanBoardType, PolicyTensorType],
         args: MctsArgs,
     ) -> None:
         self.game = game
@@ -61,7 +63,7 @@ class MCTS:
         self.valid_moves_cache = {}
         self.board_cache = {}
 
-    def _cached_hash(self, canonical_board: GenericBoardTensor) -> int:
+    def _cached_hash(self, canonical_board: BoardTensorType) -> int:
         """
         Cache the board and return the hash of the board.
         """
@@ -72,7 +74,7 @@ class MCTS:
         return h
 
     def get_action_probabilities(
-        self, canonical_board: GenericBoardTensor, temperature: int = 1
+        self, canonical_board: BoardTensorType, temperature: int = 1
     ) -> GenericPolicyTensor:
         """
         This function performs num_mcts_sims simulations of MCTS starting from
@@ -115,7 +117,7 @@ class MCTS:
         prob = array([x / counts_sum for x in counts])
         return prob
 
-    def search(self, canonical_board: GenericBoardTensor) -> float:
+    def search(self, canonical_board: BoardTensorType) -> float:
         """
         This function performs one iteration of MCTS. It is recursively called
         till a leaf node is found. The action chosen at each node is one that

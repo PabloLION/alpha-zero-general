@@ -33,7 +33,7 @@ from alpha_zero_general.game import GenericBooleanBoardTensor, GenericGame
 from alpha_zero_general.gobang.gobang_game import GobangGame
 from alpha_zero_general.gobang.keras.n_net import NNetWrapper as GobangKerasNNet
 from alpha_zero_general.mcts import MCTS, GenericPolicyTensor
-from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.neural_net import NeuralNetInterface
 from alpha_zero_general.othello.keras.n_net import NNetWrapper as OthelloKerasNNet
 from alpha_zero_general.othello.othello_game import OthelloGame
 from alpha_zero_general.othello.othello_players import RandomPlayer
@@ -57,7 +57,7 @@ def execute_game_test(
     game: GenericGame[
         GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor
     ],
-    neural_net: type[NeuralNet],
+    neural_net: type[NeuralNetInterface],
 ):
     random_play = RandomPlayer(game).play
 
