@@ -39,6 +39,9 @@ class MCTS:
     q_values_cache: dict[tuple[int, int], float]  # Q values for board_hash, action
     n_edge_visit: dict[tuple[int, int], int]
     # n_edge_visit: #_times edge board_hash, action was visited
+    # this variable is explicitly used to in both search and get_action_prob
+    # which adds the coupling between the two functions. #TODO: try decouple
+
     n_node_visit: dict[int, int]  # #times board s was visited
     policy_cache: dict[int, GenericPolicyTensor]  # policy tensor by neural net
     game_value_cache: dict[int, float]
@@ -66,7 +69,7 @@ class MCTS:
 
     def search(self, canonical_board: GenericBoardTensor) -> float:
         # return self.cleaned_search(canonical_board)
-        return self.mixed_search(canonical_board)
+        # return self.mixed_search(canonical_board)
         return self.new_search(canonical_board)
 
     def get_action_prob(
