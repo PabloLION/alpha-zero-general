@@ -38,7 +38,9 @@ from alpha_zero_general.neural_net import NeuralNetInterface
 from alpha_zero_general.othello.keras.n_net import NNetWrapper as OthelloKerasNNet
 from alpha_zero_general.othello.othello_game import OthelloGame
 from alpha_zero_general.othello.othello_players import RandomPlayer
-from alpha_zero_general.othello.pytorch.n_net import NNetWrapper as OthelloPytorchNNet
+from alpha_zero_general.othello.pytorch.n_net import (
+    OthelloTorchNNInterface as OthelloPytorchNNet,
+)
 from alpha_zero_general.rts.keras.n_net import NNetWrapper as RTSKerasNNet
 from alpha_zero_general.rts.rts_game import RTSGame
 from alpha_zero_general.tafl.keras.n_net import NNetWrapper as TaflKerasNNet

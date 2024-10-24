@@ -6,7 +6,7 @@ from numpy import bool_, dtype, float32, int8, ndarray
 from alpha_zero_general import TrainingExample
 
 OthelloBoardShapeType: TypeAlias = Any
-OthelloBoardDataType: TypeAlias = int8
+OthelloBoardDataType = int8
 OthelloBoardTensor: TypeAlias = ndarray[
     OthelloBoardShapeType, dtype[OthelloBoardDataType]
 ]

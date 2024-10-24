@@ -10,7 +10,7 @@ import coloredlogs  # type: ignore # no stubs for this library
 
 from alpha_zero_general.coach import Coach, CoachArgs
 from alpha_zero_general.othello.othello_game import OthelloGame
-from alpha_zero_general.othello.pytorch.n_net import NNetWrapper
+from alpha_zero_general.othello.pytorch.n_net import OthelloTorchNNInterface
 
 log = logging.getLogger(__name__)
 
@@ -58,8 +58,8 @@ def main() -> None:
     log.info("Loading %s...", OthelloGame.__name__)
     g = OthelloGame(6)
 
-    log.info("Loading %s...", NNetWrapper.__name__)
-    nnet = NNetWrapper(g)
+    log.info("Loading %s...", OthelloTorchNNInterface.__name__)
+    nnet = OthelloTorchNNInterface(g)
 
     if args.load_model:
         log.info(

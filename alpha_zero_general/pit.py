@@ -13,7 +13,7 @@ from alpha_zero_general.othello.othello_players import (
     HumanOthelloPlayer,
     RandomPlayer,
 )
-from alpha_zero_general.othello.pytorch.n_net import NNetWrapper as NNet
+from alpha_zero_general.othello.pytorch.n_net import OthelloTorchNNInterface as NNet
 
 """
 use this script to play any two agents against each other, or play manually with
