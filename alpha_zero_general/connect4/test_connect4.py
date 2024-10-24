@@ -40,7 +40,7 @@ def test_simple_moves():
          [ 0.  0.  0.  0.  1.  0.  0.]
          [ 1.  0.  0. -1.  1. -1. -1.]]"""
     )
-    assert expected == game.string_representation(board)
+    assert expected == game.get_board_str(board)
 
 
 def test_overfull_column():
@@ -87,7 +87,7 @@ def test_symmetries():
          [-1.  0.  0.  0.  0.  0.  0.]
          [ 1.  1.  0.  0.  0.  0.  1.]]"""
     )
-    assert expected_board1 == game.string_representation(board1)
+    assert expected_board1 == game.get_board_str(board1)
 
     expected_board2 = textwrap.dedent(
         """\
@@ -98,7 +98,7 @@ def test_symmetries():
          [ 0.  0.  0.  0.  0.  0. -1.]
          [ 1.  0.  0.  0.  0.  1.  1.]]"""
     )
-    assert expected_board2 == game.string_representation(board2)
+    assert expected_board2 == game.get_board_str(board2)
 
 
 def test_game_ended():
@@ -278,9 +278,9 @@ def test_game_ended():
 def test_immutable_move():
     """Test original board is not mutated whtn get_next_state() called."""
     board, player, game = init_board_from_moves([1, 2, 3, 3, 4])
-    original_board_string = game.string_representation(board)
+    original_board_string = game.get_board_str(board)
 
     new_np_pieces, new_player = game.get_next_state(board, 3, -1)
 
-    assert original_board_string == game.string_representation(board)
-    assert original_board_string != game.string_representation(new_np_pieces)
+    assert original_board_string == game.get_board_str(board)
+    assert original_board_string != game.get_board_str(new_np_pieces)

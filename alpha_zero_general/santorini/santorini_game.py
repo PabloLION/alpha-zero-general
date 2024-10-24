@@ -483,7 +483,7 @@ class SantoriniGame(GenericGame):
         
         """
 
-    def string_representation(self, board: GenericBoardTensor):
+    def get_board_str(self, board: GenericBoardTensor):
         return np.array2string(board)
 
     def get_board_hash(self, board: GenericBoardTensor) -> int:

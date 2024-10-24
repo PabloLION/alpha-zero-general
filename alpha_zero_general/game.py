@@ -141,7 +141,7 @@ class GenericGame(ABC, Generic[BoardTensorType, BooleanBoardType, PolicyTensorTy
         raise NotImplementedError("get_symmetries must be implemented by the subclass")
 
     @abstractmethod
-    def string_representation(self, board: BoardTensorType) -> str:
+    def get_board_str(self, board: BoardTensorType) -> str:
         """
         Input:
             board: current board
@@ -150,9 +150,7 @@ class GenericGame(ABC, Generic[BoardTensorType, BooleanBoardType, PolicyTensorTy
             board_string: a quick conversion of board to a string format.
                           Required by MCTS for hashing.
         """
-        raise NotImplementedError(
-            "string_representation must be implemented by the subclass"
-        )
+        raise NotImplementedError("get_board_str must be implemented by the subclass")
 
     @abstractmethod
     def get_board_hash(self, board: BoardTensorType) -> int:

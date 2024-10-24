@@ -87,7 +87,7 @@ class OthelloGame(GenericGame):
                 l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return l
 
-    def string_representation(self, board: GenericBoardTensor):
+    def get_board_str(self, board: GenericBoardTensor):
         return np.array2string(board)
 
     def get_board_hash(self, board: GenericBoardTensor) -> int:

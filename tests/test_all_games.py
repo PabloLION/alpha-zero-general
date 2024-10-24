@@ -44,10 +44,10 @@ from alpha_zero_general.tafl.pytorch.n_net import NNetWrapper as TaflPytorchNNet
 from alpha_zero_general.tafl.tafl_game import TaflGame
 from alpha_zero_general.tic_tac_toe.keras.n_net import NNetWrapper as TicTacToeKerasNNet
 from alpha_zero_general.tic_tac_toe.tic_tac_toe_game import TicTacToeGame
-from alpha_zero_general.tictactoe_3d.keras.n_net import (
+from alpha_zero_general.tic_tac_toe_3d.keras.n_net import (
     NNetWrapper as TicTacToe3DKerasNNet,
 )
-from alpha_zero_general.tictactoe_3d.tic_tac_toe_game import (
+from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_game import (
     TicTacToeGame as TicTacToe3DGame,
 )
 

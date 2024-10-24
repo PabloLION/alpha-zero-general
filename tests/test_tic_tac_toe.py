@@ -73,8 +73,8 @@ class TestTicTacToeGame:
         symmetries = self.game.get_symmetries(board, pi)
         assert len(symmetries) == 8
 
-    def test_string_representation(self):
+    def test_get_board_str(self):
         board = np.array([[1, 0, -1], [0, 1, 0], [-1, 0, 1]])
-        board_string = self.game.string_representation(board)
+        board_string = self.game.get_board_str(board)
         expected_string = np.array2string(board)
         assert board_string == expected_string

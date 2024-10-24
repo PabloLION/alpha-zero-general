@@ -109,7 +109,7 @@ class TaflGame(GenericGame):
         #        l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         # return l
 
-    def string_representation(self, board: GenericBoardTensor) -> str:
+    def get_board_str(self, board: GenericBoardTensor) -> str:
         # #TODO: check the type of board here!
         # print("->",str(board))
         return str(board)

@@ -78,8 +78,6 @@ class OneStepLookaheadConnect4Player:
                     "Playing random action %s from %s" % (ret_move, fallback_move_set)
                 )
         else:
-            raise Exception(
-                "No valid moves remaining: %s" % game.string_representation(board)
-            )
+            raise Exception("No valid moves remaining: %s" % game.get_board_str(board))
 
         return ret_move

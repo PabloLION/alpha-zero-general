@@ -97,7 +97,7 @@ class TicTacToeGame(GenericGame):
                 l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return l
 
-    def string_representation(self, board: GenericBoardTensor):
+    def get_board_str(self, board: GenericBoardTensor):
         # 8x8 numpy array (canonical board)
         return np.array2string(board)
 

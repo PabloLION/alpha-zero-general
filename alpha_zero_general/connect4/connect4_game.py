@@ -82,7 +82,7 @@ class Connect4Game(
         """Board is left/right board symmetric"""
         return [(board, pi), (board[:, ::-1], pi[::-1])]
 
-    def string_representation(self, board: Connect4BoardTensor) -> str:
+    def get_board_str(self, board: Connect4BoardTensor) -> str:
         return array2string(board)
 
     def get_board_hash(self, board: Connect4BoardTensor) -> int:

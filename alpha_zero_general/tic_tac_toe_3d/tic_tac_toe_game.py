@@ -8,7 +8,7 @@ sys.path.append("..")
 import numpy as np
 
 from alpha_zero_general.game import GenericGame
-from alpha_zero_general.tictactoe_3d.tic_tac_toe_logic import Board
+from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_logic import Board
 
 """
 Game class implementation for the game of 3D TicTacToe or Qubic.
@@ -108,7 +108,7 @@ class TicTacToeGame(GenericGame):
                     l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return l
 
-    def string_representation(self, board: GenericBoardTensor):
+    def get_board_str(self, board: GenericBoardTensor):
         # 8x8 numpy array (canonical board)
         return np.array2string(board)
 

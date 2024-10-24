@@ -46,8 +46,8 @@ class TestConnect4Game:
         symmetries = self.game.get_symmetries(board, pi)
         assert len(symmetries) == 2
 
-    def test_string_representation(self):
+    def test_get_board_str(self):
         # TODO: need a `get hash`
         board = self.game.get_init_board()
-        board_str = self.game.string_representation(board)
+        board_str = self.game.get_board_str(board)
         assert isinstance(board_str, str)

@@ -118,7 +118,7 @@ class DotsAndBoxesGame(GenericGame):
             pi_vertical = aux
         return l
 
-    def string_representation(self, board: GenericBoardTensor) -> str:
+    def get_board_str(self, board: GenericBoardTensor) -> str:
         # 8x8 numpy array (canonical board)
         return np.array2string(board)
 
