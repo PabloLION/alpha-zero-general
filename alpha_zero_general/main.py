@@ -4,8 +4,8 @@ from dataclasses import dataclass
 import coloredlogs  # type: ignore
 
 from alpha_zero_general.coach import Coach, CoachArgs
-from alpha_zero_general.othello.othello_game import OthelloGame as Game
-from alpha_zero_general.othello.pytorch.n_net import NNetWrapper as nn
+from alpha_zero_general.othello.othello_game import OthelloGame
+from alpha_zero_general.othello.pytorch.n_net import NNetWrapper
 
 log = logging.getLogger(__name__)
 
@@ -50,11 +50,11 @@ args = MainArgs()
 
 
 def main() -> None:
-    log.info("Loading %s...", Game.__name__)
-    g = Game(6)
+    log.info("Loading %s...", OthelloGame.__name__)
+    g = OthelloGame(6)
 
-    log.info("Loading %s...", nn.__name__)
-    nnet = nn(g)
+    log.info("Loading %s...", NNetWrapper.__name__)
+    nnet = NNetWrapper(g)
 
     if args.load_model:
         log.info(

@@ -1,7 +1,7 @@
 import numpy as np
 
-import alpha_zero_general.arena as Arena
 from alpha_zero_general import MctsArgs
+from alpha_zero_general.arena import Arena
 from alpha_zero_general.mcts import MCTS
 from alpha_zero_general.othello.othello_game import OthelloGame
 from alpha_zero_general.othello.othello_players import (
@@ -59,6 +59,6 @@ else:
 
     player2 = n2p  # Player 2 is neural network if it's cpu vs cpu.
 
-arena = Arena.Arena(n1p, player2, g, display=OthelloGame.display)
+arena = Arena(n1p, player2, g, display=OthelloGame.display)
 
 print(arena.play_games(2, verbose=True))
