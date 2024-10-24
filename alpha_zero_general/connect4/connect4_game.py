@@ -1,6 +1,7 @@
 from numpy import array2string, copy
 
 from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.coach import GenericPolicyTensor
 from alpha_zero_general.connect4.connect4_logic import Connect4Board
 from alpha_zero_general.game import GenericGame
 
@@ -71,13 +72,16 @@ class Connect4Game(GenericGame):
         return board * player
 
     def get_symmetries(
-        self, board: GenericBoardTensor, pi: list[float]
-    ) -> list[tuple[GenericBoardTensor, list[float]]]:
+        self, board: GenericBoardTensor, pi: GenericPolicyTensor
+    ) -> list[tuple[GenericBoardTensor, GenericPolicyTensor]]:
         """Board is left/right board symmetric"""
         return [(board, pi), (board[:, ::-1], pi[::-1])]
 
     def string_representation(self, board: GenericBoardTensor) -> str:
         return array2string(board)
+
+    def get_board_hash(self, board: GenericBoardTensor) -> int:
+        return hash(board.tobytes())
 
     @staticmethod
     def display(board: GenericBoardTensor) -> None:

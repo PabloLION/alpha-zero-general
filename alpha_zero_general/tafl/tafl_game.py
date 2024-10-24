@@ -20,7 +20,10 @@ from alpha_zero_general.tafl.tafl_logic import Board
 
 
 class TaflGame(GenericGame):
-    def __init__(self, name):
+    name: str
+    n: int  # board size
+
+    def __init__(self, name: str) -> None:
         self.name = name
         self.get_init_board()
 
@@ -105,8 +108,14 @@ class TaflGame(GenericGame):
         # return l
 
     def string_representation(self, board: GenericBoardTensor) -> str:
+        # #TODO: check the type of board here!
         # print("->",str(board))
         return str(board)
+
+    def get_board_hash(self, board: GenericBoardTensor) -> int:
+        # #TODO: check the type of board here!
+        # return hash(board.tobytes())
+        return hash(board)
 
     def get_score(self, board: GenericBoardTensor, player: int) -> int:
         if board.done:

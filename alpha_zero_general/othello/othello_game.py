@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import numpy as np
 
+from alpha_zero_general import GenericBoardTensor
 from alpha_zero_general.game import GenericGame
 from alpha_zero_general.othello.othello_logic import Board
 
@@ -86,8 +87,11 @@ class OthelloGame(GenericGame):
                 l += [(newB, list(newPi.ravel()) + [pi[-1]])]
         return l
 
-    def string_representation(self, board):
+    def string_representation(self, board: GenericBoardTensor):
         return np.array2string(board)
+
+    def get_board_hash(self, board: GenericBoardTensor) -> int:
+        return hash(board.tobytes())
 
     def string_representation_readable(self, board):
         board_s = "".join(

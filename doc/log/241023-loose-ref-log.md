@@ -5,11 +5,11 @@
 - [x] unused imports
 - [x] keras types
 - [ ] add type arguments for all `np.ndarray` in the project. If needed, merge the similar ones into one single type and put it in type.py.
-- [ ] `from alpha_zero_general.type import Any`
+- [x] `from alpha_zero_general.type import Any`
 - [x] Fix deps
   - ImportError while importing test module '/Users/pablo/LocalDocs/repo/eye-on/suragnair/alpha-zero-general/tests/test_all_games.py'.
 - [x] Do not write all dependency like we do in requirements. Instead, only control the top-level dependencies via pyproject.toml. The rest should be installed automatically.
-- [ ] use correct default param like
+- [x] use correct default param like
 - [x] Why do we need BoardState
 - [ ] type protocols and abstract classes
 - [ ] project level config
@@ -25,3 +25,5 @@
   - __str__ and __repr__ are two methods.
   - to use it as hash, use `__hash__` is better
 - [ ] format off for data list, like in `test_symmetries_n3`
+- [ ] style/type-gymnastics
+- [ ] retire `alpha_zero_general.type`

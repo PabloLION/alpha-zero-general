@@ -51,22 +51,26 @@ from alpha_zero_general.tictactoe_3d.tic_tac_toe_game import (
     TicTacToeGame as TicTacToe3DGame,
 )
 
+# from pytest import mark
+
 
 def execute_game_test(game: GenericGame, neural_net: type[NeuralNet]):
     random_play = RandomPlayer(game).play
 
     args = MctsArgs(num_mcts_sims=25, c_puct=1.0)
     mcts = MCTS(game, neural_net(game), args)
-    n1p = lambda x: np.argmax(mcts.get_action_prob(x, temp=0))
+    n1p = lambda x: np.argmax(mcts.get_action_probabilities(x, temperature=0))
 
     arena = Arena(n1p, random_play, game)
     print(arena.play_games(2, verbose=False))
 
 
+# @mark.skip(reason="not refactored")
 def test_othello_pytorch():
     execute_game_test(OthelloGame(6), OthelloPytorchNNet)
 
 
+# @mark.skip(reason="not refactored")
 def test_othello_keras():
     execute_game_test(OthelloGame(6), OthelloKerasNNet)
 
@@ -75,29 +79,36 @@ def test_tictactoe_keras():
     execute_game_test(TicTacToeGame(), TicTacToeKerasNNet)
 
 
+# @mark.skip(reason="not refactored")
 def test_tictactoe3d_keras():
     execute_game_test(TicTacToe3DGame(3), TicTacToe3DKerasNNet)
 
 
+# @mark.skip(reason="not refactored")
 def test_gobang_keras():
     execute_game_test(GobangGame(), GobangKerasNNet)
 
 
+# @mark.skip(reason="not refactored")
 def test_tafl_pytorch():
     execute_game_test(TaflGame(5), TaflPytorchNNet)
 
 
+# @mark.skip(reason="not refactored")
 def test_tafl_keras():
     execute_game_test(TaflGame(5), TaflKerasNNet)
 
 
+# @mark.skip(reason="not refactored")
 def test_connect4_keras():
     execute_game_test(Connect4Game(5), Connect4KerasNNet)
 
 
+# @mark.skip(reason="not refactored")
 def test_rts_keras():
     execute_game_test(RTSGame(), RTSKerasNNet)
 
 
+# @mark.skip(reason="not refactored")
 def test_dots_and_boxes_keras():
     execute_game_test(DotsAndBoxesGame(3), DotsAndBoxesKerasNNet)

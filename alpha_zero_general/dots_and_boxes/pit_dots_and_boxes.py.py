@@ -1,4 +1,3 @@
-# #TODO: rename this file to pit_dots_and_boxes.py
 import os
 
 import numpy as np
@@ -34,7 +33,7 @@ n1.load_checkpoint(
 )
 args1 = MctsArgs(num_mcts_sims=NUM_MCTS_SIMS, c_puct=1.0)
 mcts1 = MCTS(g, n1, args1)
-n1p = lambda x: np.argmax(mcts1.get_action_prob(x, temp=0))
+n1p = lambda x: np.argmax(mcts1.get_action_probabilities(x, temperature=0))
 
 n2 = NNetWrapper(g)
 n2.load_checkpoint(
@@ -43,7 +42,7 @@ n2.load_checkpoint(
 )
 args2 = MctsArgs(num_mcts_sims=NUM_MCTS_SIMS, c_puct=1.0)
 mcts2 = MCTS(g, n2, args2)
-n2p = lambda x: np.argmax(mcts2.get_action_prob(x, temp=0))
+n2p = lambda x: np.argmax(mcts2.get_action_probabilities(x, temperature=0))
 
 # Play AlphaZero versus Human
 p1 = n1p

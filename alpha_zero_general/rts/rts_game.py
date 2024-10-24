@@ -207,6 +207,9 @@ class RTSGame(GenericGame):
     def string_representation(self, board: GenericBoardTensor):
         return np.array2string(board)
 
+    def get_board_hash(self, board: GenericBoardTensor) -> int:
+        return hash(board.tobytes())
+
     def get_score(self, board: GenericBoardTensor, player: int):
         """
         Uses one of 3 elo functions that determine better player
