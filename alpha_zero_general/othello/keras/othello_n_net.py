@@ -13,8 +13,11 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
-from alpha_zero_general.othello import OthelloBoardTensor, OthelloPolicyTensor
-from alpha_zero_general.othello.keras.n_net import OthelloKerasArg
+from alpha_zero_general.othello import (
+    OthelloBoardTensor,
+    OthelloNNArg,
+    OthelloPolicyTensor,
+)
 from alpha_zero_general.othello.othello_game import OthelloGame
 
 
@@ -24,7 +27,7 @@ class OthelloNNet:
     else:
         model: Model
 
-    def __init__(self, game: OthelloGame, args: OthelloKerasArg):
+    def __init__(self, game: OthelloGame, args: OthelloNNArg):
         # game params
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()

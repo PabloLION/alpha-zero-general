@@ -1,5 +1,4 @@
 import os
-from dataclasses import dataclass
 from typing import cast
 
 import numpy as np
@@ -8,24 +7,14 @@ from alpha_zero_general.neural_net import NeuralNetInterface
 from alpha_zero_general.othello import (
     OthelloBoardTensor,
     OthelloBooleanBoardTensor,
+    OthelloNNArg,
     OthelloPolicyTensor,
     OthelloTrainingExample,
 )
 from alpha_zero_general.othello.keras.othello_n_net import OthelloNNet
 from alpha_zero_general.othello.othello_game import OthelloGame
 
-
-@dataclass(frozen=True)
-class OthelloKerasArg:
-    lr: float
-    dropout: float
-    epochs: int
-    batch_size: int
-    cuda: bool
-    num_channels: int
-
-
-args = OthelloKerasArg(
+args = OthelloNNArg(
     lr=0.001,
     dropout=0.3,
     epochs=10,

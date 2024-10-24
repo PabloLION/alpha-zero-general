@@ -1,4 +1,7 @@
 import subprocess
+from collections.abc import Callable
+from functools import wraps
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 import numpy as np
 
@@ -71,6 +74,9 @@ class GreedyOthelloPlayer:
         return candidates[0][1]
 
 
+F = TypeVar("F", bound=Callable[..., Any])
+
+
 class GTPOthelloPlayer:
     """
     Player that plays with Othello programs using the Go Text Protocol.
@@ -78,7 +84,7 @@ class GTPOthelloPlayer:
 
     _process: None | subprocess.Popen[bytes]
 
-    # The colours are reversed as the Othello programs seems to have the board setup with the opposite colours
+    # The colors are reversed as the Othello programs seems to have the board setup with the opposite colours
     player_colors = {
         -1: "white",
         1: "black",
@@ -95,6 +101,20 @@ class GTPOthelloPlayer:
         self.gtp_client = gtp_client
         self._process = None
 
+    @staticmethod
+    def _require_subprocess(func: F) -> F:
+        """
+        A decorator to ensure that the subprocess is running before calling the decorated method.
+        """
+
+        @wraps(func)
+        def wrapper(self: "GTPOthelloPlayer", *args: Any, **kwargs: Any) -> Any:
+            if self._process is None:
+                raise RuntimeError("The subprocess is not running.")
+            return func(*args, **kwargs)
+
+        return cast(F, wrapper)
+
     def start_game(self):
         """
         Should be called before the game starts in order to setup the board.
@@ -106,18 +126,21 @@ class GTPOthelloPlayer:
         self._send_command("boardsize " + str(self.game.n))
         self._send_command("clear_board")
 
+    @_require_subprocess
     def end_game(self):
         """
         Should be called after the game ends in order to clean-up the used resources.
         """
-        if self._process is not None:
-            self._send_command("quit")
-            # Waits for the client to terminate gracefully for 10 seconds. If it does not - kills it.
-            try:
-                self._process.wait(10)
-            except subprocess.TimeoutExpired:
-                self._process.kill()
-            self._process = None
+        if TYPE_CHECKING:
+            assert self._process  # checked by @_require_subprocess
+
+        self._send_command("quit")
+        # Waits for the client to terminate gracefully for 10 seconds. If it does not - kills it.
+        try:
+            self._process.wait(10)
+        except subprocess.TimeoutExpired:
+            self._process.kill()
+        self._process = None  # type: ignore
 
     def notify(self, board: OthelloBoardTensor, action: int) -> None:
         """
@@ -152,7 +175,16 @@ class GTPOthelloPlayer:
         else:
             return self.game.n**2
 
+    @_require_subprocess
     def _send_command(self, cmd: str) -> str:
+        if TYPE_CHECKING:
+            assert self._process  # checked by @_require_subprocess
+
+        if not self._process.stdin:
+            raise RuntimeError("The subprocess has no stdin.")
+        if not self._process.stdout:
+            raise RuntimeError("The subprocess has no stdout.")
+
         self._process.stdin.write(cmd.encode() + b"\n")
 
         response = ""

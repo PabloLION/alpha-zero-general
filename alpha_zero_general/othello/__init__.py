@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Any, TypeAlias
 
 from numpy import bool_, dtype, float32, int8, ndarray
@@ -17,3 +18,13 @@ OthelloPolicyTensor: TypeAlias = ndarray[OthelloPolicyShape, dtype[OthelloPolicy
 OthelloValueTensor: TypeAlias = ndarray[OthelloPolicyShape, dtype[OthelloPolicyType]]
 
 OthelloTrainingExample = TrainingExample[OthelloBoardTensor, OthelloPolicyTensor]
+
+
+@dataclass(frozen=True)
+class OthelloNNArg:
+    lr: float
+    dropout: float
+    epochs: int
+    batch_size: int
+    cuda: bool
+    num_channels: int
