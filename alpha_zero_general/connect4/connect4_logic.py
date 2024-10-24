@@ -2,6 +2,7 @@ import numpy as np
 
 from alpha_zero_general import GenericBoardTensor, WinState
 from alpha_zero_general.connect4 import Connect4BoardDataType, Connect4BoardTensor
+from alpha_zero_general.connect4.connect4_game import Connect4BooleanBoardTensor
 
 
 class Connect4Board:
@@ -40,7 +41,7 @@ class Connect4Board:
 
         self.chip_tensor[available_idx[-1]][column] = player
 
-    def get_valid_moves(self) -> Connect4BoardTensor:
+    def get_valid_moves(self) -> Connect4BooleanBoardTensor:
         # here we should have new types for Connect4GenericBoardTensor / Tensor and
         # Connect4BoardFirstRowTensor #TODO
         "Any zero value in top row in a valid move"

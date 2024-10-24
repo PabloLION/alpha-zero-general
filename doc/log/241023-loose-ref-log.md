@@ -11,7 +11,7 @@
 - [x] Do not write all dependency like we do in requirements. Instead, only control the top-level dependencies via pyproject.toml. The rest should be installed automatically.
 - [x] use correct default param like
 - [x] Why do we need BoardState
-- [ ] type protocols and abstract classes
+- [x] type protocols and abstract classes
 - [ ] project level config
   - [ ] and `from alpha_zero_general.rts.src.config_class import CONFIG`
 - `array2string(board)` instead of `board.tostring()`
@@ -28,3 +28,4 @@
 - [x] style/type-gymnastics
 - [x] retire `alpha_zero_general.type`
 - [ ] rename `./alpha_zero_general/neural_net.py` to `neural_net_interface.py`
+- [ ] maybe `game.py` should `Match` that aggregates `Board` and associates with `Rule`.

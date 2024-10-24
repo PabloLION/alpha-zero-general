@@ -1,27 +1,17 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, NamedTuple, TypeAlias
+from typing import Any, NamedTuple, TypeAlias, TypeVar
 
 from numpy import bool_, dtype, ndarray
 
-Player = Callable[[ndarray[Any, Any] | list[list[int]]], int]
-Display = Callable[[Any], None]
-# Display = Callable[[ndarray[Any, Any] | list[list[int]]], None]
-CheckpointFile = Path
-TrainExamplesFile = Path
-
-
-class WinState(NamedTuple):
-    is_ended: bool
-    winner: int | None
-
-
+# Board Tensors
 GenericBoardDataType: TypeAlias = Any  # #TODO: TBD
 GenericBoardShapeType: TypeAlias = Any
 GenericBoardTensor: TypeAlias = ndarray[
     GenericBoardShapeType, dtype[GenericBoardDataType]
 ]
+
 GenericBooleanBoardTensor: TypeAlias = ndarray[GenericBoardDataType, dtype[bool_]]
 
 GenericPolicyDataType: TypeAlias = Any
@@ -31,6 +21,10 @@ GenericPolicyTensor: TypeAlias = ndarray[
 ]
 # GenericPolicyTensor: TypeAlias = list[float]
 # #TODO: GenericPolicyTensor should be tensor or list[float]? consider perf too.
+BoardTensorType = TypeVar("BoardTensorType", bound=GenericBoardTensor)
+BooleanBoardType = TypeVar("BooleanBoardType", bound=GenericBooleanBoardTensor)
+PolicyTensorType = TypeVar("PolicyTensorType", bound=GenericPolicyTensor)
+
 
 PolicyMakerAsPlayer: TypeAlias = Callable[[GenericPolicyTensor], int]
 
@@ -41,12 +35,8 @@ class MctsArgs:
     c_puct: float
 
 
-Board = Any
 BoardEvaluation: TypeAlias = float
 PlayerId: TypeAlias = int
-# LengthyTrainExample = tuple[
-#     GenericBoardTensor, PlayerID, GenericPolicyTensor, ExampleValue
-# ]
 
 
 ## coach.py
@@ -72,3 +62,16 @@ class TrainExample(NamedTuple):
 TrainExampleHistory = list[list[TrainExample]]
 CheckpointFile = str
 TrainExamplesFile = str
+
+# not categorized
+Player = Callable[[ndarray[Any, Any] | list[list[int]]], int]
+Display = Callable[[Any], None]
+# maybe Display = Callable[[ndarray[Any, Any] | list[list[int]]], None]
+# if possible, we should use GenericBoardTensor
+CheckpointFile = Path
+TrainExamplesFile = Path
+
+
+class WinState(NamedTuple):
+    is_ended: bool
+    winner: int | None
