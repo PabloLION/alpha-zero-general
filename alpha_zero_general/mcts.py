@@ -64,7 +64,17 @@ class MCTS:
         self.game_value_cache = {}
         self.valid_moves_cache = {}
 
+    def search(self, canonical_board: GenericBoardTensor) -> float:
+        # return self.cleaned_search(canonical_board)
+        return self.mixed_search(canonical_board)
+        return self.new_search(canonical_board)
+
     def get_action_prob(
+        self, canonical_board: GenericBoardTensor, temp: int = 1
+    ) -> GenericPolicyTensor:
+        return self.new_get_action_prob(canonical_board, temp)
+
+    def old_get_action_prob(
         self, canonical_board: GenericBoardTensor, temp: int = 1
     ) -> GenericPolicyTensor:
         """
@@ -117,10 +127,60 @@ class MCTS:
         new_prob = array([x / new_counts_sum for x in new_counts])
         return new_prob
 
-    def search(self, canonical_board: GenericBoardTensor) -> float:
-        # return self.cleaned_search(canonical_board)
-        return self.mixed_search(canonical_board)
-        return self.new_search(canonical_board)
+    def new_get_action_prob(
+        self, canonical_board: GenericBoardTensor, temp: int = 1
+    ) -> GenericPolicyTensor:
+        """
+        This function performs num_mcts_sims simulations of MCTS starting from
+        canonicalBoard.
+
+        Args:
+            canonical_board: a board that is a canonical form of the current
+                                board state.
+            temp: temperature parameter in (0, 1] that controls the level of
+                    exploration of the MCTS. A higher value will encourage the
+                    AI to explore new actions while a lower value will make it
+                    greedy.
+
+        Returns:
+            probs: a policy vector where the probability of the ith action is
+                   proportional to Nsa[(s,a)]**(1./temp)
+        """
+        for _ in range(self.args.num_mcts_sims):
+            self.search(canonical_board)
+
+        # s = self.game.string_representation(canonical_board)
+        h = self.game.get_board_hash(canonical_board)
+        # counts = array(
+        #     [
+        #         self.Nsa[(s, a)] if (s, a) in self.Nsa else 0
+        #         for a in range(self.game.get_action_size())
+        #     ]
+        # )
+        new_counts = array(
+            [
+                self.n_edge_visit[(h, a)] if (h, a) in self.n_edge_visit else 0
+                for a in range(self.game.get_action_size())
+            ]
+        )
+
+        if temp == 0:
+            # all_best_action = argwhere(a=counts == max(counts)).flatten()
+            all_best_action = argwhere(a=new_counts == max(new_counts)).flatten()
+            random_best_action = rng.choice(all_best_action)
+            # prob: GenericPolicyTensor = zeros(len(counts))
+            prob: GenericPolicyTensor = zeros(len(new_counts))
+            prob[random_best_action] = 1
+            return prob
+
+        # counts = [x ** (1.0 / temp) for x in counts]
+        # counts_sum = float(sum(counts))
+        # prob = array([x / counts_sum for x in counts])
+
+        new_counts = [x ** (1.0 / temp) for x in new_counts]
+        new_counts_sum = float(sum(new_counts))
+        new_prob = array([x / new_counts_sum for x in new_counts])
+        return new_prob
 
     def old_search(self, canonical_board: GenericBoardTensor) -> float:
         """
@@ -396,7 +456,7 @@ class MCTS:
         for a in range(self.game.get_action_size()):
             action = a
             assert new_valid[action] == valid[a], f"{new_valid[action]} != {valid[a]}"
-            assert ((s, a) in self.Qsa) == ((h, action) in self.q_values_cache)
+            # assert ((s, a) in self.Qsa) == ((h, action) in self.q_values_cache)
 
             if new_valid[action]:
                 if (h, action) in self.q_values_cache:
@@ -453,10 +513,10 @@ class MCTS:
         # assert ((h, action) in self.q_values_cache) == ((s, a) in self.Qsa)
         a = action
         if (h, action) in self.q_values_cache:
-            self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
-                self.Nsa[(s, a)] + 1
-            )
-            self.Nsa[(s, a)] += 1
+            # self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
+            #     self.Nsa[(s, a)] + 1
+            # )
+            # self.Nsa[(s, a)] += 1
 
             self.q_values_cache[(h, action)] = (
                 self.n_edge_visit[(h, action)] * self.q_values_cache[(h, action)]
@@ -464,12 +524,12 @@ class MCTS:
             ) / (self.n_edge_visit[(h, action)] + 1)
             self.n_edge_visit[(h, action)] += 1
 
-            assert self.Qsa[(s, a)] == self.q_values_cache[(h, action)]
-            assert self.Nsa[(s, a)] == self.n_edge_visit[(h, action)]
+            # assert self.Qsa[(s, a)] == self.q_values_cache[(h, action)]
+            # assert self.Nsa[(s, a)] == self.n_edge_visit[(h, action)]
 
         else:
-            self.Qsa[(s, a)] = v
-            self.Nsa[(s, a)] = 1
+            # self.Qsa[(s, a)] = v
+            # self.Nsa[(s, a)] = 1
 
             self.q_values_cache[(h, action)] = new_v
             self.n_edge_visit[(h, action)] = 1
