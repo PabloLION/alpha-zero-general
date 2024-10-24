@@ -43,7 +43,7 @@ mcts1 = MCTS(g, n1, args1)
 
 
 def n1p(x: np.ndarray) -> int:
-    return np.argmax(mcts1.get_action_prob(x, temp=0))
+    return np.argmax(mcts1.get_action_probabilities(x, temperature=0))
 
 
 if HUMAN_VS_CPU:
@@ -55,7 +55,7 @@ else:
     )
     args2 = MctsArgs(num_mcts_sims=50, c_puct=1.0)
     mcts2 = MCTS(g, n2, args2)
-    n2p = lambda x: np.argmax(mcts2.get_action_prob(x, temp=0))
+    n2p = lambda x: np.argmax(mcts2.get_action_probabilities(x, temperature=0))
 
     player2 = n2p  # Player 2 is neural network if it's cpu vs cpu.
 

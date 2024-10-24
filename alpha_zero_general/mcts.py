@@ -13,7 +13,7 @@ from alpha_zero_general.game import GenericGame
 from alpha_zero_general.neural_net import NeuralNet
 
 EPS = 1e-8
-rng = random.default_rng()
+RNG = random.default_rng()
 
 log = logging.getLogger(__name__)
 
@@ -24,41 +24,27 @@ class MCTS:
     """
 
     game: GenericGame
-    nnet: NeuralNet
+    nn: NeuralNet
     args: MctsArgs
 
-    ### retiring
-    Qsa: dict[tuple[str, int], float]  # Q values for s,a (as in the paper)
-    Nsa: dict[tuple[str, int], int]  # #times edge s,a was visited
-    Ns: dict[str, int]  # #_times board s was visited
-    Ps: dict[str, GenericPolicyTensor]  # policy tensor (returned by neural net)
-    Es: dict[str, float]  # cache game.get_game_ended for board s
-    Vs: dict[str, GenericBooleanBoardTensor]  # game.get_valid_moves for board s
-    ### hiring
-    q_values_cache: dict[tuple[int, int], float]  # Q values for board_hash, action
+    q_values_cache: dict[tuple[int, int], float]  # Q_sa, Q value of board_hash,action
     n_edge_visit: dict[tuple[int, int], int]
-    # n_edge_visit: #_times edge board_hash, action was visited
+    # n_edge_visit: N(s,a), #_times edge board_hash, action was visited
     # this variable is explicitly used to in both search and get_action_prob
     # which adds the coupling between the two functions. #TODO: try decouple
 
-    n_node_visit: dict[int, int]  # #times board s was visited
-    policy_cache: dict[int, GenericPolicyTensor]  # policy tensor by neural net
-    game_value_cache: dict[int, float]
-    # cache the game value returned by game.get_game_ended for key as board_hash
-    valid_moves_cache: dict[int, GenericBooleanBoardTensor]
-    # cache the valid moves returned by game.get_valid_moves for key as board_hash
-    board_cache: dict[int, GenericBoardTensor]  # restore the board from board_hash
+    n_node_visit: dict[int, int]  # N(s,*) #_times board s was visited
+    policy_cache: dict[int, GenericPolicyTensor]  # Pi(s) policy_tensor of s from nn
+    game_value_cache: dict[int, float]  # ref-note: old Es
+    # cache the game value returned by game.get_game_ended of key board_hash
+    valid_moves_cache: dict[int, GenericBooleanBoardTensor]  # ref-note: old Vs
+    # cache the valid moves returned by game.get_valid_moves of key board_hash
+    board_cache: dict[int, GenericBoardTensor]  # restore the board from hash
 
-    def __init__(self, game: GenericGame, nnet: NeuralNet, args: MctsArgs) -> None:
+    def __init__(self, game: GenericGame, nn: NeuralNet, args: MctsArgs) -> None:
         self.game = game
-        self.nnet = nnet
+        self.nn = nn
         self.args = args
-        self.Qsa = {}
-        self.Nsa = {}
-        self.Ns = {}
-        self.Ps = {}
-        self.Es = {}
-        self.Vs = {}
         self.q_values_cache = {}
         self.n_edge_visit = {}
         self.n_node_visit = {}
@@ -66,8 +52,18 @@ class MCTS:
         self.game_value_cache = {}
         self.valid_moves_cache = {}
 
-    def get_action_prob(
-        self, canonical_board: GenericBoardTensor, temp: int = 1
+    def _cached_hash(self, canonical_board: GenericBoardTensor) -> int:
+        """
+        Cache the board and return the hash of the board.
+        """
+        h = self.game.get_board_hash(canonical_board)
+        if h not in self.board_cache:
+            self.board_cache[h] = canonical_board
+        # we can also check collision here
+        return h
+
+    def get_action_probabilities(
+        self, canonical_board: GenericBoardTensor, temperature: int = 1
     ) -> GenericPolicyTensor:
         """
         This function performs num_mcts_sims simulations of MCTS starting from
@@ -82,13 +78,14 @@ class MCTS:
                     greedy.
 
         Returns:
-            probs: a policy vector where the probability of the ith action is
-                   proportional to Nsa[(s,a)]**(1./temp)
+            prob: a policy vector where the probability of the ith action is
+                   proportional to n_edge_visit[(board,action)]**(1./temp)
         """
+
         for _ in range(self.args.num_mcts_sims):
             self.search(canonical_board)
 
-        h = self.game.get_board_hash(canonical_board)
+        h = self._cached_hash(canonical_board)
         counts = array(
             [
                 self.n_edge_visit[(h, a)] if (h, a) in self.n_edge_visit else 0
@@ -96,15 +93,15 @@ class MCTS:
             ]
         )
 
-        if temp == 0:
+        if temperature == 0:
             all_best_action = argwhere(a=counts == max(counts)).flatten()
-            random_best_action = rng.choice(all_best_action)
+            random_best_action = RNG.choice(all_best_action)
             # prob: GenericPolicyTensor = zeros(len(counts))
             prob: GenericPolicyTensor = zeros(len(counts))
             prob[random_best_action] = 1
             return prob
 
-        counts = [x ** (1.0 / temp) for x in counts]
+        counts = [x ** (1.0 / temperature) for x in counts]
         counts_sum = float(sum(counts))
         prob = array([x / counts_sum for x in counts])
         return prob
@@ -118,18 +115,22 @@ class MCTS:
         Once a leaf node is found, the neural network is called to return an
         initial policy P and a value v for the state. This value is propagated
         up the search path. In case the leaf node is a terminal state, the
-        outcome is propagated up the search path. The values of Ns, Nsa, Qsa are
-        updated.
+        outcome is propagated up the search path.
+        Update attr n_edge_visit, n_node_visit and q_values_cache.
 
         NOTE: the return values are the negative of the value of the current
         state. This is done since v is in [-1,1] and if v is the value of a
         state for the current player, then its value is -v for the other player.
 
         Returns:
-            v: the negative of the value of the current canonicalBoard
+            v: the negative of the value of the current canonical_board
+
+        REF-NOTE: the return is more like an evaluation of the current board.
+        We should improve the documentation when we have a better understanding
+        on how players work. #TODO
         """
 
-        h = self.game.get_board_hash(canonical_board)
+        h = self._cached_hash(canonical_board)
 
         if h not in self.game_value_cache:
             self.game_value_cache[h] = self.game.get_game_ended(canonical_board, 1)
@@ -137,7 +138,7 @@ class MCTS:
             return -self.game_value_cache[h]
 
         if h not in self.policy_cache:  # leaf node
-            self.policy_cache[h], v = self.nnet.predict(canonical_board)
+            self.policy_cache[h], v = self.nn.predict(canonical_board)
             valid_move = self.game.get_valid_moves(canonical_board, 1)
             self.policy_cache[h] = self.policy_cache[h] * valid_move  # mask invalid
             sum_policy_cache_h: float = sum(self.policy_cache[h])
@@ -158,31 +159,31 @@ class MCTS:
             return -v
 
         valid_move = self.valid_moves_cache[h]
-        best_u = -float("inf")
-        # best_u = float("-inf")
+        best_u = float("-inf")
         best_action = -1
 
         # pick the action with the highest upper confidence bound
         for action in range(self.game.get_action_size()):
-            if valid_move[action]:
-                if (h, action) in self.q_values_cache:
-                    u: float = self.q_values_cache[
-                        (h, action)
-                    ] + self.args.c_puct * self.policy_cache[h][action] * math.sqrt(
-                        self.n_node_visit[h]
-                    ) / (
-                        1 + self.n_edge_visit[(h, action)]
-                    )
-                else:
-                    u: float = (
-                        self.args.c_puct
-                        * self.policy_cache[h][action]
-                        * math.sqrt(self.n_node_visit[h] + EPS)
-                    )  # Q = 0 ?
+            if not valid_move[action]:
+                continue
+            if (h, action) in self.q_values_cache:
+                u: float = self.q_values_cache[
+                    (h, action)
+                ] + self.args.c_puct * self.policy_cache[h][action] * math.sqrt(
+                    self.n_node_visit[h]
+                ) / (
+                    1 + self.n_edge_visit[(h, action)]
+                )
+            else:
+                u: float = (
+                    self.args.c_puct
+                    * self.policy_cache[h][action]
+                    * math.sqrt(self.n_node_visit[h] + EPS)
+                )  # Q = 0 ?
 
-                if u > best_u:
-                    best_u = u
-                    best_action = action
+            if u > best_u:
+                best_u = u
+                best_action = action
 
         action = best_action
         next_board, next_player = self.game.get_next_state(canonical_board, 1, action)

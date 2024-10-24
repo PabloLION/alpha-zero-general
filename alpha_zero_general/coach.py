@@ -121,7 +121,7 @@ class Coach:
             canonical_board = self.game.get_canonical_form(board, self.current_player)
             temp = int(episode_step < self.args.temp_threshold)
 
-            pi = self.mcts.get_action_prob(canonical_board, temp=temp)
+            pi = self.mcts.get_action_probabilities(canonical_board, temperature=temp)
             sym = self.game.get_symmetries(canonical_board, pi)
             for b, p in sym:
                 raw_train_examples.append(RawTrainExample(b, self.current_player, p, 0))
@@ -199,13 +199,17 @@ class Coach:
             pmcts = MCTS(self.game, self.pnet, self.args.to_mcts_args())
 
             def get_p1_policy(board: GenericBoardTensor) -> int:
-                return int(np.argmax(a=pmcts.get_action_prob(board, temp=0)))
+                return int(
+                    np.argmax(a=pmcts.get_action_probabilities(board, temperature=0))
+                )
 
             self.nnet.train(train_examples)
             nmcts = MCTS(self.game, self.nnet, self.args.to_mcts_args())
 
             def get_p2_policy(board: GenericBoardTensor) -> int:
-                return int(np.argmax(nmcts.get_action_prob(board, temp=0)))
+                return int(
+                    np.argmax(nmcts.get_action_probabilities(board, temperature=0))
+                )
 
             log.info("PITTING AGAINST PREVIOUS VERSION")
 

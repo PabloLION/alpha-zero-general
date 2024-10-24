@@ -565,7 +565,9 @@ class Configuration:
                 n1.load_checkpoint(".\\..\\temp\\", player_model_file)
                 args1 = player_config or DEFAULT_MCTS_ARG
                 mcts1 = MCTS(g, n1, args1)
-                self.play = lambda x: np.argmax(mcts1.get_action_prob(x, temp=0))
+                self.play = lambda x: np.argmax(
+                    mcts1.get_action_probabilities(x, temperature=0)
+                )
 
     class _LearnArgs:
         def __init__(

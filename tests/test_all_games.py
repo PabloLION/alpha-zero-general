@@ -59,7 +59,7 @@ def execute_game_test(game: GenericGame, neural_net: type[NeuralNet]):
 
     args = MctsArgs(num_mcts_sims=25, c_puct=1.0)
     mcts = MCTS(game, neural_net(game), args)
-    n1p = lambda x: np.argmax(mcts.get_action_prob(x, temp=0))
+    n1p = lambda x: np.argmax(mcts.get_action_probabilities(x, temperature=0))
 
     arena = Arena(n1p, random_play, game)
     print(arena.play_games(2, verbose=False))
