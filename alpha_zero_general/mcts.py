@@ -136,12 +136,94 @@ class MCTS:
             v: the negative of the value of the current canonicalBoard
         """
 
-        # s = self.game.string_representation(canonical_board)
-        # if s not in self.Es:
-        #     self.Es[s] = self.game.get_game_ended(canonical_board, 1)
-        # if self.Es[s] != 0:
-        #     # terminal node
-        #     return -self.Es[s]
+        s = self.game.string_representation(canonical_board)
+
+        if s not in self.Es:
+            self.Es[s] = self.game.get_game_ended(canonical_board, 1)
+        if self.Es[s] != 0:
+            # terminal node
+            return -self.Es[s]
+
+        if s not in self.Ps:
+            # leaf node
+            self.Ps[s], v = self.nnet.predict(canonical_board)
+            valid = self.game.get_valid_moves(canonical_board, 1)
+            self.Ps[s] = self.Ps[s] * valid  # masking invalid moves
+            sum_Ps_s: float = sum(self.Ps[s])
+            if sum_Ps_s > 0:
+                self.Ps[s] /= sum_Ps_s  # renormalize
+            else:
+                # if all valid moves were masked make all valid moves equally probable
+
+                # NB! All valid moves may be masked if either your NNet architecture is insufficient or you've get overfitting or something else.
+                # If you have got dozens or hundreds of these messages you should pay attention to your NNet and/or training process.
+                log.error("All valid moves were masked, doing a workaround.")
+                self.Ps[s] = self.Ps[s] + valid
+                self.Ps[s] /= sum(self.Ps[s])
+
+            self.Vs[s] = valid
+            self.Ns[s] = 0
+            return -v
+
+        valid = self.Vs[s]
+        cur_best = -float("inf")
+        best_act = -1
+
+        # pick the action with the highest upper confidence bound
+        for a in range(self.game.get_action_size()):
+            if valid[a]:
+                if (s, a) in self.Qsa:
+                    u = self.Qsa[(s, a)] + self.args.c_puct * self.Ps[s][a] * math.sqrt(
+                        self.Ns[s]
+                    ) / (1 + self.Nsa[(s, a)])
+                else:
+                    u = (
+                        self.args.c_puct * self.Ps[s][a] * math.sqrt(self.Ns[s] + EPS)
+                    )  # Q = 0 ?
+
+                if u > cur_best:
+                    cur_best = u
+                    best_act = a
+
+        a = best_act
+        next_s, next_player = self.game.get_next_state(canonical_board, 1, a)
+        next_s = self.game.get_canonical_form(next_s, next_player)
+
+        v = self.search(next_s)
+
+        if (s, a) in self.Qsa:
+            self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
+                self.Nsa[(s, a)] + 1
+            )
+            self.Nsa[(s, a)] += 1
+
+        else:
+            self.Qsa[(s, a)] = v
+            self.Nsa[(s, a)] = 1
+
+        self.Ns[s] += 1
+
+        return -v
+
+    def new_search(self, canonical_board: GenericBoardTensor) -> float:
+        """
+        This function performs one iteration of MCTS. It is recursively called
+        till a leaf node is found. The action chosen at each node is one that
+        has the maximum upper confidence bound as in the paper.
+
+        Once a leaf node is found, the neural network is called to return an
+        initial policy P and a value v for the state. This value is propagated
+        up the search path. In case the leaf node is a terminal state, the
+        outcome is propagated up the search path. The values of Ns, Nsa, Qsa are
+        updated.
+
+        NOTE: the return values are the negative of the value of the current
+        state. This is done since v is in [-1,1] and if v is the value of a
+        state for the current player, then its value is -v for the other player.
+
+        Returns:
+            v: the negative of the value of the current canonicalBoard
+        """
 
         h = self.game.get_board_hash(canonical_board)
 
@@ -150,31 +232,10 @@ class MCTS:
         if self.game_value_cache[h] != 0:  # terminal node
             return -self.game_value_cache[h]
 
-        # if s not in self.Ps:
-        #     # leaf node
-        #     self.Ps[s], v = self.nnet.predict(canonical_board)
-        #     valid = self.game.get_valid_moves(canonical_board, 1)
-        #     self.Ps[s] = self.Ps[s] * valid  # masking invalid moves
-        #     sum_Ps_s: float = sum(self.Ps[s])
-        #     if sum_Ps_s > 0:
-        #         self.Ps[s] /= sum_Ps_s  # renormalize
-        #     else:
-        #         # if all valid moves were masked make all valid moves equally probable
-
-        #         # NB! All valid moves may be masked if either your NNet architecture is insufficient or you've get overfitting or something else.
-        #         # If you have got dozens or hundreds of these messages you should pay attention to your NNet and/or training process.
-        #         log.error("All valid moves were masked, doing a workaround.")
-        #         self.Ps[s] = self.Ps[s] + valid
-        #         self.Ps[s] /= sum(self.Ps[s])
-
-        #     self.Vs[s] = valid
-        #     self.Ns[s] = 0
-        #     return -v
-
-        if h not in self.policy_cache:
+        if h not in self.policy_cache:  # leaf node
             self.policy_cache[h], v = self.nnet.predict(canonical_board)
-            new_valid = self.game.get_valid_moves(canonical_board, 1)
-            self.policy_cache[h] = self.policy_cache[h] * new_valid
+            valid = self.game.get_valid_moves(canonical_board, 1)
+            self.policy_cache[h] = self.policy_cache[h] * valid  # mask invalid
             sum_policy_cache_h: float = sum(self.policy_cache[h])
             if sum_policy_cache_h > 0:
                 self.policy_cache[h] /= sum_policy_cache_h
@@ -183,43 +244,24 @@ class MCTS:
 
                 # NB! All valid moves may be masked if either your NNet architecture is insufficient or you've get overfitting or something else.
                 # If you have got dozens or hundreds of these messages you should pay attention to your NNet and/or training process.
-                # #TODO: better error messagej
+                # #TODO: better error message
                 log.error("All valid moves were masked, doing a workaround.")
-                self.policy_cache[h] = self.policy_cache[h] + new_valid
+                self.policy_cache[h] = self.policy_cache[h] + valid
                 self.policy_cache[h] /= sum(self.policy_cache[h])
 
-            self.valid_moves_cache[h] = new_valid
+            self.valid_moves_cache[h] = valid
             self.n_node_visit[h] = 0
             return -v
 
-        # valid = self.Vs[s]
-        # cur_best = -float("inf")
-        # best_act = -1
-
-        new_valid = self.valid_moves_cache[h]
-        new_current_best = float("-inf")
-        new_best_action = -1
+        valid = self.valid_moves_cache[h]
+        best_u = float("-inf")
+        best_action = -1
 
         # pick the action with the highest upper confidence bound
-        # for a in range(self.game.get_action_size()):
-        #     if valid[a]:
-        #         if (s, a) in self.Qsa:
-        #             u = self.Qsa[(s, a)] + self.args.c_puct * self.Ps[s][a] * math.sqrt(
-        #                 self.Ns[s]
-        #             ) / (1 + self.Nsa[(s, a)])
-        #         else:
-        #             u = (
-        #                 self.args.c_puct * self.Ps[s][a] * math.sqrt(self.Ns[s] + EPS)
-        #             )  # Q = 0 ?
-
-        #         if u > cur_best:
-        #             cur_best = u
-        #             best_act = a
-
         for action in range(self.game.get_action_size()):
-            if new_valid[action]:
+            if valid[action]:
                 if (h, action) in self.q_values_cache:
-                    u = self.q_values_cache[
+                    u: float = self.q_values_cache[
                         (h, action)
                     ] + self.args.c_puct * self.policy_cache[h][action] * math.sqrt(
                         self.n_node_visit[h]
@@ -227,39 +269,21 @@ class MCTS:
                         1 + self.n_edge_visit[(h, action)]
                     )
                 else:
-                    u = (
+                    u: float = (
                         self.args.c_puct
                         * self.policy_cache[h][action]
                         * math.sqrt(self.n_node_visit[h] + EPS)
                     )
 
-                if u > new_current_best:
-                    new_current_best = u
-                    new_best_action = action
+                if u > best_u:
+                    best_u = u
+                    best_action: int = action
 
-        # a = best_act
-        # next_s, next_player = self.game.get_next_state(canonical_board, 1, a)
-        # next_s = self.game.get_canonical_form(next_s, next_player)
-
-        # v = self.search(next_s)
-
-        action = new_best_action
+        action = best_action
         next_board, next_player = self.game.get_next_state(canonical_board, 1, action)
         next_board = self.game.get_canonical_form(next_board, next_player)
 
         new_v = self.search(next_board)
-
-        # if (s, a) in self.Qsa:
-        #     self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
-        #         self.Nsa[(s, a)] + 1
-        #     )
-        #     self.Nsa[(s, a)] += 1
-
-        # else:
-        #     self.Qsa[(s, a)] = v
-        #     self.Nsa[(s, a)] = 1
-
-        # self.Ns[s] += 1
 
         if (h, action) in self.q_values_cache:
             self.q_values_cache[(h, action)] = (
@@ -272,4 +296,5 @@ class MCTS:
             self.n_edge_visit[(h, action)] = 1
 
         self.n_node_visit[h] += 1
-        return -new_v  # instead of return -v
+
+        return -new_v  # instead of

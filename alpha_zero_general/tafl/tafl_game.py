@@ -20,7 +20,10 @@ from alpha_zero_general.tafl.tafl_logic import Board
 
 
 class TaflGame(GenericGame):
-    def __init__(self, name):
+    name: str
+    n: int  # board size
+
+    def __init__(self, name: str) -> None:
         self.name = name
         self.get_init_board()
 

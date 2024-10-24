@@ -66,14 +66,16 @@ class Arena:
                 self.game.get_canonical_form(board, current_player)
             )
 
-            valids = self.game.get_valid_moves(
+            valid_moves = self.game.get_valid_moves(
                 self.game.get_canonical_form(board, current_player), 1
             )
 
-            if valids[action] == 0:
+            if valid_moves[action] == 0:
                 log.error(f"Action {action} is not valid!")
-                log.debug(f"valids = {valids}")
-                assert valids[action] > 0
+                log.debug(msg=f"valids = {valid_moves}")
+                assert (
+                    valid_moves[action] > 0
+                ), f"Action {action} is not valid in {valid_moves}"
 
             # Notifying the opponent for the move
             opponent = players[-current_player + 1]
