@@ -2,7 +2,7 @@
 
 
 class Tafl:
-    size = 0
+    size: int = 0
     board = []
     pieces = []
 

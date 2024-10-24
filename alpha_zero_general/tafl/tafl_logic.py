@@ -4,12 +4,20 @@ from alpha_zero_general.tafl.game_variants import Tafl
 
 
 class Board:
+    size: int
+    width: int
+    height: int
+    board: list[list[int]]  # TODO: ndarray might be better? #TODO: ren
+    pieces: list[list[int]]  # TODO: ndarray might be better?
+    time: int
+    done: int
+
     def __init__(self, gv):
         self.size = gv.size
         self.width = gv.size
         self.height = gv.size
-        self.board = gv.board  # [x,y,type]
-        self.pieces = gv.pieces  # [x,y,type]
+        self.board = gv.board  # [x,y,type] #TODO: ndarray might be better?
+        self.pieces = gv.pieces  # [x,y,type] #TODO: ndarray might be better?
         self.time = 0
         self.done = 0
 

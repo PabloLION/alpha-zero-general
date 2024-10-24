@@ -23,24 +23,26 @@ class TaflGame(GenericGame):
     name: str
     n: int  # board size
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str = "Brandubh") -> None:
         self.name = name
         self.get_init_board()
 
     def get_init_board(self) -> GenericBoardTensor:
-        board = Board(Brandubh())
+        # #TODO: add enum for game variants
         if self.name == "Brandubh":
             board = Board(Brandubh())
-        if self.name == "ArdRi":
+        elif self.name == "ArdRi":
             board = Board(ArdRi())
-        if self.name == "Tablut":
+        elif self.name == "Tablut":
             board = Board(Tablut())
-        if self.name == "Tawlbwrdd":
+        elif self.name == "Tawlbwrdd":
             board = Board(Tawlbwrdd())
-        if self.name == "Hnefatafl":
+        elif self.name == "Hnefatafl":
             board = Board(Hnefatafl())
-        if self.name == "AleaEvangelii":
+        elif self.name == "AleaEvangelii":
             board = Board(AleaEvangelii())
+        else:
+            raise ValueError("Unknown variant")
         self.n = board.size
         return board
 

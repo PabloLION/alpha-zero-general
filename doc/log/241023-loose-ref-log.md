@@ -24,7 +24,7 @@
 - [ ] related to last get str representation
   - __str__ and __repr__ are two methods.
   - to use it as hash, use `__hash__` is better
-- [ ] format off for data list, like in `test_symmetries_n3`
-- [ ] style/type-gymnastics
+- [ ] `fmt: off` for data list, like in `test_symmetries_n3`
+- [x] style/type-gymnastics
 - [ ] retire `alpha_zero_general.type`
 - [ ] rename `./alpha_zero_general/neural_net.py` to `neural_net_interface.py`

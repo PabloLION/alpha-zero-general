@@ -65,12 +65,10 @@ def execute_game_test(game: GenericGame, neural_net: type[NeuralNet]):
     print(arena.play_games(2, verbose=False))
 
 
-# @mark.skip(reason="not refactored")
 def test_othello_pytorch():
     execute_game_test(OthelloGame(6), OthelloPytorchNNet)
 
 
-# @mark.skip(reason="not refactored")
 def test_othello_keras():
     execute_game_test(OthelloGame(6), OthelloKerasNNet)
 
@@ -79,36 +77,29 @@ def test_tictactoe_keras():
     execute_game_test(TicTacToeGame(), TicTacToeKerasNNet)
 
 
-# @mark.skip(reason="not refactored")
 def test_tictactoe3d_keras():
     execute_game_test(TicTacToe3DGame(3), TicTacToe3DKerasNNet)
 
 
-# @mark.skip(reason="not refactored")
 def test_gobang_keras():
     execute_game_test(GobangGame(), GobangKerasNNet)
 
 
-# @mark.skip(reason="not refactored")
 def test_tafl_pytorch():
-    execute_game_test(TaflGame(5), TaflPytorchNNet)
+    execute_game_test(TaflGame("Brandubh"), TaflPytorchNNet)
 
 
-# @mark.skip(reason="not refactored")
 def test_tafl_keras():
-    execute_game_test(TaflGame(5), TaflKerasNNet)
+    execute_game_test(TaflGame("Brandubh"), TaflKerasNNet)
 
 
-# @mark.skip(reason="not refactored")
 def test_connect4_keras():
     execute_game_test(Connect4Game(5), Connect4KerasNNet)
 
 
-# @mark.skip(reason="not refactored")
 def test_rts_keras():
     execute_game_test(RTSGame(), RTSKerasNNet)
 
 
-# @mark.skip(reason="not refactored")
 def test_dots_and_boxes_keras():
     execute_game_test(DotsAndBoxesGame(3), DotsAndBoxesKerasNNet)
