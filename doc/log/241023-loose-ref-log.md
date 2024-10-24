@@ -17,10 +17,10 @@
 - `array2string(board)` instead of `board.tostring()`
 - better file save paths, remove `os` (security)
 - [ ] enum type for `Player` and `Piece`
-- [ ] rm folder `chore`
+- [x] rm folder `chore`
 - [ ] use pathlib for paths
 - [ ] `import sys` and `sys.path.append("..")`
-- [ ] `np.array2string(board)` as hash has performance issues
+- [x] `np.array2string(board)` as hash has performance issues
 - [ ] related to last get str representation
   - __str__ and __repr__ are two methods.
   - to use it as hash, use `__hash__` is better
