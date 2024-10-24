@@ -25,7 +25,7 @@ class TestMCTS:
 
     def test_search(self, mocker: MockerFixture):
         mocker.patch(
-            "alpha_zero_general.connect4.keras.NNetWrapper.predict",
+            "alpha_zero_general.connect4.keras.n_net.NNetWrapper.predict",
             return_value=(np.array([1 / 7] * 7), 0),
         )
         board = self.game.get_init_board()
