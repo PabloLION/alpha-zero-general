@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, NamedTuple, TypeAlias, TypeVar
 
-from numpy import bool_, dtype, ndarray
+from numpy import bool_, dtype, ndarray, random
 
 # Board Tensors
 GenericBoardDataType: TypeAlias = Any  # #TODO: TBD
@@ -75,3 +75,10 @@ TrainExamplesFile = Path
 class WinState(NamedTuple):
     is_ended: bool
     winner: int | None
+
+
+## Constants
+
+EPS = 1e-8
+RANDOM_SEED = 32342
+RNG = random.default_rng(RANDOM_SEED)

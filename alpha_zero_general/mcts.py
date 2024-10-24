@@ -1,9 +1,11 @@
 import logging
 import math
 
-from numpy import argwhere, array, random, zeros
+from numpy import argwhere, array, zeros
 
 from alpha_zero_general import (
+    EPS,
+    RNG,
     GenericBoardTensor,
     GenericBooleanBoardTensor,
     GenericPolicyTensor,
@@ -11,10 +13,6 @@ from alpha_zero_general import (
 )
 from alpha_zero_general.game import GenericGame
 from alpha_zero_general.neural_net import NeuralNet
-
-EPS = 1e-8
-RANDOM_SEED = 32342
-RNG = random.default_rng(RANDOM_SEED)
 
 log = logging.getLogger(__name__)
 
@@ -24,7 +22,9 @@ class MCTS:
     This class handles the MCTS tree.
     """
 
-    game: GenericGame
+    game: GenericGame[
+        GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor
+    ]
     nn: NeuralNet
     args: MctsArgs
 
@@ -42,7 +42,14 @@ class MCTS:
     # cache the valid moves returned by game.get_valid_moves of key board_hash
     board_cache: dict[int, GenericBoardTensor]  # restore the board from hash
 
-    def __init__(self, game: GenericGame, nn: NeuralNet, args: MctsArgs) -> None:
+    def __init__(
+        self,
+        game: GenericGame[
+            GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor
+        ],
+        nn: NeuralNet,
+        args: MctsArgs,
+    ) -> None:
         self.game = game
         self.nn = nn
         self.args = args
