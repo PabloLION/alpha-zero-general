@@ -3,7 +3,7 @@ from typing import Any, TypeAlias
 from numpy import bool_, dtype, float32, int8, ndarray
 
 GobangBoardShapeType: TypeAlias = Any
-GobangBoardDataType: TypeAlias = int8
+GobangBoardDataType = int8
 GobangBoardTensor: TypeAlias = ndarray[GobangBoardShapeType, dtype[GobangBoardDataType]]
 GobangBooleanBoardTensor: TypeAlias = ndarray[GobangBoardDataType, dtype[bool_]]
 

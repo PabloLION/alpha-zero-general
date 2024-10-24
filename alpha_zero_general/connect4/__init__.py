@@ -3,7 +3,7 @@ from typing import Any, TypeAlias
 from numpy import bool_, dtype, float32, int8, ndarray
 
 Connect4BoardShapeType: TypeAlias = Any
-Connect4BoardDataType: TypeAlias = int8
+Connect4BoardDataType = int8
 Connect4BoardTensor: TypeAlias = ndarray[
     Connect4BoardShapeType, dtype[Connect4BoardDataType]
 ]

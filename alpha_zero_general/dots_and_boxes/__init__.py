@@ -3,7 +3,7 @@ from typing import Any, TypeAlias
 from numpy import bool_, dtype, float32, int8, ndarray
 
 DotsAndBoxesBoardShapeType: TypeAlias = Any
-DotsAndBoxesBoardDataType: TypeAlias = int8
+DotsAndBoxesBoardDataType = int8
 DotsAndBoxesBoardTensor: TypeAlias = ndarray[
     DotsAndBoxesBoardShapeType, dtype[DotsAndBoxesBoardDataType]
 ]

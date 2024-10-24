@@ -2,15 +2,18 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from alpha_zero_general.othello import OthelloNNArg
+from alpha_zero_general.othello.othello_game import OthelloGame
+
 
 class OthelloNNet(nn.Module):
-    def __init__(self, game, args):
+    def __init__(self, game: OthelloGame, args: OthelloNNArg):
         # game params
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
         self.args = args
 
-        super(OthelloNNet, self).__init__()
+        super().__init__()  # type: ignore # for pytorch model
         self.conv1 = nn.Conv2d(1, args.num_channels, 3, stride=1, padding=1)
         self.conv2 = nn.Conv2d(
             args.num_channels, args.num_channels, 3, stride=1, padding=1
@@ -35,7 +38,7 @@ class OthelloNNet(nn.Module):
 
         self.fc4 = nn.Linear(512, 1)
 
-    def forward(self, s):
+    def forward(self, s: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         #                                                           s: batch_size x board_x x board_y
         s = s.view(
             -1, 1, self.board_x, self.board_y

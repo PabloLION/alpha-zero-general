@@ -36,3 +36,5 @@
   - [ ] two `test_connect4.py`
 - consider using Generator for ret val of `Game.get_symmetries`
 - need a `player` / `agent` class
+- define a protocol that specifies all the classes needed for alpha_zero_general
+  - then add all the game classes to the protocol, in a separate module, like "examples"
