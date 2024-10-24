@@ -2,6 +2,8 @@ from __future__ import print_function
 
 import sys
 
+from alpha_zero_general import GenericBoardTensor
+
 sys.path.append("..")
 import numpy as np
 
@@ -481,8 +483,11 @@ class SantoriniGame(GenericGame):
         
         """
 
-    def string_representation(self, board):
+    def string_representation(self, board: GenericBoardTensor):
         return np.array2string(board)
+
+    def get_board_hash(self, board: GenericBoardTensor) -> int:
+        return hash(board.tobytes())
 
     def string_representation_readable(self, board):
         # Do not think this works.

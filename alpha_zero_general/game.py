@@ -153,16 +153,28 @@ class GenericGame(ABC):
         )
 
     @abstractmethod
-    def __hash__(self) -> int:
+    def get_board_hash(self, board: GenericBoardTensor) -> int:
         """
-        Use hash to store game in dictionary, instead of string representation.
-        This hash should include these parameters:
-            - board size
-            - current player
-            - board state
-            - game specific parameters
+        Input:
+            board: current board
 
         Returns:
-            hash: hash of the game
+            hash: a quick conversion of board to a hashable format.
+                  Required by MCTS for hashing.
         """
-        raise NotImplementedError("__hash__ must be implemented by the subclass")
+        raise NotImplementedError("get_board_hash must be implemented by the subclass")
+
+    # @abstractmethod
+    # def __hash__(self) -> int:
+    #     """
+    #     Use hash to store game in dictionary, instead of string representation.
+    #     This hash should include these parameters:
+    #         - board size
+    #         - current player
+    #         - board state
+    #         - game specific parameters
+
+    #     Returns:
+    #         hash: hash of the game
+    #     """
+    #     raise NotImplementedError("__hash__ must be implemented by the subclass")

@@ -122,6 +122,9 @@ class DotsAndBoxesGame(GenericGame):
         # 8x8 numpy array (canonical board)
         return np.array2string(board)
 
+    def get_board_hash(self, board: GenericBoardTensor) -> int:
+        return hash(board.tobytes())
+
     @staticmethod
     def display(board: GenericBoardTensor) -> None:
         n = board.shape[1]

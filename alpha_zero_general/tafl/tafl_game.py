@@ -108,6 +108,9 @@ class TaflGame(GenericGame):
         # print("->",str(board))
         return str(board)
 
+    def get_board_hash(self, board: GenericBoardTensor) -> int:
+        return hash(board.tobytes())
+
     def get_score(self, board: GenericBoardTensor, player: int) -> int:
         if board.done:
             return 1000 * board.done * player

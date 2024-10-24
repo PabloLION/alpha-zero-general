@@ -11,9 +11,9 @@ import numpy as np
 from numpy import random
 from tqdm import tqdm
 
-from alpha_zero_general import MctsArgs
+from alpha_zero_general import GenericBoardTensor, MctsArgs
 from alpha_zero_general.arena import Arena
-from alpha_zero_general.game import GenericBoardTensor, GenericGame
+from alpha_zero_general.game import GenericGame
 from alpha_zero_general.mcts import MCTS, GenericPolicyTensor
 
 log = logging.getLogger(__name__)
