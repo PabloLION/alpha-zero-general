@@ -385,8 +385,8 @@ class MCTS:
         new_valid = self.valid_moves_cache[h]
         assert numpy.all(new_valid == valid), f"{new_valid} != {valid}"
 
-        cur_best = -float("inf")
-        best_act = -1
+        # cur_best = -float("inf")
+        # best_act = -1
         new_best_u = float("-inf")
         new_best_action = -1
 
@@ -400,9 +400,9 @@ class MCTS:
 
             if new_valid[action]:
                 if (h, action) in self.q_values_cache:
-                    u = self.Qsa[(s, a)] + self.args.c_puct * self.Ps[s][a] * math.sqrt(
-                        self.n_node_visit[h]
-                    ) / (1 + self.Nsa[(s, a)])
+                    # u = self.Qsa[(s, a)] + self.args.c_puct * self.Ps[s][a] * math.sqrt(
+                    #     self.n_node_visit[h]
+                    # ) / (1 + self.Nsa[(s, a)])
 
                     new_u: float = self.q_values_cache[
                         (h, action)
@@ -412,44 +412,46 @@ class MCTS:
                         1 + self.n_edge_visit[(h, action)]
                     )
                 else:
-                    u = (
-                        self.args.c_puct
-                        * self.Ps[s][a]
-                        * math.sqrt(self.n_node_visit[h] + EPS)
-                    )  # Q = 0 ?
+                    # u = (
+                    #     self.args.c_puct
+                    #     * self.Ps[s][a]
+                    #     * math.sqrt(self.n_node_visit[h] + EPS)
+                    # )  # Q = 0 ?
                     new_u = (
                         self.args.c_puct
                         * self.policy_cache[h][action]
                         * math.sqrt(self.n_node_visit[h] + EPS)
                     )  # Q = 0 ?
-                assert new_u == u, f"{new_u=} != {u=}"
+                # assert new_u == u, f"{new_u=} != {u=}"
 
-                if u > cur_best:
-                    cur_best = u
-                    best_act = a
+                # if u > cur_best:
+                #     cur_best = u
+                #     best_act = a
 
                 if new_u > new_best_u:
                     new_best_u = new_u
                     new_best_action = action
 
-        assert best_act == new_best_action, f"{best_act} != {new_best_action}"
-        assert cur_best == new_best_u, f"{cur_best} != {new_best_u}"
+        # assert best_act == new_best_action, f"{best_act} != {new_best_action}"
+        # assert cur_best == new_best_u, f"{cur_best} != {new_best_u}"
 
-        a = best_act
-        next_s, next_player = self.game.get_next_state(canonical_board, 1, a)
-        next_s = self.game.get_canonical_form(next_s, next_player)
+        # a = best_act
+        # next_s, next_player = self.game.get_next_state(canonical_board, 1, a)
+        # next_s = self.game.get_canonical_form(next_s, next_player)
 
         action = new_best_action
         next_board, new_next_player = self.game.get_next_state(
             canonical_board, 1, action
         )
         next_board = self.game.get_canonical_form(next_board, new_next_player)
-        assert numpy.all(next_board == next_s), f"{next_board=} != {next_s=}"
+        # assert numpy.all(next_board == next_s), f"{next_board=} != {next_s=}"
 
-        v = self.mixed_search(next_s)
+        # v = self.mixed_search(next_s)
+        v = self.mixed_search(next_board)
         new_v = v
 
-        assert ((h, action) in self.q_values_cache) == ((s, a) in self.Qsa)
+        # assert ((h, action) in self.q_values_cache) == ((s, a) in self.Qsa)
+        a = action
         if (h, action) in self.q_values_cache:
             self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
                 self.Nsa[(s, a)] + 1
