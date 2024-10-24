@@ -1,51 +1,55 @@
 import numpy as np
 
-from alpha_zero_general import GenericBoardDataType, GenericBoardTensor
+from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.connect4 import Connect4BoardDataType, Connect4BoardTensor
 from alpha_zero_general.type import WinState
 
 
 class Connect4Board:
     """
     Connect4 Board.
+    The pieces of this game are called "chips" (or "discs").
     """
+
+    chip_tensor: Connect4BoardTensor
 
     def __init__(
         self,
         height: int,
         width: int,
         win_length: int,
-        np_pieces: GenericBoardTensor | None = None,
+        chip_tensor: Connect4BoardTensor | None = None,
     ):
         "Set up initial board configuration."
         self.height = height
         self.width = width
         self.win_length = win_length
 
-        if np_pieces is None:
-            self.np_pieces = np.zeros(
-                [self.height, self.width], dtype=GenericBoardDataType
+        if chip_tensor is None:
+            self.chip_tensor = np.zeros(
+                [self.height, self.width], dtype=Connect4BoardDataType
             )
         else:
-            self.np_pieces = np_pieces
-            assert self.np_pieces.shape == (self.height, self.width)
+            self.chip_tensor = chip_tensor
+            assert self.chip_tensor.shape == (self.height, self.width)
 
-    def add_stone(self, column: int, player: int) -> None:
+    def add_chip(self, column: int, player: int) -> None:
         "Create copy of board containing new stone."
-        (available_idx,) = np.where(self.np_pieces[:, column] == 0)
+        (available_idx,) = np.nonzero(self.chip_tensor[:, column] == 0)
         if len(available_idx) == 0:
             raise ValueError("Can't play column %s on board %s" % (column, self))
 
-        self.np_pieces[available_idx[-1]][column] = player
+        self.chip_tensor[available_idx[-1]][column] = player
 
-    def get_valid_moves(self) -> np.ndarray:
+    def get_valid_moves(self) -> Connect4BoardTensor:
         # here we should have new types for Connect4GenericBoardTensor / Tensor and
         # Connect4BoardFirstRowTensor #TODO
         "Any zero value in top row in a valid move"
-        return self.np_pieces[0] == 0
+        return self.chip_tensor[0] == 0
 
     def get_win_state(self) -> WinState:
         for player in [-1, 1]:
-            player_pieces = self.np_pieces == -player
+            player_pieces = self.chip_tensor == -player
             # Check rows & columns for win
             if (
                 self._is_straight_winner(player_pieces)
@@ -64,7 +68,7 @@ class Connect4Board:
     def with_np_pieces(self, np_pieces: GenericBoardTensor) -> "Connect4Board":
         """Create copy of board with specified pieces."""
         if np_pieces is None:
-            np_pieces = self.np_pieces
+            np_pieces = self.chip_tensor
         return Connect4Board(self.height, self.width, self.win_length, np_pieces)
 
     def _is_diagonal_winner(self, player_pieces: GenericBoardTensor) -> bool:
@@ -88,4 +92,4 @@ class Connect4Board:
         return max([x.max() for x in run_lengths]) >= self.win_length
 
     def __str__(self) -> str:
-        return str(self.np_pieces)
+        return str(self.chip_tensor)

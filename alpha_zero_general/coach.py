@@ -1,54 +1,28 @@
 import logging
 import os
 from collections import deque
-from collections.abc import Callable
 from dataclasses import dataclass
 from pickle import Pickler, Unpickler
 from random import shuffle
-from typing import Any, NamedTuple, TypeAlias
 
 import numpy as np
 from numpy import random
 from tqdm import tqdm
 
-from alpha_zero_general import GenericBoardTensor, MctsArgs
+from alpha_zero_general import (
+    CheckpointFile,
+    GenericBoardTensor,
+    MctsArgs,
+    RawTrainExample,
+    TrainExample,
+    TrainExampleHistory,
+)
 from alpha_zero_general.arena import Arena
 from alpha_zero_general.game import GenericGame
-from alpha_zero_general.mcts import MCTS, GenericPolicyTensor
+from alpha_zero_general.mcts import MCTS
+from alpha_zero_general.neural_net import NeuralNet
 
 log = logging.getLogger(__name__)
-
-Display = Callable[[Any], None]
-Board = Any
-ExampleValue: TypeAlias = float
-PlayerId: TypeAlias = int
-# LengthyTrainExample = tuple[
-#     GenericBoardTensor, PlayerID, GenericPolicyTensor, ExampleValue
-# ]
-
-
-class RawTrainExample(NamedTuple):
-    """
-    (canonical_board, current_player, pi, v)
-    pi is the MCTS informed policy vector, v is +1 if
-    the player eventually won the game, else -1.
-    """
-
-    board: GenericBoardTensor
-    current_player: PlayerId
-    policy: GenericPolicyTensor
-    neutral_value: ExampleValue  # from neutral perspective
-
-
-class TrainExample(NamedTuple):
-    board: GenericBoardTensor
-    policy: GenericPolicyTensor
-    value: ExampleValue  # from player's perspective
-
-
-TrainExampleHistory = list[list[TrainExample]]
-CheckpointFile = str
-TrainExamplesFile = str
 
 
 @dataclass(frozen=True)  # freeze to check for immutability in refactor
@@ -81,12 +55,12 @@ class Coach:
     in Game and NeuralNet. args are specified in main.py.
     """
 
-    def __init__(self, game: GenericGame, nnet: Any, args: CoachArgs):
+    def __init__(self, game: GenericGame, nn: NeuralNet, args: CoachArgs):
         self.game = game
-        self.nnet = nnet
-        self.pnet = self.nnet.__class__(self.game)  # the competitor network
+        self.nn = nn
+        self.pnet = self.nn.__class__(self.game)  # the competitor network
         self.args: CoachArgs = args
-        self.mcts = MCTS(self.game, self.nnet, self.args.to_mcts_args())
+        self.mcts = MCTS(self.game, self.nn, self.args.to_mcts_args())
         self.train_examples_history: TrainExampleHistory = (
             []
         )  # history of examples from args.numItersForTrainExamplesHistory latest iterations
@@ -133,15 +107,14 @@ class Coach:
 
             r = self.game.get_game_ended(board, self.current_player)
 
-            if r != 0:
-                # filter out draws
-                return [
+            if r != 0:  # game ended
+                return [  # filter out draws #TODO: use filter()
                     TrainExample(
-                        te.board,
-                        te.policy,
-                        r * ((-1) ** (te.current_player != self.current_player)),
+                        rte.board,
+                        rte.policy,
+                        r * ((-1) ** (rte.current_player != self.current_player)),
                     )
-                    for te in raw_train_examples
+                    for rte in raw_train_examples
                 ]
 
     def learn(self):
@@ -164,7 +137,7 @@ class Coach:
 
                 for _ in tqdm(range(self.args.num_eps), desc="Self Play"):
                     self.mcts = MCTS(
-                        self.game, self.nnet, self.args.to_mcts_args()
+                        self.game, self.nn, self.args.to_mcts_args()
                     )  # reset search tree
                     iteration_train_examples += self.execute_episode()
 
@@ -190,12 +163,14 @@ class Coach:
             shuffle(train_examples)
 
             # training new network, keeping a copy of the old one
-            self.nnet.save_checkpoint(
+            self.nn.save_checkpoint(
                 folder=self.args.checkpoint, filename="temp.pth.tar"
             )
+
             self.pnet.load_checkpoint(
                 folder=self.args.checkpoint, filename="temp.pth.tar"
-            )
+            )  # #TODO: using file system to pass the model is not the best way
+            # we should add a method to pass the model directly.
             pmcts = MCTS(self.game, self.pnet, self.args.to_mcts_args())
 
             def get_p1_policy(board: GenericBoardTensor) -> int:
@@ -203,8 +178,8 @@ class Coach:
                     np.argmax(a=pmcts.get_action_probabilities(board, temperature=0))
                 )
 
-            self.nnet.train(train_examples)
-            nmcts = MCTS(self.game, self.nnet, self.args.to_mcts_args())
+            self.nn.train(train_examples)
+            nmcts = MCTS(self.game, self.nn, self.args.to_mcts_args())
 
             def get_p2_policy(board: GenericBoardTensor) -> int:
                 return int(
@@ -226,15 +201,15 @@ class Coach:
                 or float(nwins) / (pwins + nwins) < self.args.update_threshold
             ):
                 log.info("REJECTING NEW MODEL")
-                self.nnet.load_checkpoint(
+                self.nn.load_checkpoint(
                     folder=self.args.checkpoint, filename="temp.pth.tar"
                 )
             else:
                 log.info("ACCEPTING NEW MODEL")
-                self.nnet.save_checkpoint(
+                self.nn.save_checkpoint(
                     folder=self.args.checkpoint, filename=self.get_checkpoint_file(i)
                 )
-                self.nnet.save_checkpoint(
+                self.nn.save_checkpoint(
                     folder=self.args.checkpoint, filename="best.pth.tar"
                 )
 

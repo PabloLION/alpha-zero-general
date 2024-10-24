@@ -1,9 +1,12 @@
 from numpy import array2string, copy
 
-from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.coach import GenericPolicyTensor
+from alpha_zero_general import GenericBoardTensor, GenericPolicyTensor
 from alpha_zero_general.connect4.connect4_logic import Connect4Board
 from alpha_zero_general.game import GenericGame
+
+# from alpha_zero_general.connect4 import Connect4BoardTensor, Connect4PolicyTensor
+# #TODO/TYPE: find a way to make Connect4BoardTensor a subclass of GenericBoardTensor
+
 
 DEFAULT_CONNECT4_BOARD_HEIGHT = 6
 DEFAULT_CONNECT4_BOARD_WIDTH = 7
@@ -26,7 +29,7 @@ class Connect4Game(GenericGame):
         self._base_board = Connect4Board(height, width, win_length, np_pieces)
 
     def get_init_board(self) -> GenericBoardTensor:
-        return self._base_board.np_pieces
+        return self._base_board.chip_tensor
 
     def get_board_size(self) -> tuple[int, int]:
         return (self._base_board.height, self._base_board.width)
@@ -39,8 +42,8 @@ class Connect4Game(GenericGame):
     ) -> tuple[GenericBoardTensor, int]:
         """Returns a copy of the board with updated move, original board is unmodified."""
         b = self._base_board.with_np_pieces(np_pieces=copy(board))
-        b.add_stone(action, player)
-        return b.np_pieces, -player
+        b.add_chip(action, player)
+        return b.chip_tensor, -player
 
     def get_valid_moves(
         self, board: GenericBoardTensor, player: int

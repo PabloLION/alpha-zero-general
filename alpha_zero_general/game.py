@@ -82,7 +82,7 @@ class GenericGame(ABC):
         raise NotImplementedError("get_valid_moves must be implemented by the subclass")
 
     @abstractmethod
-    def get_game_ended(self, board: GenericBoardTensor, player: int) -> int:
+    def get_game_ended(self, board: GenericBoardTensor, player: int) -> float:
         """
         #TODO:
             Function name not corresponding to return type.

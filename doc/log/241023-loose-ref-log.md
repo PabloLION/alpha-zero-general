@@ -27,3 +27,4 @@
 - [ ] format off for data list, like in `test_symmetries_n3`
 - [ ] style/type-gymnastics
 - [ ] retire `alpha_zero_general.type`
+- [ ] rename `./alpha_zero_general/neural_net.py` to `neural_net_interface.py`

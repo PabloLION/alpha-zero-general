@@ -1,6 +1,6 @@
 from typing import Any
 
-from alpha_zero_general import GenericPolicyTensor
+from alpha_zero_general import GenericPolicyTensor, TrainExample
 from alpha_zero_general.game import GenericGame
 
 
@@ -19,7 +19,7 @@ class NeuralNet:
             "The __init__ method must be implemented by the subclass"
         )
 
-    def train(self, examples: list[tuple]):
+    def train(self, examples: list[TrainExample]):
         """
         This function trains the neural network with examples obtained from
         self-play.
