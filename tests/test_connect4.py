@@ -1,3 +1,8 @@
+"""
+Refactor note:
+#TODO: merge with another test_connect4.py
+"""
+
 import numpy as np
 import pytest
 
@@ -42,7 +47,7 @@ class TestConnect4Game:
 
     def test_get_symmetries(self):
         board = self.game.get_init_board()
-        pi = [1 / 7] * 7
+        pi = np.array([1 / 7] * 7)
         symmetries = self.game.get_symmetries(board, pi)
         assert len(symmetries) == 2
 

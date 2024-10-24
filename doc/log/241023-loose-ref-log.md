@@ -29,4 +29,5 @@
 - [x] retire `alpha_zero_general.type`
 - [x] rename `./alpha_zero_general/neural_net.py` to `neural_net_interface.py`
 - [ ] maybe `game.py` should `Match` that aggregates `Board` and associates with `Rule`.
-- [ ] move to py312 (maybe?)
+- [ ] move to py312 for generics(maybe?)
+- [ ] merge two nn files (interface wrapper)

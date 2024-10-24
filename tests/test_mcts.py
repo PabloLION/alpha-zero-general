@@ -4,7 +4,7 @@ from pytest_mock import MockerFixture
 
 from alpha_zero_general import MctsArgs
 from alpha_zero_general.connect4.connect4_game import Connect4Game
-from alpha_zero_general.connect4.keras.n_net import NNetWrapper as nn
+from alpha_zero_general.connect4.keras.n_net import Connect4NNInterface as nn
 from alpha_zero_general.mcts import MCTS
 
 
@@ -25,7 +25,7 @@ class TestMCTS:
 
     def test_search(self, mocker: MockerFixture):
         mocker.patch(
-            "alpha_zero_general.connect4.keras.n_net.NNetWrapper.predict",
+            "alpha_zero_general.connect4.keras.n_net.Connect4NNInterface.predict",
             return_value=(np.array([1 / 7] * 7), 0),
         )
         board = self.game.get_init_board()

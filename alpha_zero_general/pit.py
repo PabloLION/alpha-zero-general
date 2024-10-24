@@ -1,3 +1,7 @@
+"""
+Using Othello as an example, this script pits two agents against each other.
+"""
+
 import numpy as np
 
 from alpha_zero_general import MctsArgs

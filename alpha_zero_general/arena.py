@@ -3,8 +3,13 @@ from typing import Generic
 
 from tqdm import tqdm
 
-from alpha_zero_general import Display, PolicyMakerAsPlayer
-from alpha_zero_general.coach import BoardTensor, BooleanBoard, PolicyTensor
+from alpha_zero_general import (
+    BoardTensor,
+    BooleanBoard,
+    Display,
+    PolicyMakerAsPlayer,
+    PolicyTensor,
+)
 from alpha_zero_general.game import GenericGame
 
 log = logging.getLogger(__name__)

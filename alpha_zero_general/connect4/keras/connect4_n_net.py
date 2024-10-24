@@ -1,7 +1,7 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from tensorflow import Tensor
-from tensorflow.keras.activations import relu
+from tensorflow.keras.activations import relu  # type: ignore # stubs problem
 from tensorflow.keras.layers import (
     Add,
     BatchNormalization,
@@ -11,17 +11,29 @@ from tensorflow.keras.layers import (
     Input,
     Reshape,
 )
-from tensorflow.keras.losses import CategoricalCrossentropy, MeanSquaredError
-from tensorflow.keras.models import Model
+from tensorflow.keras.losses import (  # type: ignore # stubs problem
+    CategoricalCrossentropy,
+    MeanSquaredError,
+)
+from tensorflow.keras.models import Model  # type: ignore # stubs problem
 from tensorflow.keras.optimizers import Adam
 
-from alpha_zero_general.connect4.connect4_game import Connect4Game
+from alpha_zero_general.connect4.connect4_game import (
+    Connect4BoardTensor,
+    Connect4Game,
+    Connect4PolicyTensor,
+)
 
-# from tensorflow.python.ops.array_ops import Reshape
+# maybe reshape from: from tensorflow.python.ops.array_ops import Reshape
 
 
 class Connect4NNet:
-    model: Model  # type: ignore # Model is not subscriptable
+    if TYPE_CHECKING:
+        model: Model[
+            Connect4BoardTensor, tuple[list[Connect4PolicyTensor], list[float]]
+        ]
+    else:
+        model: Model
 
     def __init__(self, game: Connect4Game, args: Any):
         # game params
@@ -63,6 +75,7 @@ class Connect4NNet:
         policy_relu = relu(policy_bn)
         flat_policy = Flatten()(policy_relu)
         self.pi = Dense(self.action_size, activation="softmax", name="pi")(flat_policy)
+        # #TODO: check if `self.` is needed.
 
         # Value head
         value_conv = Conv2D(filters=1, kernel_size=1, strides=1, padding="same")(t)

@@ -1,6 +1,6 @@
 import numpy as np
 
-from alpha_zero_general import GenericBoardTensor, WinState
+from alpha_zero_general import WinState
 from alpha_zero_general.connect4 import Connect4BoardDataType, Connect4BoardTensor
 from alpha_zero_general.connect4.connect4_game import Connect4BooleanBoardTensor
 
@@ -42,8 +42,7 @@ class Connect4Board:
         self.chip_tensor[available_idx[-1]][column] = player
 
     def get_valid_moves(self) -> Connect4BooleanBoardTensor:
-        # here we should have new types for Connect4GenericBoardTensor / Tensor and
-        # Connect4BoardFirstRowTensor #TODO
+        #  #TODO need Connect4BoardFirstRowTensor
         "Any zero value in top row in a valid move"
         return self.chip_tensor[0] == 0
 
@@ -65,13 +64,13 @@ class Connect4Board:
         # Game is not ended yet.
         return WinState(False, None)
 
-    def with_np_pieces(self, np_pieces: GenericBoardTensor) -> "Connect4Board":
+    def with_np_pieces(self, np_pieces: Connect4BoardTensor) -> "Connect4Board":
         """Create copy of board with specified pieces."""
         if np_pieces is None:
             np_pieces = self.chip_tensor
         return Connect4Board(self.height, self.width, self.win_length, np_pieces)
 
-    def _is_diagonal_winner(self, player_pieces: GenericBoardTensor) -> bool:
+    def _is_diagonal_winner(self, player_pieces: Connect4BoardTensor) -> bool:
         """Checks if player_pieces contains a diagonal win."""
         win_length = self.win_length
         for i in range(len(player_pieces) - win_length + 1):
@@ -83,7 +82,7 @@ class Connect4Board:
                     return True
         return False
 
-    def _is_straight_winner(self, player_pieces: GenericBoardTensor) -> bool:
+    def _is_straight_winner(self, player_pieces: Connect4BoardTensor) -> bool:
         """Checks if player_pieces contains a vertical or horizontal win."""
         run_lengths = [
             player_pieces[:, i : i + self.win_length].sum(axis=1)
