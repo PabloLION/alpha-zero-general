@@ -136,15 +136,13 @@ class MCTS:
             v: the negative of the value of the current canonicalBoard
         """
 
-        # retiring
-        s = self.game.string_representation(canonical_board)
-        if s not in self.Es:
-            self.Es[s] = self.game.get_game_ended(canonical_board, 1)
-        if self.Es[s] != 0:
-            # terminal node
-            return -self.Es[s]
+        # s = self.game.string_representation(canonical_board)
+        # if s not in self.Es:
+        #     self.Es[s] = self.game.get_game_ended(canonical_board, 1)
+        # if self.Es[s] != 0:
+        #     # terminal node
+        #     return -self.Es[s]
 
-        # hiring
         h = self.game.get_board_hash(canonical_board)
 
         if h not in self.game_value_cache:
@@ -152,29 +150,27 @@ class MCTS:
         if self.game_value_cache[h] != 0:  # terminal node
             return -self.game_value_cache[h]
 
-        # retiring (and False)
-        if s not in self.Ps and False:
-            # leaf node
-            self.Ps[s], v = self.nnet.predict(canonical_board)
-            valid = self.game.get_valid_moves(canonical_board, 1)
-            self.Ps[s] = self.Ps[s] * valid  # masking invalid moves
-            sum_Ps_s: float = sum(self.Ps[s])
-            if sum_Ps_s > 0:
-                self.Ps[s] /= sum_Ps_s  # renormalize
-            else:
-                # if all valid moves were masked make all valid moves equally probable
+        # if s not in self.Ps:
+        #     # leaf node
+        #     self.Ps[s], v = self.nnet.predict(canonical_board)
+        #     valid = self.game.get_valid_moves(canonical_board, 1)
+        #     self.Ps[s] = self.Ps[s] * valid  # masking invalid moves
+        #     sum_Ps_s: float = sum(self.Ps[s])
+        #     if sum_Ps_s > 0:
+        #         self.Ps[s] /= sum_Ps_s  # renormalize
+        #     else:
+        #         # if all valid moves were masked make all valid moves equally probable
 
-                # NB! All valid moves may be masked if either your NNet architecture is insufficient or you've get overfitting or something else.
-                # If you have got dozens or hundreds of these messages you should pay attention to your NNet and/or training process.
-                log.error("All valid moves were masked, doing a workaround.")
-                self.Ps[s] = self.Ps[s] + valid
-                self.Ps[s] /= sum(self.Ps[s])
+        #         # NB! All valid moves may be masked if either your NNet architecture is insufficient or you've get overfitting or something else.
+        #         # If you have got dozens or hundreds of these messages you should pay attention to your NNet and/or training process.
+        #         log.error("All valid moves were masked, doing a workaround.")
+        #         self.Ps[s] = self.Ps[s] + valid
+        #         self.Ps[s] /= sum(self.Ps[s])
 
-            self.Vs[s] = valid
-            self.Ns[s] = 0
-            return -v
+        #     self.Vs[s] = valid
+        #     self.Ns[s] = 0
+        #     return -v
 
-        # hiring
         if h not in self.policy_cache:
             self.policy_cache[h], v = self.nnet.predict(canonical_board)
             new_valid = self.game.get_valid_moves(canonical_board, 1)
@@ -196,34 +192,30 @@ class MCTS:
             self.n_node_visit[h] = 0
             return -v
 
-        # retiring
-        valid = self.Vs[s]
-        cur_best = -float("inf")
-        best_act = -1
+        # valid = self.Vs[s]
+        # cur_best = -float("inf")
+        # best_act = -1
 
-        # hiring
         new_valid = self.valid_moves_cache[h]
         new_current_best = float("-inf")
         new_best_action = -1
 
-        # retiring
         # pick the action with the highest upper confidence bound
-        for a in range(self.game.get_action_size()):
-            if valid[a]:
-                if (s, a) in self.Qsa:
-                    u = self.Qsa[(s, a)] + self.args.c_puct * self.Ps[s][a] * math.sqrt(
-                        self.Ns[s]
-                    ) / (1 + self.Nsa[(s, a)])
-                else:
-                    u = (
-                        self.args.c_puct * self.Ps[s][a] * math.sqrt(self.Ns[s] + EPS)
-                    )  # Q = 0 ?
+        # for a in range(self.game.get_action_size()):
+        #     if valid[a]:
+        #         if (s, a) in self.Qsa:
+        #             u = self.Qsa[(s, a)] + self.args.c_puct * self.Ps[s][a] * math.sqrt(
+        #                 self.Ns[s]
+        #             ) / (1 + self.Nsa[(s, a)])
+        #         else:
+        #             u = (
+        #                 self.args.c_puct * self.Ps[s][a] * math.sqrt(self.Ns[s] + EPS)
+        #             )  # Q = 0 ?
 
-                if u > cur_best:
-                    cur_best = u
-                    best_act = a
+        #         if u > cur_best:
+        #             cur_best = u
+        #             best_act = a
 
-        # hiring
         for action in range(self.game.get_action_size()):
             if new_valid[action]:
                 if (h, action) in self.q_values_cache:
@@ -245,34 +237,29 @@ class MCTS:
                     new_current_best = u
                     new_best_action = action
 
-        # retiring
-        a = best_act
-        next_s, next_player = self.game.get_next_state(canonical_board, 1, a)
-        next_s = self.game.get_canonical_form(next_s, next_player)
+        # a = best_act
+        # next_s, next_player = self.game.get_next_state(canonical_board, 1, a)
+        # next_s = self.game.get_canonical_form(next_s, next_player)
 
-        v = self.search(next_s)
+        # v = self.search(next_s)
 
-        # hiring
         action = new_best_action
         next_board, next_player = self.game.get_next_state(canonical_board, 1, action)
         next_board = self.game.get_canonical_form(next_board, next_player)
 
         new_v = self.search(next_board)
 
-        # retiring
-        if (s, a) in self.Qsa:
-            self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
-                self.Nsa[(s, a)] + 1
-            )
-            self.Nsa[(s, a)] += 1
+        # if (s, a) in self.Qsa:
+        #     self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
+        #         self.Nsa[(s, a)] + 1
+        #     )
+        #     self.Nsa[(s, a)] += 1
 
-        else:
-            self.Qsa[(s, a)] = v
-            self.Nsa[(s, a)] = 1
+        # else:
+        #     self.Qsa[(s, a)] = v
+        #     self.Nsa[(s, a)] = 1
 
-        self.Ns[s] += 1
-
-        # hiring
+        # self.Ns[s] += 1
 
         if (h, action) in self.q_values_cache:
             self.q_values_cache[(h, action)] = (
