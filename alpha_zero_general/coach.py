@@ -11,11 +11,11 @@ from numpy import random
 from tqdm import tqdm
 
 from alpha_zero_general import (
-    BoardTensorType,
-    BooleanBoardType,
+    BoardTensor,
+    BooleanBoard,
     CheckpointFile,
     MctsArgs,
-    PolicyTensorType,
+    PolicyTensor,
     RawTrainingExample,
     TrainExampleHistory,
     TrainingExample,
@@ -52,7 +52,7 @@ class CoachArgs:
         )
 
 
-class Coach(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
+class Coach(Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     """
     This class executes the self-play + learning. It uses the functions defined
     in Game and NeuralNet. args are specified in main.py.
@@ -60,8 +60,8 @@ class Coach(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
 
     def __init__(
         self,
-        game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType],
-        nn: NeuralNetInterface[BoardTensorType, BooleanBoardType, PolicyTensorType],
+        game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor],
+        nn: NeuralNetInterface[BoardTensor, BooleanBoard, PolicyTensor],
         args: CoachArgs,
     ):
         self.game = game
@@ -69,16 +69,14 @@ class Coach(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
         self.pnet = self.nn.__class__(self.game)  # the competitor network
         self.args: CoachArgs = args
         self.mcts = MCTS(self.game, self.nn, self.args.to_mcts_args())
-        self.train_examples_history: TrainExampleHistory[
-            BoardTensorType, PolicyTensorType
-        ] = (
+        self.train_examples_history: TrainExampleHistory[BoardTensor, PolicyTensor] = (
             []
         )  # history of examples from args.numItersForTrainExamplesHistory latest iterations
         self.skip_first_self_play = False  # can be over ride in loadTrainExamples()
 
     def execute_episode(
         self,
-    ) -> list[TrainingExample[BoardTensorType, PolicyTensorType]]:
+    ) -> list[TrainingExample[BoardTensor, PolicyTensor]]:
         """
         Executes one episode of self-play, starting with player 1.
 
@@ -96,9 +94,7 @@ class Coach(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
                         pi is the MCTS informed policy vector, v is +1 if
                         the player eventually won the game, else -1.
         """
-        raw_train_examples: list[
-            RawTrainingExample[BoardTensorType, PolicyTensorType]
-        ] = []
+        raw_train_examples: list[RawTrainingExample[BoardTensor, PolicyTensor]] = []
         # train_examples: board, player, policy, value
         board = self.game.get_init_board()
         self.current_player = 1
@@ -148,7 +144,7 @@ class Coach(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
             # examples of the iteration
             if not self.skip_first_self_play or i > 1:
                 iteration_train_examples: deque[
-                    TrainingExample[BoardTensorType, PolicyTensorType]
+                    TrainingExample[BoardTensor, PolicyTensor]
                 ] = deque([], maxlen=self.args.max_len_of_queue)
 
                 for _ in tqdm(range(self.args.num_eps), desc="Self Play"):
@@ -173,9 +169,7 @@ class Coach(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
             self.save_train_examples(i - 1)
 
             # shuffle examples before training
-            train_examples: list[TrainingExample[BoardTensorType, PolicyTensorType]] = (
-                []
-            )
+            train_examples: list[TrainingExample[BoardTensor, PolicyTensor]] = []
             for e in self.train_examples_history:
                 train_examples.extend(e)
             shuffle(train_examples)
@@ -191,7 +185,7 @@ class Coach(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
             # we should add a method to pass the model directly.
             pmcts = MCTS(self.game, self.pnet, self.args.to_mcts_args())
 
-            def get_p1_policy(board: BoardTensorType) -> int:
+            def get_p1_policy(board: BoardTensor) -> int:
                 return int(
                     np.argmax(a=pmcts.get_action_probabilities(board, temperature=0))
                 )
@@ -199,14 +193,14 @@ class Coach(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
             self.nn.train(train_examples)
             nmcts = MCTS(self.game, self.nn, self.args.to_mcts_args())
 
-            def get_p2_policy(board: BoardTensorType) -> int:
+            def get_p2_policy(board: BoardTensor) -> int:
                 return int(
                     np.argmax(nmcts.get_action_probabilities(board, temperature=0))
                 )
 
             log.info("PITTING AGAINST PREVIOUS VERSION")
 
-            arena = Arena[BoardTensorType, BooleanBoardType, PolicyTensorType](
+            arena = Arena[BoardTensor, BooleanBoard, PolicyTensor](
                 get_p1_policy,
                 get_p2_policy,
                 self.game,

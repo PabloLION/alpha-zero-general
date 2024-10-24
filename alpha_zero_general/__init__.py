@@ -22,12 +22,12 @@ GenericPolicyTensor: TypeAlias = ndarray[
 ]
 # GenericPolicyTensor: TypeAlias = list[float]
 # #TODO: GenericPolicyTensor should be tensor or list[float]? consider perf too.
-BoardTensorType = TypeVar("BoardTensorType", bound=GenericBoardTensor)
-BooleanBoardType = TypeVar("BooleanBoardType", bound=GenericBooleanBoardTensor)
-PolicyTensorType = TypeVar("PolicyTensorType", bound=GenericPolicyTensor)
+BoardTensor = TypeVar("BoardTensor", bound=GenericBoardTensor)
+BooleanBoard = TypeVar("BooleanBoard", bound=GenericBooleanBoardTensor)
+PolicyTensor = TypeVar("PolicyTensor", bound=GenericPolicyTensor)
 
 
-PolicyMakerAsPlayer: TypeAlias = Callable[[BoardTensorType], int]
+PolicyMakerAsPlayer: TypeAlias = Callable[[BoardTensor], int]
 
 
 @dataclass(frozen=True)  # freeze to check for immutability in refactor
@@ -41,26 +41,26 @@ PlayerId: TypeAlias = int
 
 
 ## coach.py
-class RawTrainingExample(NamedTuple, Generic[BoardTensorType, PolicyTensorType]):
+class RawTrainingExample(NamedTuple, Generic[BoardTensor, PolicyTensor]):
     """
     (canonical_board, current_player, pi, v)
     pi is the MCTS informed policy vector, v is +1 if
     the player eventually won the game, else -1.
     """
 
-    board: BoardTensorType
+    board: BoardTensor
     current_player: PlayerId
-    policy: PolicyTensorType
+    policy: PolicyTensor
     neutral_evaluation: BoardEvaluation  # from neutral perspective
 
 
-class TrainingExample(NamedTuple, Generic[BoardTensorType, PolicyTensorType]):
-    board: BoardTensorType
-    policy: PolicyTensorType
+class TrainingExample(NamedTuple, Generic[BoardTensor, PolicyTensor]):
+    board: BoardTensor
+    policy: PolicyTensor
     evaluation: BoardEvaluation  # from player's perspective
 
 
-TrainExampleHistory = list[list[TrainingExample[BoardTensorType, PolicyTensorType]]]
+TrainExampleHistory = list[list[TrainingExample[BoardTensor, PolicyTensor]]]
 
 # not categorized
 Player = Callable[[ndarray[Any, Any] | list[list[int]]], int]

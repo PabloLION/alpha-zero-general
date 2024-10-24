@@ -4,22 +4,22 @@ from typing import Generic
 from tqdm import tqdm
 
 from alpha_zero_general import Display, PolicyMakerAsPlayer
-from alpha_zero_general.coach import BoardTensorType, BooleanBoardType, PolicyTensorType
+from alpha_zero_general.coach import BoardTensor, BooleanBoard, PolicyTensor
 from alpha_zero_general.game import GenericGame
 
 log = logging.getLogger(__name__)
 
 
-class Arena(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
+class Arena(Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     """
     An Arena class where any 2 agents can be pit against each other.
     """
 
     def __init__(
         self,
-        player1: PolicyMakerAsPlayer[BoardTensorType],
-        player2: PolicyMakerAsPlayer[BoardTensorType],
-        game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType],
+        player1: PolicyMakerAsPlayer[BoardTensor],
+        player2: PolicyMakerAsPlayer[BoardTensor],
+        game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor],
         display: Display | None = None,
     ):
         """
@@ -35,9 +35,7 @@ class Arena(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
         """
         self.player1 = player1
         self.player2 = player2
-        self.game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType] = (
-            game
-        )
+        self.game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor] = game
         self.display = display
 
     def play_game(self, verbose: bool = False) -> float:
@@ -50,7 +48,7 @@ class Arena(Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]):
             or
                 draw result returned from the game that is neither 1, -1, nor 0.
         """
-        players: list[PolicyMakerAsPlayer[BoardTensorType]] = [
+        players: list[PolicyMakerAsPlayer[BoardTensor]] = [
             self.player1,
             None,
             self.player2,

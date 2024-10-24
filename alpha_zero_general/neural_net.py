@@ -2,18 +2,16 @@ from abc import ABC, abstractmethod
 from typing import Any, Generic
 
 from alpha_zero_general import (
-    BoardTensorType,
-    BooleanBoardType,
+    BoardTensor,
+    BooleanBoard,
     GenericPolicyTensor,
-    PolicyTensorType,
+    PolicyTensor,
     TrainingExample,
 )
 from alpha_zero_general.game import GenericGame
 
 
-class NeuralNetInterface(
-    ABC, Generic[BoardTensorType, BooleanBoardType, PolicyTensorType]
-):
+class NeuralNetInterface(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     """
     This class specifies the base NeuralNet class. To define your own neural
     network, subclass this class and implement the functions below. The neural
@@ -24,17 +22,13 @@ class NeuralNetInterface(
     """
 
     @abstractmethod
-    def __init__(
-        self, game: GenericGame[BoardTensorType, BooleanBoardType, PolicyTensorType]
-    ):
+    def __init__(self, game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor]):
         raise NotImplementedError(
             "The __init__ method must be implemented by the subclass"
         )
 
     @abstractmethod
-    def train(
-        self, examples: list[TrainingExample[BoardTensorType, PolicyTensorType]]
-    ) -> None:
+    def train(self, examples: list[TrainingExample[BoardTensor, PolicyTensor]]) -> None:
         """
         Impure function, trains the neural network with examples obtained from
         self-play.
