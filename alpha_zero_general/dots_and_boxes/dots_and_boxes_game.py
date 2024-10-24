@@ -32,6 +32,8 @@ class DotsAndBoxesGame(
     def get_action_size(self) -> int:
         # return number of actions
         return 2 * (self.n + 1) * self.n + 1
+        # #TODO: ref-note: check if this is correct.
+        # return 2 * (self.n + 1) * (self.n + 1)
 
     def get_next_state(
         self, board: DotsAndBoxesBoardTensor, player: int, action: int
@@ -52,6 +54,7 @@ class DotsAndBoxesGame(
         self, board: DotsAndBoxesBoardTensor, player: int
     ) -> DotsAndBoxesBooleanBoardTensor:
         # return a fixed size binary vector
+        # #TODO/PERF: check if this can be optimized
         b = Board(self.n)
         b.pieces = np.copy(board)
         return b.get_legal_moves(player)

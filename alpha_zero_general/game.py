@@ -1,12 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Generic
 
-from alpha_zero_general import (
-    BoardTensor,
-    BooleanBoard,
-    GenericBooleanBoardTensor,
-    PolicyTensor,
-)
+from alpha_zero_general import BoardTensor, BooleanBoard, PolicyTensor
 
 
 class GenericGame(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
@@ -68,9 +63,7 @@ class GenericGame(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
         raise NotImplementedError("get_next_state must be implemented by the subclass")
 
     @abstractmethod
-    def get_valid_moves(
-        self, board: BoardTensor, player: int
-    ) -> GenericBooleanBoardTensor:
+    def get_valid_moves(self, board: BoardTensor, player: int) -> BooleanBoard:
         """
         Input:
             board: current board

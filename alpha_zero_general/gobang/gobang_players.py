@@ -1,11 +1,11 @@
 import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.game import GenericGame
+from alpha_zero_general.gobang.gobang_game import GobangGame
 
 
 class RandomPlayer:
-    def __init__(self, game: GenericGame):
+    def __init__(self, game: GobangGame):
         self.game = game
 
     def play(self, board: GenericBoardTensor) -> int:
@@ -17,7 +17,7 @@ class RandomPlayer:
 
 
 class HumanGobangPlayer:
-    def __init__(self, game: GenericGame):
+    def __init__(self, game: GobangGame):
         self.game = game
 
     def play(self, board: GenericBoardTensor) -> int:
@@ -40,17 +40,18 @@ class HumanGobangPlayer:
 
 
 class GreedyGobangPlayer:
-    def __init__(self, game: GenericGame):
+    def __init__(self, game: GobangGame):
         self.game = game
 
     def play(self, board: GenericBoardTensor) -> int:
         valids = self.game.get_valid_moves(board, 1)
-        candidates = []
+        candidates: list[tuple[int, int]] = []
         for a in range(self.game.get_action_size()):
             if valids[a] == 0:
                 continue
-            nextBoard, _ = self.game.get_next_state(board, 1, a)
-            score = self.game.get_score(nextBoard, 1)
+            _next_board, _ = self.game.get_next_state(board, 1, a)
+            # score = self.game.get_score(next_board, 1)
+            score = 0  # #TODO/LOW: this seems unfinished
             candidates += [(-score, a)]
         candidates.sort()
         return candidates[0][1]
