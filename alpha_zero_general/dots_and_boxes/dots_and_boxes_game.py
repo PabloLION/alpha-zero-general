@@ -1,15 +1,26 @@
 import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.dots_and_boxes import (
+    DotsAndBoxesBoardTensor,
+    DotsAndBoxesBooleanBoardTensor,
+    DotsAndBoxesPolicyTensor,
+)
 from alpha_zero_general.dots_and_boxes.dots_and_boxes_logic import Board
 from alpha_zero_general.game import GenericGame
 
 
-class DotsAndBoxesGame(GenericGame):
+class DotsAndBoxesGame(
+    GenericGame[
+        DotsAndBoxesBoardTensor,
+        DotsAndBoxesBooleanBoardTensor,
+        DotsAndBoxesPolicyTensor,
+    ]
+):
     def __init__(self, n: int = 3):
         self.n = n
 
-    def get_init_board(self) -> GenericBoardTensor:
+    def get_init_board(self) -> DotsAndBoxesBoardTensor:
         # return initial board (numpy board)
         b = Board(self.n)
         return np.array(b.pieces)
@@ -23,8 +34,8 @@ class DotsAndBoxesGame(GenericGame):
         return 2 * (self.n + 1) * self.n + 1
 
     def get_next_state(
-        self, board: GenericBoardTensor, player: int, action: int
-    ) -> tuple[GenericBoardTensor, int]:
+        self, board: DotsAndBoxesBoardTensor, player: int, action: int
+    ) -> tuple[DotsAndBoxesBoardTensor, int]:
         # if player takes action on board, return next (board,player)
         # action must be a valid move
         b = Board(self.n)
@@ -38,14 +49,14 @@ class DotsAndBoxesGame(GenericGame):
         return b.pieces, -player
 
     def get_valid_moves(
-        self, board: GenericBoardTensor, player: int
-    ) -> GenericBoardTensor:
+        self, board: DotsAndBoxesBoardTensor, player: int
+    ) -> DotsAndBoxesBooleanBoardTensor:
         # return a fixed size binary vector
         b = Board(self.n)
         b.pieces = np.copy(board)
         return b.get_legal_moves(player)
 
-    def get_game_ended(self, board: GenericBoardTensor, player: int) -> int:
+    def get_game_ended(self, board: DotsAndBoxesBoardTensor, player: int) -> int:
         # return 0 if not ended, 1 if player 1 won, -1 if player 1 lost
         b = Board(self.n)
         b.pieces = np.copy(board)
@@ -60,8 +71,8 @@ class DotsAndBoxesGame(GenericGame):
             return 1 * player if player_1_won else -1 * player
 
     def get_canonical_form(
-        self, board: GenericBoardTensor, player: int
-    ) -> GenericBoardTensor:
+        self, board: DotsAndBoxesBoardTensor, player: int
+    ) -> DotsAndBoxesBoardTensor:
         board = np.copy(board)
         if player == -1:
             # swap score
@@ -71,8 +82,8 @@ class DotsAndBoxesGame(GenericGame):
         return board
 
     def get_symmetries(
-        self, board: GenericBoardTensor, pi: list[float]
-    ) -> list[tuple[GenericBoardTensor, list[float]]]:
+        self, board: DotsAndBoxesBoardTensor, pi: DotsAndBoxesPolicyTensor
+    ) -> list[tuple[DotsAndBoxesBoardTensor, DotsAndBoxesPolicyTensor]]:
         # mirror, rotational
 
         horizontal = np.copy(board[: self.n + 1, : self.n])
@@ -81,9 +92,9 @@ class DotsAndBoxesGame(GenericGame):
         pi_horizontal = np.copy(pi[:t]).reshape((self.n + 1, self.n))
         pi_vertical = np.copy(pi[t:-1]).reshape((self.n, self.n + 1))
 
-        l = []
+        ans: list[tuple[DotsAndBoxesBoardTensor, DotsAndBoxesPolicyTensor]] = []
 
-        for i in range(1, 5):
+        for _i in range(1, 5):
             horizontal = np.rot90(horizontal)
             vertical = np.rot90(vertical)
             pi_horizontal = np.rot90(pi_horizontal)
@@ -100,14 +111,14 @@ class DotsAndBoxesGame(GenericGame):
                 new_board.pieces[: self.n + 1, : self.n] = vertical
                 new_board.pieces[-self.n :, :] = horizontal
 
-                l += [
+                ans.append(
                     (
                         new_board.pieces,
-                        list(pi_vertical.ravel())
-                        + list(pi_horizontal.ravel())
-                        + [pi[-1]],
+                        np.concatenate(
+                            [pi_vertical.ravel(), pi_horizontal.ravel(), [pi[-1]]]
+                        ),
                     )
-                ]
+                )
 
             aux = horizontal
             horizontal = vertical
@@ -116,7 +127,7 @@ class DotsAndBoxesGame(GenericGame):
             aux = pi_horizontal
             pi_horizontal = pi_vertical
             pi_vertical = aux
-        return l
+        return ans
 
     def get_board_str(self, board: GenericBoardTensor) -> str:
         # 8x8 numpy array (canonical board)

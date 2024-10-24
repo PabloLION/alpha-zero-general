@@ -1,29 +1,41 @@
 import os
+from typing import cast
 
 import numpy as np
 from flask import Flask, Response, request
 
 from alpha_zero_general import MctsArgs
-from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import (
+    DotsAndBoxesBoardTensor,
+    DotsAndBoxesBooleanBoardTensor,
+    DotsAndBoxesGame,
+    DotsAndBoxesPolicyTensor,
+)
 from alpha_zero_general.dots_and_boxes.dots_and_boxes_players import GreedyRandomPlayer
-from alpha_zero_general.dots_and_boxes.keras.n_net import NNetWrapper
+from alpha_zero_general.dots_and_boxes.keras.n_net import DotsAndBoxesNNInterface
 from alpha_zero_general.mcts import MCTS
+
+USE_ALPHA_ZERO = True
 
 app = Flask(__name__)
 
 # #TODO: is it one mcts per game? and one game per server?
-mcts = None
-game = None
+mcts: MCTS[
+    DotsAndBoxesBoardTensor, DotsAndBoxesBooleanBoardTensor, DotsAndBoxesPolicyTensor
+]
+game: DotsAndBoxesGame
 
 
 # curl -d "board=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0" -X POST http://localhost:8888/predict
 @app.route("/predict", methods=["POST"])
 def predict():
-    board = np.fromstring(request.form["board"], sep=",").reshape(game.get_board_size())
+    board = cast(
+        DotsAndBoxesBoardTensor,
+        np.fromstring(request.form["board"], sep=",").reshape(game.get_board_size()),
+    )
 
-    use_alpha_zero = True
-    if use_alpha_zero:
-        action = np.argmax(mcts.get_action_probabilities(board, temperature=0))
+    if USE_ALPHA_ZERO:
+        action = int(np.argmax(mcts.get_action_probabilities(board, temperature=0)))
     else:
         action = GreedyRandomPlayer(game).play(board)
 
@@ -36,9 +48,9 @@ def predict():
 
 if __name__ == "__main__":
     game = DotsAndBoxesGame(n=3)
-    n1 = NNetWrapper(game)
-    mcts = MCTS(game, n1, MctsArgs(num_mcts_sims=50, c_puct=1.0))
-    n1.load_checkpoint(
+    nn1 = DotsAndBoxesNNInterface(game)
+    mcts = MCTS(game, nn1, MctsArgs(num_mcts_sims=50, c_puct=1.0))
+    nn1.load_checkpoint(
         os.path.join("..", "pretrained_models", "dotsandboxes", "keras", "3x3"),
         "best.pth.tar",
     )

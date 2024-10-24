@@ -31,3 +31,6 @@
 - [ ] maybe `game.py` should `Match` that aggregates `Board` and associates with `Rule`.
 - [ ] move to py312 for generics(maybe?)
 - [ ] merge two nn files (interface wrapper)
+- [ ] tests
+  - [ ] `dots_and_boxes_test.py`
+  - [ ] two `test_connect4.py`

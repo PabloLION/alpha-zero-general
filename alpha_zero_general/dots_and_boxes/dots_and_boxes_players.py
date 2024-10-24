@@ -1,11 +1,11 @@
 import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.game import GenericGame
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
 
 
 class RandomPlayer:
-    def __init__(self, game: GenericGame):
+    def __init__(self, game: DotsAndBoxesGame):
         self.game = game
 
     def play(self, board: GenericBoardTensor) -> int:
@@ -18,7 +18,7 @@ class RandomPlayer:
 
 # Will play at random, unless there's a chance to score a square
 class GreedyRandomPlayer:
-    def __init__(self, game: GenericGame):
+    def __init__(self, game: DotsAndBoxesGame):
         self.game = game
 
     def play(self, board: GenericBoardTensor) -> int:
@@ -36,7 +36,7 @@ class GreedyRandomPlayer:
 
 
 class HumanDotsAndBoxesPlayer:
-    def __init__(self, game: GenericGame):
+    def __init__(self, game: DotsAndBoxesGame):
         self.game = game
 
     def play(self, board: GenericBoardTensor) -> int:

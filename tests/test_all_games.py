@@ -28,7 +28,7 @@ from alpha_zero_general.connect4.keras.n_net import (
 )
 from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
 from alpha_zero_general.dots_and_boxes.keras.n_net import (
-    NNetWrapper as DotsAndBoxesKerasNNet,
+    DotsAndBoxesNNInterface as DotsAndBoxesKerasNNet,
 )
 from alpha_zero_general.game import GenericGame
 from alpha_zero_general.gobang.gobang_game import GobangGame

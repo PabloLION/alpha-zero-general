@@ -1,4 +1,4 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from tensorflow.keras.layers import (
     Activation,
@@ -11,9 +11,23 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
+from alpha_zero_general.dots_and_boxes import (
+    DotsAndBoxesBoardTensor,
+    DotsAndBoxesPolicyTensor,
+)
+
 
 class DotsAndBoxesNNet:
-    def create_model(self, dropout: float) -> Model:
+    if TYPE_CHECKING:
+        model: Model[
+            DotsAndBoxesBoardTensor, tuple[list[DotsAndBoxesPolicyTensor], list[float]]
+        ]
+    else:
+        model: Model
+
+    def create_model(
+        self, dropout: float
+    ) -> "Model[DotsAndBoxesBoardTensor, tuple[list[DotsAndBoxesPolicyTensor], list[float]]]":
         # Neural Net
         self.input_boards = Input(
             shape=(self.board_x, self.board_y)
