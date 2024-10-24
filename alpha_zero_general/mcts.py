@@ -57,12 +57,14 @@ class MCTS:
         self.Ps = {}
         self.Es = {}
         self.Vs = {}
+
         self.q_values_cache = {}
         self.n_edge_visit = {}
         self.n_node_visit = {}
         self.policy_cache = {}
         self.game_value_cache = {}
         self.valid_moves_cache = {}
+        self.board_cache = {}
 
     def get_action_prob(
         self, canonical_board: GenericBoardTensor, temp: int = 1
@@ -325,41 +327,41 @@ class MCTS:
             v: the negative of the value of the current canonicalBoard
         """
 
-        s = self.game.string_representation(canonical_board)
+        # s = self.game.string_representation(canonical_board)
         h = self.game.get_board_hash(canonical_board)
 
-        assert (h in self.game_value_cache) == (s in self.Es)
+        # assert (h in self.game_value_cache) == (s in self.Es)
         if h not in self.game_value_cache:
-            self.game_value_cache[h] = self.Es[s] = self.game.get_game_ended(
-                canonical_board, 1
-            )
+            self.game_value_cache[h] = self.game.get_game_ended(canonical_board, 1)
+            # self.Es[s] =  self.game_value_cache[h]
 
-        assert self.Es[s] == self.game_value_cache[h]
-        if self.Es[s] != 0:
+        # assert self.Es[s] == self.game_value_cache[h]
+        # if self.Es[s] != 0:
+        if self.game_value_cache[h] != 0:
             # terminal node
-            assert self.game.get_game_ended(canonical_board, 1) == self.Es[s]
+            # assert self.game.get_game_ended(canonical_board, 1) == self.Es[s]
             return -self.game_value_cache[h]
 
-        assert (s in self.Ps) == (h in self.policy_cache)
+        # assert (s in self.Ps) == (h in self.policy_cache)
         if h not in self.policy_cache:
             # leaf node
-            self.Ps[s], v = self.nnet.predict(canonical_board)
-            valid = self.game.get_valid_moves(canonical_board, 1)
-            self.Ps[s] = self.Ps[s] * valid  # masking invalid moves
-            sum_Ps_s: float = sum(self.Ps[s])
+            # self.Ps[s], v = self.nnet.predict(canonical_board)
+            # valid = self.game.get_valid_moves(canonical_board, 1)
+            # self.Ps[s] = self.Ps[s] * valid  # masking invalid moves
+            # sum_Ps_s: float = sum(self.Ps[s])
 
             self.policy_cache[h], v = self.nnet.predict(canonical_board)
             new_valid = self.game.get_valid_moves(canonical_board, 1)
             self.policy_cache[h] = self.policy_cache[h] * new_valid
             sum_policy_cache_h: float = sum(self.policy_cache[h])
 
-            assert numpy.all(valid == new_valid), f"{valid=} != {new_valid=}"
-            assert numpy.all(self.Ps[s] == self.policy_cache[h])
-            assert sum_Ps_s == sum_policy_cache_h
+            # assert numpy.all(valid == new_valid), f"{valid=} != {new_valid=}"
+            # assert numpy.all(self.Ps[s] == self.policy_cache[h])
+            # assert sum_Ps_s == sum_policy_cache_h
 
             if sum_policy_cache_h > 0:
                 self.policy_cache[h] /= sum_policy_cache_h
-                self.Ps[s] /= sum_Ps_s  # renormalize
+                # self.Ps[s] /= sum_Ps_s  # renormalize
             else:
                 # if all valid moves were masked make all valid moves equally probable
 
@@ -370,39 +372,37 @@ class MCTS:
                 self.policy_cache[h] = self.policy_cache[h] + new_valid
                 self.policy_cache[h] /= sum(self.policy_cache[h])
 
-                self.Ps[s] = self.Ps[s] + valid
-                self.Ps[s] /= sum(self.Ps[s])
+                # self.Ps[s] = self.Ps[s] + valid
+                # self.Ps[s] /= sum(self.Ps[s])
 
+            # assert numpy.all(new_valid == valid)
             self.valid_moves_cache[h] = new_valid
             self.n_node_visit[h] = 0
 
-            self.Vs[s] = valid
-            # self.Ns[s] = 0
             return -v
 
-        assert numpy.all(self.Ps[s] == self.policy_cache[h])
-        valid = self.Vs[s]
+        # assert numpy.all(self.Ps[s] == self.policy_cache[h])
+        valid = self.valid_moves_cache[h]
         new_valid = self.valid_moves_cache[h]
         assert numpy.all(new_valid == valid), f"{new_valid} != {valid}"
 
-        cur_best = -float("inf")
-        best_act = -1
+        # cur_best = -float("inf")
+        # best_act = -1
         new_best_u = float("-inf")
         new_best_action = -1
 
         # pick the action with the highest upper confidence bound
-        # for action in range(self.game.get_action_size()):
-        #   if new_valid[action]:
-        for a in range(self.game.get_action_size()):
-            action = a
-            assert new_valid[action] == valid[a], f"{new_valid[action]} != {valid[a]}"
-            assert ((s, a) in self.Qsa) == ((h, action) in self.q_values_cache)
+        for action in range(self.game.get_action_size()):
+            # a = action
+            # assert new_valid[action] == valid[a], f"{new_valid[action]} != {valid[a]}"
+            # assert ((s, a) in self.Qsa) == ((h, action) in self.q_values_cache)
+            # assert self.n_edge_visit[(h, action)] == self.Nsa[(s, a)]
 
             if new_valid[action]:
                 if (h, action) in self.q_values_cache:
-                    u = self.Qsa[(s, a)] + self.args.c_puct * self.Ps[s][a] * math.sqrt(
-                        self.n_node_visit[h]
-                    ) / (1 + self.Nsa[(s, a)])
+                    # u = self.Qsa[(s, a)] + self.args.c_puct * self.Ps[s][a] * math.sqrt(
+                    #     self.n_node_visit[h]
+                    # ) / (1 + self.Nsa[(s, a)])
 
                     new_u: float = self.q_values_cache[
                         (h, action)
@@ -412,64 +412,64 @@ class MCTS:
                         1 + self.n_edge_visit[(h, action)]
                     )
                 else:
-                    u = (
-                        self.args.c_puct
-                        * self.Ps[s][a]
-                        * math.sqrt(self.n_node_visit[h] + EPS)
-                    )  # Q = 0 ?
+                    # u = (
+                    #     self.args.c_puct
+                    #     * self.Ps[s][a]
+                    #     * math.sqrt(self.n_node_visit[h] + EPS)
+                    # )  # Q = 0 ?
                     new_u = (
                         self.args.c_puct
                         * self.policy_cache[h][action]
                         * math.sqrt(self.n_node_visit[h] + EPS)
                     )  # Q = 0 ?
-                assert new_u == u, f"{new_u=} != {u=}"
+                # assert new_u == u, f"{new_u=} != {u=}"
 
-                if u > cur_best:
-                    cur_best = u
-                    best_act = a
+                # if u > cur_best:
+                #     cur_best = u
+                #     best_act = a
 
                 if new_u > new_best_u:
                     new_best_u = new_u
                     new_best_action = action
 
-        assert best_act == new_best_action, f"{best_act} != {new_best_action}"
-        assert cur_best == new_best_u, f"{cur_best} != {new_best_u}"
+        # assert best_act == new_best_action, f"{best_act} != {new_best_action}"
+        # assert cur_best == new_best_u, f"{cur_best} != {new_best_u}"
 
-        a = best_act
-        next_s, next_player = self.game.get_next_state(canonical_board, 1, a)
-        next_s = self.game.get_canonical_form(next_s, next_player)
+        # a = best_act
+        # next_s, next_player = self.game.get_next_state(canonical_board, 1, a)
+        # next_s = self.game.get_canonical_form(next_s, next_player)
 
         action = new_best_action
         next_board, new_next_player = self.game.get_next_state(
             canonical_board, 1, action
         )
         next_board = self.game.get_canonical_form(next_board, new_next_player)
-        assert numpy.all(next_board == next_s), f"{next_board=} != {next_s=}"
+        # assert numpy.all(next_board == next_s), f"{next_board=} != {next_s=}"
 
-        v = self.mixed_search(next_s)
-        new_v = v
+        # old_v = self.mixed_search(next_s)
+        v: float = self.mixed_search(next_board)
+        new_v: float = v
 
-        assert ((h, action) in self.q_values_cache) == ((s, a) in self.Qsa)
+        # assert ((h, action) in self.q_values_cache) == ((s, a) in self.Qsa)
         if (h, action) in self.q_values_cache:
-            self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
-                self.Nsa[(s, a)] + 1
-            )
-            self.Nsa[(s, a)] += 1
+            # self.Qsa[(s, a)] = (self.Nsa[(s, a)] * self.Qsa[(s, a)] + v) / (
+            #     self.Nsa[(s, a)] + 1
+            # )
+            # self.Nsa[(s, a)] += 1
 
             self.q_values_cache[(h, action)] = (
-                self.n_edge_visit[(h, action)] * self.q_values_cache[(h, action)]
-                + new_v
+                self.n_edge_visit[(h, action)] * self.q_values_cache[(h, action)] + v
             ) / (self.n_edge_visit[(h, action)] + 1)
             self.n_edge_visit[(h, action)] += 1
 
-            assert self.Qsa[(s, a)] == self.q_values_cache[(h, action)]
-            assert self.Nsa[(s, a)] == self.n_edge_visit[(h, action)]
+            # assert self.Qsa[(s, a)] == self.q_values_cache[(h, action)]
+            # assert self.Nsa[(s, a)] == self.n_edge_visit[(h, action)]
 
         else:
-            self.Qsa[(s, a)] = v
-            self.Nsa[(s, a)] = 1
+            # self.Qsa[(s, a)] = v
+            # self.Nsa[(s, a)] = 1
 
-            self.q_values_cache[(h, action)] = new_v
+            self.q_values_cache[(h, action)] = v
             self.n_edge_visit[(h, action)] = 1
 
         # self.Ns[s] += 1
