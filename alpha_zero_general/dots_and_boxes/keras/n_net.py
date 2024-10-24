@@ -84,7 +84,7 @@ class NNetWrapper(NeuralNet):
         self, folder: str = "checkpoint", filename: str = "checkpoint.pth.tar"
     ) -> None:
         # change extension
-        filename = filename.split(".")[0] + ".h5"
+        filename = filename.split(".")[0] + ".weights.h5"
 
         filepath = os.path.join(folder, filename)
         if not os.path.exists(folder):
@@ -102,7 +102,7 @@ class NNetWrapper(NeuralNet):
         self, folder: str = "checkpoint", filename: str = "checkpoint.pth.tar"
     ) -> None:
         # change extension
-        filename = filename.split(".")[0] + ".h5"
+        filename = filename.split(".")[0] + ".weights.h5"
 
         filepath = os.path.join(folder, filename)
         self.nnet.model.load_weights(filepath)

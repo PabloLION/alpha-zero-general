@@ -78,7 +78,7 @@ class NNetWrapper(NeuralNet):
 
     def save_checkpoint(self, folder="checkpoint", filename="checkpoint.pth.tar"):
         # change extension
-        filename = filename.split(".")[0] + ".h5"
+        filename = filename.split(".")[0] + ".weights.h5"
 
         filepath = os.path.join(folder, filename)
         if not os.path.exists(folder):
@@ -94,7 +94,7 @@ class NNetWrapper(NeuralNet):
 
     def load_checkpoint(self, folder="checkpoint", filename="checkpoint.pth.tar"):
         # change extension
-        filename = filename.split(".")[0] + ".h5"
+        filename = filename.split(".")[0] + ".weights.h5"
 
         filepath = os.path.join(folder, filename)
         self.nnet.model.load_weights(filepath)
