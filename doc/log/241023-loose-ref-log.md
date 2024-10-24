@@ -35,3 +35,4 @@
   - [ ] `dots_and_boxes_test.py`
   - [ ] two `test_connect4.py`
 - consider using Generator for ret val of `Game.get_symmetries`
+- need a `player` / `agent` class

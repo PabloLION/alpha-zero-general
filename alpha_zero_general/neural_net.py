@@ -11,6 +11,7 @@ from alpha_zero_general import (
 from alpha_zero_general.game import GenericGame
 
 
+# #TODO/REF: rename to NNInterface
 class NeuralNetInterface(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     """
     This class specifies the base NeuralNet class. To define your own neural
