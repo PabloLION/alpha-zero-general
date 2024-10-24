@@ -22,16 +22,17 @@ import numpy as np
 
 from alpha_zero_general import MctsArgs
 from alpha_zero_general.arena import Arena
+from alpha_zero_general.coach import GenericBoardTensor
 from alpha_zero_general.connect4.connect4_game import Connect4Game
 from alpha_zero_general.connect4.keras.n_net import NNetWrapper as Connect4KerasNNet
 from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
 from alpha_zero_general.dots_and_boxes.keras.n_net import (
     NNetWrapper as DotsAndBoxesKerasNNet,
 )
-from alpha_zero_general.game import GenericGame
+from alpha_zero_general.game import GenericBooleanBoardTensor, GenericGame
 from alpha_zero_general.gobang.gobang_game import GobangGame
 from alpha_zero_general.gobang.keras.n_net import NNetWrapper as GobangKerasNNet
-from alpha_zero_general.mcts import MCTS
+from alpha_zero_general.mcts import MCTS, GenericPolicyTensor
 from alpha_zero_general.neural_net import NeuralNet
 from alpha_zero_general.othello.keras.n_net import NNetWrapper as OthelloKerasNNet
 from alpha_zero_general.othello.othello_game import OthelloGame
@@ -51,10 +52,13 @@ from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_game import (
     TicTacToeGame as TicTacToe3DGame,
 )
 
-# from pytest import mark
 
-
-def execute_game_test(game: GenericGame, neural_net: type[NeuralNet]):
+def execute_game_test(
+    game: GenericGame[
+        GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor
+    ],
+    neural_net: type[NeuralNet],
+):
     random_play = RandomPlayer(game).play
 
     args = MctsArgs(num_mcts_sims=25, c_puct=1.0)
