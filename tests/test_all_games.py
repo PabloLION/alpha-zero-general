@@ -51,9 +51,7 @@ from alpha_zero_general.tic_tac_toe.tic_tac_toe_game import TicTacToeGame
 from alpha_zero_general.tic_tac_toe_3d.keras.n_net import (
     NNetWrapper as TicTacToe3DKerasNNet,
 )
-from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_game import (
-    TicTacToeGame as TicTacToe3DGame,
-)
+from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_3d_game import TicTacToe3DGame
 
 
 def execute_game_test(

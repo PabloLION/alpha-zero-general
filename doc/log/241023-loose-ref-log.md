@@ -1,3 +1,13 @@
+
+### quick fix
+
+- [ ] py313_functions  -> py313_backport
+- [ ] GamePolicyType: TypeAlias = float32
+- [ ] `self.nnet.model`
+- [ ] `TicTacToeNNet as onnet`
+
+### modernize
+
 - [x] .no-git
 - [x] .TicTacToeNNet
 - [x] isort
