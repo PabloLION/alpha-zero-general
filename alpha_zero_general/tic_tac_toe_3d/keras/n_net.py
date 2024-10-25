@@ -7,7 +7,7 @@ import numpy as np
 sys.path.append("..")
 
 from alpha_zero_general.neural_net import NeuralNetInterface
-from alpha_zero_general.tic_tac_toe_3d.keras.tic_tac_toe_n_net import (
+from alpha_zero_general.tic_tac_toe_3d.keras.tic_tac_toe_3d_n_net import (
     TicTacToeNNet as onnet,
 )
 from alpha_zero_general.utils import DotDict
