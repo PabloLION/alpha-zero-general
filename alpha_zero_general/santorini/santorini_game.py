@@ -1,19 +1,20 @@
 from __future__ import print_function
 
 import sys
+from typing import Any, List, Tuple
 
-from alpha_zero_general import GenericBoardTensor
-
-sys.path.append("..")
 import numpy as np
 
+from alpha_zero_general import GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor
 from alpha_zero_general.game import GenericGame
 from alpha_zero_general.santorini.santorini_logic import Board
 
+sys.path.append("..")
 
-class SantoriniGame(GenericGame):
+
+class SantoriniGame(GenericGame[GenericBoardTensor, GenericBooleanBoardTensor, GenericPolicyTensor]):
     """
-    Many of thes functions are based on those from OthelloGame.py:
+    Many of these functions are based on those from OthelloGame.py:
         https://github.com/suragnair/alpha-zero-general/blob/master/othello/OthelloGame.py
     """
 
@@ -32,26 +33,26 @@ class SantoriniGame(GenericGame):
     ]
 
     @staticmethod
-    def get_square_piece(piece):
+    def get_square_piece(piece: int) -> str:
         return SantoriniGame.square_content[piece]
 
-    def __init__(self, board_length=5, true_random_placement=False):
+    def __init__(self, board_length: int = 5, true_random_placement: bool = False) -> None:
         self.n = board_length
 
-    def get_init_board(self):
+    def get_init_board(self) -> GenericBoardTensor:
         # return initial board (numpy board)
         b = Board(self.n)
         return np.array(b.pieces)
 
-    def get_board_size(self):
+    def get_board_size(self) -> Tuple[int, int, int]:
         # (dimension,a,b) tuple
         return (2, self.n, self.n)
 
-    def get_action_size(self):
+    def get_action_size(self) -> int:
         # return number of actions
         return 128
 
-    def get_next_state(self, board, player, action):
+    def get_next_state(self, board: GenericBoardTensor, player: int, action: int) -> Tuple[GenericBoardTensor, int]:
         # if player takes action on board, return next (board,player)
         # action must be a valid move
 
@@ -102,7 +103,7 @@ class SantoriniGame(GenericGame):
             print("action: ", action)
         return (b.pieces, -player)
 
-    def get_valid_moves(self, board, player):
+    def get_valid_moves(self, board: GenericBoardTensor, player: int) -> GenericBooleanBoardTensor:
         # return a fixed size binary vector
         # _, _, valids = board.get_all_moves
         b = Board(self.n)
@@ -112,14 +113,14 @@ class SantoriniGame(GenericGame):
         return np.array(b.get_legal_moves_binary(color))
         # Get all the squares with pieces of the given color.
 
-    def get_valid_moves_human(self, board, player):
+    def get_valid_moves_human(self, board: GenericBoardTensor, player: int) -> Tuple[List[Any], List[Any], List[int]]:
         b = Board(self.n)
         b.pieces = np.copy(board)
         color = player
 
         return b.get_all_moves(color)
 
-    def get_character_locations(self, board, player):
+    def get_character_locations(self, board: GenericBoardTensor, player: int) -> List[Tuple[int, int]]:
         """
         Returns a list of both character's locations as tuples for the player
         """
@@ -137,7 +138,7 @@ class SantoriniGame(GenericGame):
 
         return [char1_location, char2_location]
 
-    def get_game_ended(self, board, player):
+    def get_game_ended(self, board: GenericBoardTensor, player: int) -> float:
         """
         Assumes player is about to move. THIS IS NOT COMPATIBLE with the prior implementation of Arena.py
         which returned self.game.get_game_ended(board, 1).
@@ -165,7 +166,7 @@ class SantoriniGame(GenericGame):
             return -1
         return 0
 
-    def get_canonical_form(self, board, player):
+    def get_canonical_form(self, board: GenericBoardTensor, player: int) -> GenericBoardTensor:
         # return state if player==1, else return -state if player==-1
         board = board * np.append(
             np.ones((1, self.n, self.n), dtype="int") * player,
@@ -175,7 +176,7 @@ class SantoriniGame(GenericGame):
 
         return board
 
-    def get_random_board_symmetry(self, board):
+    def get_random_board_symmetry(self, board: GenericBoardTensor) -> GenericBoardTensor:
         """
         Returns a random board symmetry.
         """
@@ -191,7 +192,7 @@ class SantoriniGame(GenericGame):
 
         return np.array([newB0, newB1])
 
-    def get_symmetries(self, board, pi):
+    def get_symmetries(self, board: GenericBoardTensor, pi: GenericPolicyTensor) -> List[Tuple[GenericBoardTensor, GenericPolicyTensor]]:
         # mirror, rotational
 
         assert len(pi) == 128  # each player has two pieces which can move in
@@ -244,7 +245,7 @@ class SantoriniGame(GenericGame):
 
         return syms
 
-    def rotate(self, pi_64):
+    def rotate(self, pi_64: GenericPolicyTensor) -> GenericPolicyTensor:
         """
         Input: first XOR second half of Pi
         Returns: the half of pie in a reordered list that corresponds
@@ -323,7 +324,7 @@ class SantoriniGame(GenericGame):
 
         return pi_new
 
-    def flip(self, pi_64):
+    def flip(self, pi_64: GenericPolicyTensor) -> GenericPolicyTensor:
         """
         Input: first XOR second half of Pi
         Returns: the half of pie in a reordered list that corresponds
@@ -402,101 +403,20 @@ class SantoriniGame(GenericGame):
 
         return pi_new
 
-        #        # One counter clockwise rotation:
-        #        l = []
-        #        for i in range(8):
-        #            l2 = []
-        #            for k in range(8):
-        #                l2.append(pi[i*8 + k])
-        #            l3 = []
-        #            l3 = [l2[i] for i in [2, 4, 7, 1, 6, 0, 3, 5]]
-        #            l.append(l3)
-        #        l_pi = [l[i] for i in [2, 4, 7, 1, 6, 0, 3, 5]]
-        #
-        #
-        #        # One flip (mirror) left <-->> right
-        #        l_flip
-        #        for i in range(8):
-        #            l2_flip = []
-        #            for k in range(8):
-        #                l2_flip.append(pi[i*8 + k])
-        #            l3_flip = []
-        #            l3_flip = [l2_flip[i] for i in [2, 1, 0, 4, 3, 7, 6, 5]]
-        #            l_flip.append(l3_flip)
-        #        l_pi_flip = [l_flip[i] for i in [2, 1, 0, 4, 3, 7, 6, 5]]
-        #
-        """
-        split into 
-        0-63, and 64-127. Here the letters a,...,h denote move locations
-        
-        These are the actions the first 64 values of pi correspond to doing
-        
-        0  1  2    8  9  10    16 17 18 
-        3  a  4    11 b  12    19 c  20
-        5  6  7    13 14 15    21 22 23
-        
-        24 25 26   original    32 33 34
-        27 d  28    piece      35 e  36
-        29 30 31   location    37 38 39
-        
-        40 41 42   48 49 50    56 57 58
-        43 f  44   51 g  52    59 h  60
-        45 46 47   53 54 55    61 62 63
-        
-        
-        
-        Initially we have: 
-            
-            a  b  c
-            d     e
-            f  g  h
-        
-        after CCW rotation we have: 
-            
-            c  e  h
-            b     g
-            a  d  f
-        
-        where for each move location a,..,h:
-        
-                                0  1  2    
-        initially a is:         3  a  4    
-                                5  6  7 
-        
-                                2  4  7
-        after CCW rotation:     1  a  6
-                                0  3  5
-                                
-        
-
-                              
-        initial values at indices: [0, 1, 2, 3, 4, 5, 6, 7]
-                        --->[2, 4, 7, 1, 6, 0, 3, 5] under 1 CCW rotation
-        
-        
-        
-        For flips left <---> right:
-               
-        [0, 1, 2, 3, 4, 5, 6, 7]
-    --->[2, 1, 0, 4, 3, 7, 6, 5] under 1 flip
-        
-        
-        """
-
-    def get_board_str(self, board: GenericBoardTensor):
+    def get_board_str(self, board: GenericBoardTensor) -> str:
         return np.array2string(board)
 
     def get_board_hash(self, board: GenericBoardTensor) -> int:
         return hash(board.tobytes())
 
-    def string_representation_readable(self, board):
+    def string_representation_readable(self, board: GenericBoardTensor) -> str:
         # Do not think this works.
         board_s = "".join(
             self.square_content[square] for row in board for square in row
         )
         return board_s
 
-    def get_score(self, board, player):
+    def get_score(self, board: GenericBoardTensor, player: int) -> int:
         """
         Only used by 'Greedy player'
         """
@@ -525,7 +445,7 @@ class SantoriniGame(GenericGame):
         return score
 
     @staticmethod
-    def display(board):
+    def display(board: GenericBoardTensor) -> None:
         n = board.shape[1]
         print("   ", end="")
         for y in range(n):

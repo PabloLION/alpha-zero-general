@@ -1,4 +1,5 @@
 import numpy as np
+from typing import List, Tuple, Union
 
 
 class Board:
@@ -45,7 +46,7 @@ class Board:
     """
 
     # NOTE THESE ARE NEITHER CCW NOR CW!
-    __directions = [
+    __directions: List[Tuple[int, int]] = [
         (-1, -1),
         (-1, 0),
         (-1, 1),
@@ -57,7 +58,7 @@ class Board:
     ]
     #                  Nw,     N,     Ne,   W      E,    Sw,    S,    Se,
 
-    def __init__(self, board_length, true_random_placement=False):
+    def __init__(self, board_length: int, true_random_placement: bool = False) -> None:
         """
         Initializes an empty board of shape (2, board_length, board_length)
                                           =  (dimension, row, column)
@@ -105,13 +106,13 @@ class Board:
                 self.pieces[0][board_center][board_center + 1] = -2
 
     # add [][] indexer syntax to the Board
-    def __getitem__(self, index):
+    def __getitem__(self, index: Union[int, Tuple[int, int]]) -> np.ndarray:
         """
         Currently unused.
         """
         return self.pieces[index]
 
-    def get_character_locations(self, player):
+    def get_character_locations(self, player: int) -> List[Tuple[int, int]]:
         """
         Returns a list of both character's locations as tuples for the player
         """
@@ -127,7 +128,7 @@ class Board:
 
         return [char1_location, char2_location]
 
-    def get_legal_moves(self, color):
+    def get_legal_moves(self, color: int) -> List[List[Tuple[int, int]]]:
         """Returns all the legal moves for the given color.
         (1 for white, -1 for black
         """
@@ -139,7 +140,7 @@ class Board:
             moves.extend(self.get_moves_for_location(piece_location)[0])
         return moves
 
-    def get_all_moves(self, color):
+    def get_all_moves(self, color: int) -> Tuple[List[List[Tuple[int, int]]], List[List[Tuple[int, int]]], List[int]]:
         """Returns 3 np arrays:
             all the legal moves for the given color.
             all moves for a given color
@@ -161,7 +162,7 @@ class Board:
 
         return (legal_moves, all_moves, all_moves_binary)
 
-    def get_legal_moves_binary(self, color):
+    def get_legal_moves_binary(self, color: int) -> List[int]:
         """Returns a binary vector of legal moves for the given color.
         (1 for white, -1 for black
         """
@@ -174,7 +175,7 @@ class Board:
 
         return moves
 
-    def get_moves_for_location(self, location):
+    def get_moves_for_location(self, location: Tuple[int, int]) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Given a board location as an (x,y) tuple, this returns a tripple containing:
           1. an np.array of all legal actions in a vaugly human-readable format.
@@ -266,7 +267,7 @@ class Board:
             np.array(actions_all_bool).astype(int),
         )
 
-    def get_builds_for_location(self, move, offset, original_location):
+    def get_builds_for_location(self, move: Tuple[int, int], offset: List[int], original_location: Tuple[int, int]) -> List[List[Tuple[int, int]]]:
         """
         Function gets legal builds for a given move location.
         Input: move, the location that was moved TO. Assume we are already here
@@ -333,7 +334,7 @@ class Board:
 
         return builds
 
-    def get_all_builds_for_location(self, move, offset, original_location):
+    def get_all_builds_for_location(self, move: Tuple[int, int], offset: List[int], original_location: Tuple[int, int]) -> Tuple[List[List[Tuple[int, int]]], np.ndarray]:
         """
         Function gets ALL builds for a given move location, as well as a binary rep
         of whether they are valid.
@@ -448,13 +449,13 @@ class Board:
         #   to whether the builds in all_builds are legal
         return all_builds, valid_builds
 
-    def has_legal_moves(self, color):
+    def has_legal_moves(self, color: int) -> bool:
         """
         Returns a boolean (whether player of given color has legal actions)
         """
         return len(self.get_legal_moves(color)) > 0
 
-    def execute_move(self, move, color):
+    def execute_move(self, move: List[Tuple[int, int]], color: int) -> None:
         """Perform the given move on the board; color gives the color of
         the piece to play (1=white,-1=black). Assumes move is legal
         """

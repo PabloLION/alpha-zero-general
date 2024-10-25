@@ -26,6 +26,20 @@ BoardTensor = TypeVar("BoardTensor", bound=GenericBoardTensor)
 BooleanBoard = TypeVar("BooleanBoard", bound=GenericBooleanBoardTensor)
 PolicyTensor = TypeVar("PolicyTensor", bound=GenericPolicyTensor)
 
+# Santorini Game Tensors
+SantoriniBoardShapeType: TypeAlias = Any
+SantoriniBoardDataType = int
+SantoriniBoardTensor: TypeAlias = ndarray[
+    SantoriniBoardShapeType, dtype[SantoriniBoardDataType]
+]
+SantoriniBooleanBoardTensor: TypeAlias = ndarray[SantoriniBoardDataType, dtype[bool_]]
+
+SantoriniPolicyShape: TypeAlias = Any
+SantoriniPolicyType: TypeAlias = float
+SantoriniPolicyTensor: TypeAlias = ndarray[
+    SantoriniPolicyShape, dtype[SantoriniPolicyType]
+]
+SantoriniValueTensor: TypeAlias = ndarray[SantoriniPolicyShape, dtype[SantoriniPolicyType]]
 
 PolicyMakerAsPlayer: TypeAlias = Callable[[BoardTensor], int]
 
