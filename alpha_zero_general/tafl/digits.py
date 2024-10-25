@@ -1,11 +1,16 @@
 # https://stackoverflow.com/questions/2267362/how-to-convert-an-integer-in-any-base-to-a-string
 
 import string
+from typing import no_type_check
+
+from alpha_zero_general.py313_functions import deprecated
 
 digs = string.digits + string.ascii_letters
 
 
-def int2base(x, base, length):
+@deprecated
+@no_type_check
+def old_int2base(x: int, base: int, length: int) -> list[int]:
     if x < 0:
         sign = -1
     elif x == 0:
@@ -14,7 +19,7 @@ def int2base(x, base, length):
         sign = 1
 
     x *= sign
-    digits = []
+    digits = list[int]()
 
     while x:
         digits.append(digs[int(x % base)])
@@ -27,6 +32,17 @@ def int2base(x, base, length):
         digits.extend(["0"])
 
     return list(map(lambda x: int(x), digits))
+
+
+def int2base(x: int, base: int, length: int) -> list[int]:
+    assert x >= 0
+    digits = list[int]()
+    while x:
+        digits.append(x % base)
+        x = x // base
+    while len(digits) < length:
+        digits.append(0)
+    return digits
 
 
 def test():
@@ -79,4 +95,5 @@ def test():
         print(i, ":", int2base(i, size, 4))
 
 
-# test()
+if __name__ == "__main__":
+    test()
