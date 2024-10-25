@@ -54,6 +54,7 @@ from alpha_zero_general.tic_tac_toe_3d.keras.n_net import (
 from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_3d_game import TicTacToe3DGame
 
 
+# #TODO/REF: to type this, we need a generic Player class
 def execute_game_test(
     game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor],
     neural_net: NeuralNetInterface[BoardTensor, BooleanBoard, PolicyTensor],
