@@ -1,5 +1,8 @@
 import numpy as np
 
+from alpha_zero_general.tic_tac_toe import TicTacToeBoardTensor
+from alpha_zero_general.tic_tac_toe.tic_tac_toe_game import TicTacToeGame
+
 """
 Random and Human-ineracting players for the game of TicTacToe.
 
@@ -12,10 +15,10 @@ Based on the OthelloPlayers by Surag Nair.
 
 
 class RandomPlayer:
-    def __init__(self, game):
+    def __init__(self, game: TicTacToeGame):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: TicTacToeBoardTensor) -> int:
         a = np.random.randint(self.game.get_action_size())
         valids = self.game.get_valid_moves(board, 1)
         while valids[a] != 1:
@@ -24,10 +27,11 @@ class RandomPlayer:
 
 
 class HumanTicTacToePlayer:
-    def __init__(self, game):
+
+    def __init__(self, game: TicTacToeGame):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: TicTacToeBoardTensor) -> int:
         # display(board)
         valid = self.game.get_valid_moves(board, 1)
         for i in range(len(valid)):

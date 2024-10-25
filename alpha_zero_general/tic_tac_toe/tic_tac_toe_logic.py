@@ -15,44 +15,60 @@ Based on the board for the game of Othello by Eric P. Nichols.
 
 """
 
+from numpy import any, argwhere, zeros
 
-class Board:
-    def __init__(self, n=3):
+from alpha_zero_general.tic_tac_toe import TicTacToeBoardDataType
+from alpha_zero_general.tic_tac_toe.tic_tac_toe_game import TicTacToeBoardTensor
+
+
+class TicTacToeBoard:
+    pieces: TicTacToeBoardTensor
+
+    def __init__(self, n: int = 3):
         "Set up initial board configuration."
 
         self.n = n
         # Create the empty board array.
-        self.pieces = [None] * self.n
-        for i in range(self.n):
-            self.pieces[i] = [0] * self.n
+        self.pieces = zeros((n, n), dtype=TicTacToeBoardDataType)
 
     # add [][] indexer syntax to the Board
-    def __getitem__(self, index):
+    def __getitem__(self, index: int):
         return self.pieces[index]
 
-    def get_legal_moves(self, color):
+    def get_legal_moves(self, color: int):
+        """Returns all the legal moves for the given color.
+        (1 for white, -1 for black)
+        Args:
+            color: int, 1 for white, -1 for black
+        """
+        return argwhere(self.pieces == 0)
+
+    def old_get_legal_moves(self, color: int):  # -> list[Any]:
         """Returns all the legal moves for the given color.
         (1 for white, -1 for black)
         @param color not used and came from previous version.
         """
-        moves = set()  # stores the legal moves.
+        moves = set[tuple[int, int]]()
 
         # Get all the empty squares (color==0)
         for y in range(self.n):
             for x in range(self.n):
                 if self[x][y] == 0:
-                    newmove = (x, y)
-                    moves.add(newmove)
+                    new_move = (x, y)
+                    moves.add(new_move)
         return list(moves)
 
-    def has_legal_moves(self):
+    def old_has_legal_moves(self):
         for y in range(self.n):
             for x in range(self.n):
                 if self[x][y] == 0:
                     return True
         return False
 
-    def is_win(self, color):
+    def has_legal_moves(self):
+        return any(self.pieces == 0)
+
+    def is_win(self, color: int) -> bool:
         """Check whether the given player has collected a triplet in any direction;
         @param color (1=white,-1=black)
         """
@@ -89,7 +105,7 @@ class Board:
 
         return False
 
-    def execute_move(self, move, color):
+    def execute_move(self, move: tuple[int, int], color: int):
         """Perform the given move on the board;
         color gives the color pf the piece to play (1=white,-1=black)
         """

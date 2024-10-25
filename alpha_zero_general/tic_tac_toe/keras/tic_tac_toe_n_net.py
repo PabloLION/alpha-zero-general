@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from tensorflow.keras.layers import (
     Activation,
     BatchNormalization,
@@ -11,6 +13,13 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
+from alpha_zero_general.tic_tac_toe import (
+    TicTacToeBoardTensor,
+    TicTacToeNNArg,
+    TicTacToePolicyTensor,
+)
+from alpha_zero_general.tic_tac_toe.tic_tac_toe_game import TicTacToeGame
+
 """
 NeuralNet for the game of TicTacToe.
 
@@ -22,7 +31,14 @@ Based on the OthelloNNet by SourKream and Surag Nair.
 
 
 class TicTacToeNNet:
-    def __init__(self, game, args):
+    if TYPE_CHECKING:
+        model: Model[
+            TicTacToeBoardTensor, tuple[list[TicTacToePolicyTensor], list[float]]
+        ]
+    else:
+        model: Model
+
+    def __init__(self, game: TicTacToeGame, args: TicTacToeNNArg):
         # game params
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
