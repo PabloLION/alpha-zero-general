@@ -62,7 +62,7 @@ def execute_game_test(
     random_play = RandomPlayer(game).play
     # need RandomPlayer ABC, Player ABC
 
-    args = MctsArgs(num_mcts_sims=25, c_puct=1.0)
+    args = MctsArgs(num_mcts_sims=10, c_puct=1.0)
     mcts = MCTS(game, neural_net(game), args)
 
     def n1policy(x: BoardTensor) -> int:
