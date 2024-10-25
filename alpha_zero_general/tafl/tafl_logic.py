@@ -1,7 +1,14 @@
+"""
+REFACTORING:
+TODO: ren piece_num to piece_idx
+
+"""
+
 from typing import Any
 
 import numpy as np
 
+from alpha_zero_general.tafl import TaflPiece
 from alpha_zero_general.tafl.game_variants import TaflGameVariant
 
 
@@ -9,8 +16,10 @@ class TaflBoard:
     size: int
     width: int
     height: int
-    board: list[list[int]]  # TODO: ndarray might be better? #TODO: ren
-    pieces: list[list[int]]  # TODO: ndarray might be better?
+    # board stores the board layout (like throne), without pieces and ...
+    # piece type is not used in `board`, they are just placeholders.
+    board: list[TaflPiece]  # TODO: ndarray might be better?
+    pieces: list[TaflPiece]  # TODO: ndarray might be better?
     time: int
     done: int
 
@@ -21,8 +30,8 @@ class TaflBoard:
         self.size = gv.size
         self.width = gv.size
         self.height = gv.size
-        self.board = gv.board  # [x,y,type] #TODO/TYPE: type better
-        self.pieces = gv.pieces  # [x,y,type] #TODO/TYPE: type better
+        self.board = gv.board  # TODO/TYPE: type better
+        self.pieces = gv.pieces  # TODO/TYPE: type better
         self.time = 0
         self.done = 0
 
@@ -41,8 +50,8 @@ class TaflBoard:
     def get_copy(self):
         gv = TaflGameVariant()
         gv.size = self.size
-        gv.board = np.copy(np.array(self.board)).tolist()
-        gv.pieces = np.copy(np.array(self.pieces)).tolist()
+        gv.board = [TaflPiece(*p) for p in self.board]
+        gv.pieces = [TaflPiece(*p) for p in self.pieces]
         b = TaflBoard(gv)
         b.time = self.time
         b.done = self.done
@@ -86,7 +95,7 @@ class TaflBoard:
         # print("Illegal move:",move,legal)
 
     def get_image(self):
-        image = [[0 for col in range(self.width)] for row in range(self.height)]
+        image = [[0 for _ in range(self.width)] for _ in range(self.height)]
         for item in self.board:
             image[item[1]][item[0]] = item[2] * 10
         for piece in self.pieces:
@@ -146,27 +155,49 @@ class TaflBoard:
 
             return 0  # legal move
         except Exception as ex:
-            print("error in islegalmove ", ex, piece_num, x2, y2)
+            print("error in _is_legal_move ", ex, piece_num, x2, y2)
             raise
 
-    def _get_captures(self, piece_num: int, x2: int, y2: int):
+    def _get_captures_idx(self, piece_num: int, x2: int, y2: int):
+        captures: list[int] = []
         # Assumes was already checked for legal move
-        captures = []
-        piece = self.pieces[piece_num]
-        piece_type = piece[2]
-        for a_piece in self.pieces:
-            if piece_type * a_piece[2] < 0:
-                d1 = a_piece[0] - x2
-                d2 = a_piece[1] - y2
+        target_piece = self.pieces[piece_num]
+        piece_type = target_piece[2]
+        for compared_idx, compared_piece in enumerate(self.pieces):
+            if piece_type * compared_piece[2] < 0:
+                d1 = compared_piece[0] - x2
+                d2 = compared_piece[1] - y2
                 if (abs(d1) == 1 and d2 == 0) or (abs(d2) == 1 and d1 == 0):
                     for b_piece in self.pieces:
                         if piece_type * b_piece[2] > 0 and not (
-                            piece[0] == b_piece[0] and piece[1] == b_piece[1]
+                            target_piece[0] == b_piece[0]
+                            and target_piece[1] == b_piece[1]
                         ):
-                            e1 = b_piece[0] - a_piece[0]
-                            e2 = b_piece[1] - a_piece[1]
+                            e1 = b_piece[0] - compared_piece[0]
+                            e2 = b_piece[1] - compared_piece[1]
                             if d1 == e1 and d2 == e2:
-                                captures.append(a_piece)
+                                captures.append(compared_idx)
+        return captures
+
+    def _get_captures_piece(self, piece_num: int, x2: int, y2: int):
+        captures: list[TaflPiece] = []
+        # Assumes was already checked for legal move
+        target_piece = self.pieces[piece_num]
+        piece_type = target_piece[2]
+        for _compared_idx, compared_piece in enumerate(self.pieces):
+            if piece_type * compared_piece[2] < 0:
+                d1 = compared_piece[0] - x2
+                d2 = compared_piece[1] - y2
+                if (abs(d1) == 1 and d2 == 0) or (abs(d2) == 1 and d1 == 0):
+                    for b_piece in self.pieces:
+                        if piece_type * b_piece[2] > 0 and not (
+                            target_piece[0] == b_piece[0]
+                            and target_piece[1] == b_piece[1]
+                        ):
+                            e1 = b_piece[0] - compared_piece[0]
+                            e2 = b_piece[1] - compared_piece[1]
+                            if d1 == e1 and d2 == e2:
+                                captures.append(compared_piece)
         return captures
 
     # returns code for invalid mode (<0) or number of pieces captured
@@ -177,17 +208,20 @@ class TaflBoard:
 
         self.time = self.time + 1
 
-        piece = self.pieces[piece_num]
-        piece[0] = x2
-        piece[1] = y2
-        caps = self._get_captures(piece_num, x2, y2)
+        new_piece_type = self.pieces[piece_num].type
+        new_piece = TaflPiece(x2, y2, new_piece_type)
+        self.pieces[piece_num] = new_piece
+        capture_ids = self._get_captures_idx(piece_num, x2, y2)
+        empty_piece = TaflPiece(-99, -99, -1)
         # print("Captures = ",caps)
-        for c in caps:
-            c[0] = -99
+        # for c in captures:
+        #     c[0] = -99
+        for captured_idx in capture_ids:
+            self.pieces[captured_idx] = empty_piece
 
         self.done = self._get_win_lose()
 
-        return len(caps)
+        return len(capture_ids)
 
     def _get_win_lose(self):
         if self.time > 50:

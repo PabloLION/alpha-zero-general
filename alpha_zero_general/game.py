@@ -118,7 +118,9 @@ class GenericGame(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     ) -> list[tuple[BoardTensor, PolicyTensor]]:
         """
         #TODO:
-            - PolicyTensorType?
+            - Offer a new function to flip and rotate the board as the base
+                element of the symmetry group, and we can generate the rest of
+                the group by applying the base element multiple times.
 
         Input:
             board: current board

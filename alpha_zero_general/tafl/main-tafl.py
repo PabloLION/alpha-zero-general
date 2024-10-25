@@ -1,3 +1,7 @@
+if __name__ != "__main__":
+    raise ImportError(f"Script {__file__} should not be imported as a module")
+
+
 from alpha_zero_general.coach import Coach
 from alpha_zero_general.main import MainArgs
 from alpha_zero_general.tafl.pytorch.n_net import NNetWrapper as nn
@@ -19,14 +23,14 @@ args = MainArgs(
 )
 
 if __name__ == "__main__":
-    g = Game(6)
-    nnet = nn(g)
+    game = Game()
+    nnet = nn(game)
 
     if args.load_model:
         nnet.load_checkpoint(args.load_folder_file[0], args.load_folder_file[1])
 
-    c = Coach(g, nnet, args)
+    c = Coach(game, nnet, args.to_coach_args())
     if args.load_model:
         print("Load train_examples from file")
-        c.loadTrainExamples()
+        c.load_train_examples()
     c.learn()

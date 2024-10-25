@@ -1,4 +1,10 @@
-# Note: Run this file from alpha_zero_general.Arena directory (the one above /tafl)
+"""
+use this script to play any two agents against each other, or play manually with
+any agent.
+"""
+
+if __name__ != "__main__":
+    raise ImportError(f"Script {__file__} should not be imported as a module")
 
 from alpha_zero_general.arena import Arena
 from alpha_zero_general.tafl.tafl_game import TaflGame, display
@@ -7,11 +13,6 @@ from alpha_zero_general.tafl.tafl_players import (
     HumanTaflPlayer,
     RandomTaflPlayer,
 )
-
-"""
-use this script to play any two agents against each other, or play manually with
-any agent.
-"""
 
 game = TaflGame("Brandubh")
 
