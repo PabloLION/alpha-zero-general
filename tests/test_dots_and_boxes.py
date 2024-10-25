@@ -60,7 +60,7 @@ class TestDotsAndBoxesGame:
         symmetries = self.game.get_symmetries(board, pi)
         assert len(symmetries) == 8
 
-    def test_string_representation(self):
+    def test_get_board_str(self):
         board = self.game.get_init_board()
-        board_str = self.game.string_representation(board)
+        board_str = self.game.get_board_str(board)
         assert board_str == np.array2string(board)

@@ -1,15 +1,22 @@
+if __name__ != "__main__":
+    raise ImportError(f"Script {__file__} should not be imported as a module")
+
+
 import logging
 
-import coloredlogs
+import coloredlogs  # type: ignore # no stubs for this library
 
 from alpha_zero_general.coach import Coach
 from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import DotsAndBoxesGame
-from alpha_zero_general.dots_and_boxes.keras.n_net import NNetWrapper as nn
+from alpha_zero_general.dots_and_boxes.keras.n_net import DotsAndBoxesNNInterface as nn
 from alpha_zero_general.main import MainArgs
 
 log = logging.getLogger(__name__)
 
-coloredlogs.install(level="INFO")  # Change this to DEBUG to see more info.
+coloredlogs.install(  # type: ignore
+    level="INFO"
+)  # Change this to DEBUG to see more info.
+
 args = MainArgs(
     num_iter=100,
     num_eps=25,  # Number of complete self-play games to simulate during a new iteration.
@@ -51,7 +58,7 @@ def main():
     else:
         log.warning("Not loading a checkpoint!")
     log.info("Loading the Coach...")
-    c = Coach(g, nnet, args)
+    c = Coach(g, nnet, args.to_coach_args())
     log.info("Starting the learning process 🎉")
     c.learn()
 

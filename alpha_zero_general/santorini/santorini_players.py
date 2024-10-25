@@ -1,12 +1,13 @@
 import numpy as np
+from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general.santorini.santorini_game import SantoriniGame
 
 
-# Renamed OthelloPlayers.py Function
 class RandomPlayer:
-    def __init__(self, game):
+    def __init__(self, game: SantoriniGame):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: GenericBoardTensor) -> int:
         a = np.random.randint(self.game.get_action_size())
         valids = self.game.get_valid_moves(board, 1)
         while valids[a] != 1:
@@ -15,11 +16,10 @@ class RandomPlayer:
 
 
 class HumanSantoriniPlayer:
-    def __init__(self, game):
+    def __init__(self, game: SantoriniGame):
         self.game = game
 
-    def play(self, board):
-        # display(board)
+    def play(self, board: GenericBoardTensor) -> int:
         valids, all_moves, all_moves_binary = self.game.get_valid_moves_human(board, 1)
 
         for i in range(len(all_moves)):
@@ -29,7 +29,6 @@ class HumanSantoriniPlayer:
                         i, all_moves[i][0], all_moves[i][1], all_moves[i][2]
                     )
                 )
-        #                print("[", int(i/self.game.n), int(i%self.game.n), end="] ")
         valid_move = False
         while not valid_move:
             input_move = int(input("\nPlease enter a move number: "))
@@ -40,12 +39,11 @@ class HumanSantoriniPlayer:
         return input_move
 
 
-# Renamed OthelloPlayers.py Function
 class GreedySantoriniPlayer:
-    def __init__(self, game):
+    def __init__(self, game: SantoriniGame):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: GenericBoardTensor) -> int:
         valids = self.game.get_valid_moves(board, 1)
         candidates = []
         for a in range(self.game.get_action_size()):

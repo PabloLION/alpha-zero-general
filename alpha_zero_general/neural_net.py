@@ -1,10 +1,18 @@
-from typing import Any
+from abc import ABC, abstractmethod
+from typing import Any, Generic
 
-from alpha_zero_general import GenericPolicyTensor, TrainExample
+from alpha_zero_general import (
+    BoardTensor,
+    BooleanBoard,
+    GenericPolicyTensor,
+    PolicyTensor,
+    TrainingExample,
+)
 from alpha_zero_general.game import GenericGame
 
 
-class NeuralNet:
+# #TODO/REF: rename to NNInterface
+class NeuralNetInterface(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     """
     This class specifies the base NeuralNet class. To define your own neural
     network, subclass this class and implement the functions below. The neural
@@ -14,24 +22,27 @@ class NeuralNet:
     See othello/NNet.py for an example implementation.
     """
 
-    def __init__(self, game: GenericGame):
+    @abstractmethod
+    def __init__(self, game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor]):
         raise NotImplementedError(
             "The __init__ method must be implemented by the subclass"
         )
 
-    def train(self, examples: list[TrainExample]):
+    @abstractmethod
+    def train(self, examples: list[TrainingExample[BoardTensor, PolicyTensor]]) -> None:
         """
-        This function trains the neural network with examples obtained from
+        Impure function, trains the neural network with examples obtained from
         self-play.
 
         Input:
-            examples: a list of training examples, where each example is of form
-                      (board, pi, v). pi is the MCTS informed policy vector for
-                      the given board, and v is its value. The examples has
-                      board in its canonical form.
+            examples: a list of TrainingExample, where each example is of form
+                (board, pi, v). pi is the MCTS informed policy vector for
+                the given board, and v is its value. The examples has
+                board in its canonical form.
         """
         raise NotImplementedError("train method must be implemented by the subclass")
 
+    @abstractmethod
     def predict(self, board: Any) -> tuple[GenericPolicyTensor, float]:
         """
         Input:
@@ -44,6 +55,7 @@ class NeuralNet:
         """
         raise NotImplementedError("predict method must be implemented by the subclass")
 
+    @abstractmethod
     def save_checkpoint(self, folder: str, filename: str) -> None:
         """
         Saves the current neural network (with its parameters) in
@@ -53,6 +65,7 @@ class NeuralNet:
             "save_checkpoint method must be implemented by the subclass"
         )
 
+    @abstractmethod
     def load_checkpoint(self, folder: str, filename: str) -> None:
         """
         Loads parameters of the neural network from folder/filename

@@ -1,14 +1,18 @@
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, NamedTuple, TypeAlias
 
-from numpy import bool_, dtype, ndarray
+# from pathlib import Path
+from typing import Any, Generic, NamedTuple, TypeAlias, TypeVar
 
+from numpy import bool_, dtype, float32, int8, ndarray, random
+
+# Board Tensors
 GenericBoardDataType: TypeAlias = Any  # #TODO: TBD
 GenericBoardShapeType: TypeAlias = Any
 GenericBoardTensor: TypeAlias = ndarray[
     GenericBoardShapeType, dtype[GenericBoardDataType]
 ]
+
 GenericBooleanBoardTensor: TypeAlias = ndarray[GenericBoardDataType, dtype[bool_]]
 
 GenericPolicyDataType: TypeAlias = Any
@@ -18,8 +22,28 @@ GenericPolicyTensor: TypeAlias = ndarray[
 ]
 # GenericPolicyTensor: TypeAlias = list[float]
 # #TODO: GenericPolicyTensor should be tensor or list[float]? consider perf too.
+BoardTensor = TypeVar("BoardTensor", bound=GenericBoardTensor)
+BooleanBoard = TypeVar("BooleanBoard", bound=GenericBooleanBoardTensor)
+PolicyTensor = TypeVar("PolicyTensor", bound=GenericPolicyTensor)
 
-PolicyMakerAsPlayer: TypeAlias = Callable[[GenericPolicyTensor], int]
+# Santorini Game Tensors
+SantoriniBoardShapeType: TypeAlias = Any
+SantoriniBoardDataType = int8
+SantoriniBoardTensor: TypeAlias = ndarray[
+    SantoriniBoardShapeType, dtype[SantoriniBoardDataType]
+]
+SantoriniBooleanBoardTensor: TypeAlias = ndarray[SantoriniBoardDataType, dtype[bool_]]
+
+SantoriniPolicyShape: TypeAlias = Any
+SantoriniPolicyType = float32
+SantoriniPolicyTensor: TypeAlias = ndarray[
+    SantoriniPolicyShape, dtype[SantoriniPolicyType]
+]
+SantoriniValueTensor: TypeAlias = ndarray[
+    SantoriniPolicyShape, dtype[SantoriniPolicyType]
+]
+
+PolicyMakerAsPlayer: TypeAlias = Callable[[BoardTensor], int]
 
 
 @dataclass(frozen=True)  # freeze to check for immutability in refactor
@@ -28,35 +52,50 @@ class MctsArgs:
     c_puct: float
 
 
-Display = Callable[[Any], None]
-Board = Any
 BoardEvaluation: TypeAlias = float
 PlayerId: TypeAlias = int
-# LengthyTrainExample = tuple[
-#     GenericBoardTensor, PlayerID, GenericPolicyTensor, ExampleValue
-# ]
 
 
 ## coach.py
-class RawTrainExample(NamedTuple):
+class RawTrainingExample(NamedTuple, Generic[BoardTensor, PolicyTensor]):
     """
     (canonical_board, current_player, pi, v)
     pi is the MCTS informed policy vector, v is +1 if
     the player eventually won the game, else -1.
     """
 
-    board: GenericBoardTensor
+    board: BoardTensor
     current_player: PlayerId
-    policy: GenericPolicyTensor
+    policy: PolicyTensor
     neutral_evaluation: BoardEvaluation  # from neutral perspective
 
 
-class TrainExample(NamedTuple):
-    board: GenericBoardTensor
-    policy: GenericPolicyTensor
+class TrainingExample(NamedTuple, Generic[BoardTensor, PolicyTensor]):
+    board: BoardTensor
+    policy: PolicyTensor
     evaluation: BoardEvaluation  # from player's perspective
 
 
-TrainExampleHistory = list[list[TrainExample]]
+TrainExampleHistory = list[list[TrainingExample[BoardTensor, PolicyTensor]]]
+
+# not categorized
+Player = Callable[[ndarray[Any, Any] | list[list[int]]], int]
+Display = Callable[[Any], None]
+# maybe Display = Callable[[ndarray[Any, Any] | list[list[int]]], None]
+# if possible, we should use GenericBoardTensor
 CheckpointFile = str
 TrainExamplesFile = str
+# CheckpointFile = Path
+# TrainExamplesFile = Path
+
+
+class WinState(NamedTuple):
+    is_ended: bool
+    winner: int | None
+
+
+## Constants
+
+EPS = 1e-8
+RANDOM_SEED = 32342
+RNG = random.default_rng(RANDOM_SEED)

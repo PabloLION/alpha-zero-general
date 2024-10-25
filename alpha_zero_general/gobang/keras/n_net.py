@@ -3,32 +3,30 @@ from typing import Any
 
 import numpy as np
 
-from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.gobang.keras.gobang_n_net import GobangNNet as onnet
-from alpha_zero_general.neural_net import NeuralNet
-from alpha_zero_general.utils import DotDict
+from alpha_zero_general.gobang import (
+    GobangBoardTensor,
+    GobangBooleanBoardTensor,
+    GobangNNArg,
+    GobangPolicyTensor,
+    GobangTrainingExample,
+)
+from alpha_zero_general.gobang.keras.gobang_n_net import GobangNNet
+from alpha_zero_general.neural_net import NeuralNetInterface
 
-args = DotDict(
-    {
-        "lr": 0.001,
-        "dropout": 0.3,
-        "epochs": 10,
-        "batch_size": 64,
-        "cuda": True,
-        "num_channels": 512,
-    }
+args = GobangNNArg(
+    lr=0.001, dropout=0.3, epochs=10, batch_size=64, cuda=True, num_channels=512
 )
 
 
-class NNetWrapper(NeuralNet):
+class NNetWrapper(
+    NeuralNetInterface[GobangBoardTensor, GobangBooleanBoardTensor, GobangPolicyTensor]
+):
     def __init__(self, game: Any):
-        self.nnet = onnet(game, args)
+        self.nn = GobangNNet(game, args)
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
 
-    def train(
-        self, examples: list[tuple[GenericBoardTensor, list[float], float]]
-    ) -> None:
+    def train(self, examples: list[GobangTrainingExample]) -> None:
         """
         examples: list of examples, each example is of form (board, pi, v)
         """
@@ -36,14 +34,14 @@ class NNetWrapper(NeuralNet):
         input_boards = np.asarray(input_boards)
         target_pis = np.asarray(target_pis)
         target_vs = np.asarray(target_vs)
-        self.nnet.model.fit(
+        self.nn.model.fit(
             x=input_boards,
             y=[target_pis, target_vs],
             batch_size=args.batch_size,
             epochs=args.epochs,
         )
 
-    def predict(self, board: GenericBoardTensor) -> tuple[np.ndarray, float]:
+    def predict(self, board: GobangBoardTensor) -> tuple[GobangPolicyTensor, float]:
         """
         board: np array with board
         """
@@ -53,7 +51,7 @@ class NNetWrapper(NeuralNet):
         # preparing input
         board = board[np.newaxis, :, :]
 
-        pi, v = self.nnet.model.predict(board, verbose=False)
+        pi, v = self.nn.model.predict(board, verbose=0)
 
         # print('PREDICTION TIME TAKEN : {0:03f}'.format(time.time()-start))
         return pi[0], v[0]
@@ -74,7 +72,7 @@ class NNetWrapper(NeuralNet):
             os.mkdir(folder)
         else:
             print("Checkpoint Directory exists! ")
-        self.nnet.model.save_weights(filepath)
+        self.nn.model.save_weights(filepath)
 
     def load_checkpoint(
         self, folder: str = "checkpoint", filename: str = "checkpoint.pth.tar"
@@ -85,5 +83,5 @@ class NNetWrapper(NeuralNet):
         # https://github.com/pytorch/examples/blob/master/imagenet/main.py#L98
         filepath = os.path.join(folder, filename)
         if not os.path.exists(filepath):
-            raise ("No model in path {}".format(filepath))
-        self.nnet.model.load_weights(filepath)
+            raise FileNotFoundError("No model in path {}".format(filepath))
+        self.nn.model.load_weights(filepath)

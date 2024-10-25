@@ -1,57 +1,68 @@
 from __future__ import print_function
 
 import sys
+from typing import Any
 
-from alpha_zero_general import GenericBoardTensor
-
-sys.path.append("..")
 import numpy as np
 
 from alpha_zero_general.game import GenericGame
+from alpha_zero_general.santorini import (
+    SantoriniBoardTensor,
+    SantoriniBooleanBoardTensor,
+    SantoriniPolicyTensor,
+)
 from alpha_zero_general.santorini.santorini_logic import Board
 
+sys.path.append("..")
 
-class SantoriniGame(GenericGame):
+
+class SantoriniGame(
+    GenericGame[
+        SantoriniBoardTensor, SantoriniBooleanBoardTensor, SantoriniPolicyTensor
+    ]
+):
     """
-    Many of thes functions are based on those from OthelloGame.py:
+    Many of these functions are based on those from OthelloGame.py:
         https://github.com/suragnair/alpha-zero-general/blob/master/othello/OthelloGame.py
     """
 
+    # #TODO/REF: think where to put this constant
     square_content = {-2: "Y", -1: "X", +0: "-", +1: "O", +2: "U"}
 
+    # #TODO/REF: think where to put this constant
+    # #TODO/REF: duped constant
+    # fmt: off
     # NOTE THESE ARE NEITHER CCW NOR CW!
-    __directions = [
-        (-1, -1),
-        (-1, 0),
-        (-1, 1),
-        (0, -1),
-        (0, 1),
-        (1, -1),
-        (1, 0),
-        (1, 1),
-    ]
+    __directions = list[tuple[int, int]](
+        [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)])
+    #         NW,      N,     NE,      W,     E,     SW,     S,    SE
+    # fmt: on
 
     @staticmethod
-    def get_square_piece(piece):
+    def get_square_piece(piece: int) -> str:
         return SantoriniGame.square_content[piece]
 
-    def __init__(self, board_length=5, true_random_placement=False):
+    def __init__(
+        self, board_length: int = 5, true_random_placement: bool = False
+    ) -> None:
         self.n = board_length
 
-    def get_init_board(self):
+    def get_init_board(self) -> SantoriniBoardTensor:
         # return initial board (numpy board)
         b = Board(self.n)
         return np.array(b.pieces)
 
-    def get_board_size(self):
+    def get_board_size(self) -> tuple[int, int, int]:
         # (dimension,a,b) tuple
         return (2, self.n, self.n)
 
-    def get_action_size(self):
+    def get_action_size(self) -> int:
         # return number of actions
         return 128
 
-    def get_next_state(self, board, player, action):
+    def get_next_state(
+        self, board: SantoriniBoardTensor, player: int, action: int
+    ) -> tuple[SantoriniBoardTensor, int]:
         # if player takes action on board, return next (board,player)
         # action must be a valid move
 
@@ -66,33 +77,41 @@ class SantoriniGame(GenericGame):
             action = action % 64
         else:
             char_idx = 0  # character is 1
-        action_move = action // 8
-        action_build = action % 8
+        action_move_idx = action // 8
+        action_build_idx = action % 8
 
-        try:
-            action_move = self.__directions[action_move]
-        except IndexError as e:
-            print(e)
+        assert 0 <= action_move_idx < 8, f"{action_move_idx=} should be less than 8"
+        action_move: tuple[int, int] = self.__directions[action_move_idx]
+
+        # #TODO/REF: maybe it's easier to just check action < 64.
+        if action_build_idx >= 8:
             print("index error on action_move from directions")
             self.display(board)
             print("player: ", player)
             print("action: ", action)
             print("char_idx: ", char_idx)
-            print("action_move: ", action_move)
-            print("action_build: ", action_build)
-        action_build = self.__directions[action_build]
+            print("action_int: ", action_move_idx)
+            print("action_build: ", action_build_idx)
+            raise ValueError(
+                f"{action_build_idx=} and {action_move_idx=} should be less than 8"
+            )
 
-        char = piece_locations[char_idx]
+        action_build = self.__directions[action_build_idx]
 
-        action_move = (action_move[0] + char[0], action_move[1] + char[1])
-        action_build = (
+        char: tuple[int, int] = piece_locations[char_idx]
+
+        action_move: tuple[int, int] = (
+            action_move[0] + char[0],
+            action_move[1] + char[1],
+        )
+        action_build: tuple[int, int] = (
             action_move[0] + action_build[0],
             action_build[1] + action_build[1],
         )
-        action = [char, action_move, action_build]
+        new_action = [char, action_move, action_build]
 
         try:
-            b.execute_move(action, player)
+            b.execute_move(new_action, player)
         except IndexError as e:
             print(e)
             self.display(board)
@@ -102,7 +121,9 @@ class SantoriniGame(GenericGame):
             print("action: ", action)
         return (b.pieces, -player)
 
-    def get_valid_moves(self, board, player):
+    def get_valid_moves(
+        self, board: SantoriniBoardTensor, player: int
+    ) -> SantoriniBooleanBoardTensor:
         # return a fixed size binary vector
         # _, _, valids = board.get_all_moves
         b = Board(self.n)
@@ -112,14 +133,18 @@ class SantoriniGame(GenericGame):
         return np.array(b.get_legal_moves_binary(color))
         # Get all the squares with pieces of the given color.
 
-    def get_valid_moves_human(self, board, player):
+    def get_valid_moves_human(
+        self, board: SantoriniBoardTensor, player: int
+    ) -> tuple[list[Any], list[Any], list[int]]:
         b = Board(self.n)
         b.pieces = np.copy(board)
         color = player
 
         return b.get_all_moves(color)
 
-    def get_character_locations(self, board, player):
+    def get_character_locations(
+        self, board: SantoriniBoardTensor, player: int
+    ) -> tuple[tuple[int, int], tuple[int, int]]:
         """
         Returns a list of both character's locations as tuples for the player
         """
@@ -135,9 +160,9 @@ class SantoriniGame(GenericGame):
         char2_location = np.where(b.pieces[0] == 2 * color)
         char2_location = (char2_location[0][0], char2_location[1][0])
 
-        return [char1_location, char2_location]
+        return (char1_location, char2_location)
 
-    def get_game_ended(self, board, player):
+    def get_game_ended(self, board: SantoriniBoardTensor, player: int) -> float:
         """
         Assumes player is about to move. THIS IS NOT COMPATIBLE with the prior implementation of Arena.py
         which returned self.game.get_game_ended(board, 1).
@@ -165,7 +190,9 @@ class SantoriniGame(GenericGame):
             return -1
         return 0
 
-    def get_canonical_form(self, board, player):
+    def get_canonical_form(
+        self, board: SantoriniBoardTensor, player: int
+    ) -> SantoriniBoardTensor:
         # return state if player==1, else return -state if player==-1
         board = board * np.append(
             np.ones((1, self.n, self.n), dtype="int") * player,
@@ -175,7 +202,9 @@ class SantoriniGame(GenericGame):
 
         return board
 
-    def get_random_board_symmetry(self, board):
+    def get_random_board_symmetry(
+        self, board: SantoriniBoardTensor
+    ) -> SantoriniBoardTensor:
         """
         Returns a random board symmetry.
         """
@@ -191,7 +220,9 @@ class SantoriniGame(GenericGame):
 
         return np.array([newB0, newB1])
 
-    def get_symmetries(self, board, pi):
+    def get_symmetries(
+        self, board: SantoriniBoardTensor, pi: SantoriniPolicyTensor
+    ) -> list[tuple[SantoriniBoardTensor, SantoriniPolicyTensor]]:
         # mirror, rotational
 
         assert len(pi) == 128  # each player has two pieces which can move in
@@ -199,131 +230,68 @@ class SantoriniGame(GenericGame):
         b = Board(self.n)
         b.pieces = np.copy(board)
 
-        syms = []
+        symmetries = list[tuple[SantoriniBoardTensor, SantoriniPolicyTensor]]()
 
-        Pi0 = pi[:64]
-        Pi1 = pi[64:]
+        policy0 = pi[:64]
+        policy1 = pi[64:]
 
-        for i in range(1, 5):
+        for n_rot in range(1, 5):
             for k in [True, False]:
                 # rotate board:
-                newB0 = np.rot90(b.pieces[0], 1)
-                newB1 = np.rot90(b.pieces[1], 1)
+                new_board0 = np.rot90(b.pieces[0], n_rot)
+                new_board1 = np.rot90(b.pieces[1], n_rot)
 
                 # rotate pi:
-                newPi0 = self.rotate(Pi0)
-                newPi1 = self.rotate(Pi1)
+                new_policy0 = self.rotate(policy0)
+                new_policy1 = self.rotate(policy1)
 
-                # We will record  var_, which may be modified by a flip, but
+                # We will record var_, which may be modified by a flip, but
                 # reinitialize the next rotation/flip with var to get all syms:
                 # rotate, rotate+flip, rotate^2, rotate^2+flip,
                 # rotate^3, rotate^3+flip, rotate^4=Identity, rotate^4+flip
-                newB0_ = newB0
-                newB1_ = newB1
-                newPi0_ = newPi0
-                newPi1_ = newPi1
+                newB0_ = new_board0
+                newB1_ = new_board1
+                newPi0_ = new_policy0
+                newPi1_ = new_policy1
                 if k:
                     # flip board:
-                    newB0_ = np.fliplr(newB0)
-                    newB1_ = np.fliplr(newB1)
+                    newB0_ = np.fliplr(new_board0)
+                    newB1_ = np.fliplr(new_board1)
 
                     # flip pi:
-                    newPi0_ = self.flip(Pi0)
-                    newPi1_ = self.flip(Pi1)
+                    newPi0_ = self.flip(policy0)
+                    newPi1_ = self.flip(policy1)
 
                 newPi = np.ravel([newPi0_, newPi1_])
 
                 # record the symmetry
-                syms += [(np.array([newB0_, newB1_]), list(newPi))]
+                symmetries.append((np.array([newB0_, newB1_]), list(newPi)))
+                symmetries += [(np.array([newB0_, newB1_]), list(newPi))]
 
                 # reset the board as the rotated one values with the new values
-                b.pieces[0] = np.copy(newB0)
-                b.pieces[1] = np.copy(newB1)
-                Pi0 = newPi0
-                Pi1 = newPi1
+                b.pieces[0] = np.copy(new_board0)
+                b.pieces[1] = np.copy(new_board1)
+                policy0 = new_policy0
+                policy1 = new_policy1
 
-        return syms
+        return symmetries
 
-    def rotate(self, pi_64):
+    def rotate(self, pi_64: SantoriniPolicyTensor) -> SantoriniPolicyTensor:
         """
         Input: first XOR second half of Pi
         Returns: the half of pie in a reordered list that corresponds
                  to a counterclockwise rotation of the board
         """
         assert len(pi_64) == 64
-
-        rotation_indices = [
-            18,
-            20,
-            23,
-            17,
-            22,
-            16,
-            19,
-            21,
-            34,
-            36,
-            39,
-            33,
-            38,
-            32,
-            35,
-            37,
-            58,
-            60,
-            63,
-            57,
-            62,
-            56,
-            59,
-            61,
-            10,
-            12,
-            15,
-            9,
-            14,
-            8,
-            11,
-            13,
-            50,
-            52,
-            55,
-            49,
-            54,
-            48,
-            51,
-            53,
-            2,
-            4,
-            7,
-            1,
-            6,
-            0,
-            3,
-            5,
-            26,
-            28,
-            31,
-            25,
-            30,
-            24,
-            27,
-            29,
-            42,
-            44,
-            47,
-            41,
-            46,
-            40,
-            43,
-            45,
-        ]
+        # fmt: off
+        rotation_indices = [18,20,23,17,22,16,19,21,34,36,39,33,38,32,35,37,58,60,63,57,62,56,59,61,10,12,15,9,14,8,11,13,50,52,55,49,54,48,51,53,2,4,7,1,6,0,3,5,26,28,31,25,30,24,27,29,42,44,47,41,46,40,43,45]
+        # fmt: on
 
         pi_new = [pi_64[i] for i in rotation_indices]
 
         return pi_new
 
-    def flip(self, pi_64):
+    def flip(self, pi_64: SantoriniPolicyTensor) -> SantoriniPolicyTensor:
         """
         Input: first XOR second half of Pi
         Returns: the half of pie in a reordered list that corresponds
@@ -331,72 +299,9 @@ class SantoriniGame(GenericGame):
         """
         assert len(pi_64) == 64
 
-        flip_indices = [
-            18,
-            17,
-            16,
-            20,
-            19,
-            23,
-            22,
-            21,
-            10,
-            9,
-            8,
-            12,
-            11,
-            15,
-            14,
-            13,
-            2,
-            1,
-            0,
-            4,
-            3,
-            7,
-            6,
-            5,
-            34,
-            33,
-            32,
-            36,
-            35,
-            39,
-            38,
-            37,
-            26,
-            25,
-            24,
-            28,
-            27,
-            31,
-            30,
-            29,
-            58,
-            57,
-            56,
-            60,
-            59,
-            63,
-            62,
-            61,
-            50,
-            49,
-            48,
-            52,
-            51,
-            55,
-            54,
-            53,
-            42,
-            41,
-            40,
-            44,
-            43,
-            47,
-            46,
-            45,
-        ]
+        # fmt: off
+        flip_indices = [18,17,16,20,19,23,22,21,10,9,8,12,11,15,14,13,2,1,0,4,3,7,6,5,34,33,32,36,35,39,38,37,26,25,24,28,27,31,30,29,58,57,56,60,59,63,62,61,50,49,48,52,51,55,54,53,42,41,40,44,43,47,46,45]
+        # fmt: on
 
         pi_new = [pi_64[i] for i in flip_indices]
 
@@ -483,20 +388,20 @@ class SantoriniGame(GenericGame):
         
         """
 
-    def string_representation(self, board: GenericBoardTensor):
+    def get_board_str(self, board: SantoriniBoardTensor) -> str:
         return np.array2string(board)
 
-    def get_board_hash(self, board: GenericBoardTensor) -> int:
+    def get_board_hash(self, board: SantoriniBoardTensor) -> int:
         return hash(board.tobytes())
 
-    def string_representation_readable(self, board):
+    def string_representation_readable(self, board: SantoriniBoardTensor) -> str:
         # Do not think this works.
         board_s = "".join(
             self.square_content[square] for row in board for square in row
         )
         return board_s
 
-    def get_score(self, board, player):
+    def get_score(self, board: SantoriniBoardTensor, player: int) -> int:
         """
         Only used by 'Greedy player'
         """
@@ -525,7 +430,7 @@ class SantoriniGame(GenericGame):
         return score
 
     @staticmethod
-    def display(board):
+    def display(board: SantoriniBoardTensor) -> None:
         n = board.shape[1]
         print("   ", end="")
         for y in range(n):

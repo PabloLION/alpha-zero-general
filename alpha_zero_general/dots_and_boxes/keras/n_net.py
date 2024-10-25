@@ -1,28 +1,42 @@
 import os
+from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
 
-from alpha_zero_general import GenericBoardTensor
+from alpha_zero_general import TrainingExample
+from alpha_zero_general.dots_and_boxes.dots_and_boxes_game import (
+    DotsAndBoxesBoardTensor,
+    DotsAndBoxesBooleanBoardTensor,
+    DotsAndBoxesPolicyTensor,
+)
 from alpha_zero_general.dots_and_boxes.keras.dots_and_boxes_n_net import (
-    DotsAndBoxesNNet as onnet,
+    DotsAndBoxesNNet,
 )
-from alpha_zero_general.neural_net import NeuralNet
-from alpha_zero_general.utils import DotDict
+from alpha_zero_general.neural_net import NeuralNetInterface
 
-args = DotDict(
-    {
-        "lr": 0.001,
-        "dropout": 0.3,
-        "epochs": 10,
-        "batch_size": 64,
-        "cuda": True,
-        "num_channels": 512,
-    }
+
+@dataclass(frozen=True)
+class DotsAndBoxesBoardKerasArg:
+    lr: float
+    dropout: float
+    epochs: int
+    batch_size: int
+    cuda: bool
+    num_channels: int
+
+
+args = DotsAndBoxesBoardKerasArg(
+    lr=0.001,
+    dropout=0.3,
+    epochs=10,
+    batch_size=64,
+    cuda=True,
+    num_channels=512,
 )
 
 
-def normalize_score(board: GenericBoardTensor) -> None:
+def normalize_score(board: DotsAndBoxesBoardTensor) -> None:
     p1_score = board[:, 0, -1]
     p2_score = board[:, 1, -1]
     score = p1_score - p2_score
@@ -41,14 +55,23 @@ def normalize_score(board: GenericBoardTensor) -> None:
     board[:, 1, -1] = 0
 
 
-class NNetWrapper(NeuralNet):
+class DotsAndBoxesNNInterface(
+    NeuralNetInterface[
+        DotsAndBoxesBoardTensor,
+        DotsAndBoxesBooleanBoardTensor,
+        DotsAndBoxesPolicyTensor,
+    ]
+):
     def __init__(self, game: Any):
-        self.nnet = onnet(game, args)
+        self.nn = DotsAndBoxesNNet(game, args)
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
 
     def train(
-        self, examples: list[tuple[GenericBoardTensor, list[float], float]]
+        self,
+        examples: list[
+            TrainingExample[DotsAndBoxesBoardTensor, DotsAndBoxesPolicyTensor]
+        ],
     ) -> None:
         """
         examples: list of examples, each example is of form (board, pi, v)
@@ -60,14 +83,16 @@ class NNetWrapper(NeuralNet):
 
         target_pis = np.asarray(target_pis)
         target_vs = np.asarray(target_vs)
-        self.nnet.model.fit(
+        self.nn.model.fit(
             x=input_boards,
             y=[target_pis, target_vs],
             batch_size=args.batch_size,
             epochs=args.epochs,
         )
 
-    def predict(self, board: GenericBoardTensor) -> tuple[np.ndarray, float]:
+    def predict(
+        self, board: DotsAndBoxesBoardTensor
+    ) -> tuple[DotsAndBoxesPolicyTensor, float]:
         """
         board: np array with board
         """
@@ -76,7 +101,7 @@ class NNetWrapper(NeuralNet):
         board = board[np.newaxis, :, :]
         normalize_score(board)
 
-        pi, v = self.nnet.model.predict(board, verbose=False)
+        pi, v = self.nn.model.predict(board, verbose=0)
 
         return pi[0], v[0]
 
@@ -96,7 +121,7 @@ class NNetWrapper(NeuralNet):
             os.mkdir(folder)
         else:
             print("Checkpoint Directory exists! ")
-        self.nnet.model.save_weights(filepath)
+        self.nn.model.save_weights(filepath)
 
     def load_checkpoint(
         self, folder: str = "checkpoint", filename: str = "checkpoint.pth.tar"
@@ -105,4 +130,4 @@ class NNetWrapper(NeuralNet):
         filename = filename.split(".")[0] + ".weights.h5"
 
         filepath = os.path.join(folder, filename)
-        self.nnet.model.load_weights(filepath)
+        self.nn.model.load_weights(filepath)

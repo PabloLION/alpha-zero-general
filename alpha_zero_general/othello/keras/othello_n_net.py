@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from tensorflow.keras.layers import (
     Activation,
     BatchNormalization,
@@ -11,9 +13,21 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
+from alpha_zero_general.othello import (
+    OthelloBoardTensor,
+    OthelloNNArg,
+    OthelloPolicyTensor,
+)
+from alpha_zero_general.othello.othello_game import OthelloGame
+
 
 class OthelloNNet:
-    def __init__(self, game, args):
+    if TYPE_CHECKING:
+        model: Model[OthelloBoardTensor, tuple[list[OthelloPolicyTensor], list[float]]]
+    else:
+        model: Model
+
+    def __init__(self, game: OthelloGame, args: OthelloNNArg):
         # game params
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()

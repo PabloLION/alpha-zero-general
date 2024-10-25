@@ -1,31 +1,30 @@
 import logging
 import math
+from typing import Generic, cast
 
-from numpy import argwhere, array, random, zeros
+from numpy import argwhere, array, zeros
 
 from alpha_zero_general import (
+    EPS,
+    RNG,
     GenericBoardTensor,
     GenericBooleanBoardTensor,
     GenericPolicyTensor,
     MctsArgs,
 )
-from alpha_zero_general.game import GenericGame
-from alpha_zero_general.neural_net import NeuralNet
-
-EPS = 1e-8
-RANDOM_SEED = 32342
-RNG = random.default_rng(RANDOM_SEED)
+from alpha_zero_general.game import BoardTensor, BooleanBoard, GenericGame, PolicyTensor
+from alpha_zero_general.neural_net import NeuralNetInterface
 
 log = logging.getLogger(__name__)
 
 
-class MCTS:
+class MCTS(Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     """
     This class handles the MCTS tree.
     """
 
-    game: GenericGame
-    nn: NeuralNet
+    game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor]
+    nn: NeuralNetInterface[BoardTensor, BooleanBoard, PolicyTensor]
     args: MctsArgs
 
     q_values_cache: dict[tuple[int, int], float]  # Q_sa, Q value of board_hash,action
@@ -42,7 +41,12 @@ class MCTS:
     # cache the valid moves returned by game.get_valid_moves of key board_hash
     board_cache: dict[int, GenericBoardTensor]  # restore the board from hash
 
-    def __init__(self, game: GenericGame, nn: NeuralNet, args: MctsArgs) -> None:
+    def __init__(
+        self,
+        game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor],
+        nn: NeuralNetInterface[BoardTensor, BooleanBoard, PolicyTensor],
+        args: MctsArgs,
+    ) -> None:
         self.game = game
         self.nn = nn
         self.args = args
@@ -54,7 +58,7 @@ class MCTS:
         self.valid_moves_cache = {}
         self.board_cache = {}
 
-    def _cached_hash(self, canonical_board: GenericBoardTensor) -> int:
+    def _cached_hash(self, canonical_board: BoardTensor) -> int:
         """
         Cache the board and return the hash of the board.
         """
@@ -65,11 +69,11 @@ class MCTS:
         return h
 
     def get_action_probabilities(
-        self, canonical_board: GenericBoardTensor, temperature: int = 1
-    ) -> GenericPolicyTensor:
+        self, canonical_board: BoardTensor, temperature: int = 1
+    ) -> PolicyTensor:
         """
         This function performs num_mcts_sims simulations of MCTS starting from
-        canonicalBoard.
+        canonical_board.
 
         Args:
             canonical_board: a board that is a canonical form of the current
@@ -98,17 +102,17 @@ class MCTS:
         if temperature == 0:
             all_best_action = argwhere(a=counts == max(counts)).flatten()
             random_best_action = RNG.choice(all_best_action)
-            # prob: GenericPolicyTensor = zeros(len(counts))
-            prob: GenericPolicyTensor = zeros(len(counts))
+            # prob: PolicyTensorType = zeros(len(counts))
+            prob = cast(PolicyTensor, zeros(len(counts)))
             prob[random_best_action] = 1
             return prob
 
         counts = [x ** (1.0 / temperature) for x in counts]
         counts_sum = float(sum(counts))
-        prob = array([x / counts_sum for x in counts])
+        prob = cast(PolicyTensor, array([x / counts_sum for x in counts]))
         return prob
 
-    def search(self, canonical_board: GenericBoardTensor) -> float:
+    def search(self, canonical_board: BoardTensor) -> float:
         """
         This function performs one iteration of MCTS. It is recursively called
         till a leaf node is found. The action chosen at each node is one that

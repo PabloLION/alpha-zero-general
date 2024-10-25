@@ -1,13 +1,10 @@
 from abc import ABC, abstractmethod
+from typing import Generic
 
-from alpha_zero_general import (
-    GenericBoardTensor,
-    GenericBooleanBoardTensor,
-    GenericPolicyTensor,
-)
+from alpha_zero_general import BoardTensor, BooleanBoard, PolicyTensor
 
 
-class GenericGame(ABC):
+class GenericGame(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     """
     This class specifies the base Game class. To define your own game, subclass
     this class and implement the functions below. This works when the game is
@@ -25,7 +22,7 @@ class GenericGame(ABC):
         )
 
     @abstractmethod
-    def get_init_board(self) -> GenericBoardTensor:
+    def get_init_board(self) -> BoardTensor:
         """
         Returns:
             start_board: a representation of the board (ideally this is the form
@@ -51,8 +48,8 @@ class GenericGame(ABC):
 
     @abstractmethod
     def get_next_state(
-        self, board: GenericBoardTensor, player: int, action: int
-    ) -> tuple[GenericBoardTensor, int]:
+        self, board: BoardTensor, player: int, action: int
+    ) -> tuple[BoardTensor, int]:
         """
         Input:
             board: current board
@@ -66,9 +63,7 @@ class GenericGame(ABC):
         raise NotImplementedError("get_next_state must be implemented by the subclass")
 
     @abstractmethod
-    def get_valid_moves(
-        self, board: GenericBoardTensor, player: int
-    ) -> GenericBooleanBoardTensor:
+    def get_valid_moves(self, board: BoardTensor, player: int) -> BooleanBoard:
         """
         Input:
             board: current board
@@ -82,7 +77,7 @@ class GenericGame(ABC):
         raise NotImplementedError("get_valid_moves must be implemented by the subclass")
 
     @abstractmethod
-    def get_game_ended(self, board: GenericBoardTensor, player: int) -> float:
+    def get_game_ended(self, board: BoardTensor, player: int) -> float:
         """
         #TODO:
             Function name not corresponding to return type.
@@ -99,9 +94,7 @@ class GenericGame(ABC):
         raise NotImplementedError("get_game_ended must be implemented by the subclass")
 
     @abstractmethod
-    def get_canonical_form(
-        self, board: GenericBoardTensor, player: int
-    ) -> GenericBoardTensor:
+    def get_canonical_form(self, board: BoardTensor, player: int) -> BoardTensor:
         """
         Input:
             board: current board
@@ -121,11 +114,13 @@ class GenericGame(ABC):
 
     @abstractmethod
     def get_symmetries(
-        self, board: GenericBoardTensor, pi: GenericPolicyTensor
-    ) -> list[tuple[GenericBoardTensor, GenericPolicyTensor]]:
+        self, board: BoardTensor, pi: PolicyTensor
+    ) -> list[tuple[BoardTensor, PolicyTensor]]:
         """
         #TODO:
-            - GenericPolicyTensor?
+            - Offer a new function to flip and rotate the board as the base
+                element of the symmetry group, and we can generate the rest of
+                the group by applying the base element multiple times.
 
         Input:
             board: current board
@@ -139,7 +134,7 @@ class GenericGame(ABC):
         raise NotImplementedError("get_symmetries must be implemented by the subclass")
 
     @abstractmethod
-    def string_representation(self, board: GenericBoardTensor) -> str:
+    def get_board_str(self, board: BoardTensor) -> str:
         """
         Input:
             board: current board
@@ -148,12 +143,10 @@ class GenericGame(ABC):
             board_string: a quick conversion of board to a string format.
                           Required by MCTS for hashing.
         """
-        raise NotImplementedError(
-            "string_representation must be implemented by the subclass"
-        )
+        raise NotImplementedError("get_board_str must be implemented by the subclass")
 
     @abstractmethod
-    def get_board_hash(self, board: GenericBoardTensor) -> int:
+    def get_board_hash(self, board: BoardTensor) -> int:
         """
         Input:
             board: current board

@@ -1,11 +1,16 @@
+"""
+refactor notes:
+This is like othello main. should move it.
+"""
+
 import logging
 from dataclasses import dataclass
 
-import coloredlogs  # type: ignore
+import coloredlogs  # type: ignore # no stubs for this library
 
 from alpha_zero_general.coach import Coach, CoachArgs
-from alpha_zero_general.othello.othello_game import OthelloGame as Game
-from alpha_zero_general.othello.pytorch.n_net import NNetWrapper as nn
+from alpha_zero_general.othello.othello_game import OthelloGame
+from alpha_zero_general.othello.pytorch.n_net import OthelloTorchNNInterface
 
 log = logging.getLogger(__name__)
 
@@ -50,11 +55,11 @@ args = MainArgs()
 
 
 def main() -> None:
-    log.info("Loading %s...", Game.__name__)
-    g = Game(6)
+    log.info("Loading %s...", OthelloGame.__name__)
+    g = OthelloGame(6)
 
-    log.info("Loading %s...", nn.__name__)
-    nnet = nn(g)
+    log.info("Loading %s...", OthelloTorchNNInterface.__name__)
+    nnet = OthelloTorchNNInterface(g)
 
     if args.load_model:
         log.info(
@@ -67,14 +72,14 @@ def main() -> None:
         log.warning("Not loading a checkpoint!")
 
     log.info("Loading the Coach...")
-    c = Coach(g, nnet, args.to_coach_args())
+    coach = Coach(g, nnet, args.to_coach_args())
 
     if args.load_model:
         log.info("Loading 'train_examples' from file...")
-        c.load_train_examples()
+        coach.load_train_examples()
 
     log.info("Starting the learning process 🎉")
-    c.learn()
+    coach.learn()
 
 
 if __name__ == "__main__":

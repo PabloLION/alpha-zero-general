@@ -1,11 +1,11 @@
 import numpy as np
 
 from alpha_zero_general import GenericBoardTensor
-from alpha_zero_general.game import GenericGame
+from tests.test_all_games import Connect4Game
 
 
 class RandomPlayer:
-    def __init__(self, game: GenericGame):
+    def __init__(self, game: Connect4Game):
         self.game = game
 
     def play(self, board: GenericBoardTensor) -> int:
@@ -17,7 +17,7 @@ class RandomPlayer:
 
 
 class HumanConnect4Player:
-    def __init__(self, game: GenericGame):
+    def __init__(self, game: Connect4Game):
         self.game = game
 
     def play(self, board: GenericBoardTensor) -> int:
@@ -36,16 +36,16 @@ class HumanConnect4Player:
 class OneStepLookaheadConnect4Player:
     """Simple player who always takes a win if presented, or blocks a loss if obvious, otherwise is random."""
 
-    def __init__(self, game: GenericGame, verbose: bool = True):
+    def __init__(self, game: Connect4Game, verbose: bool = True):
         self.game = game
         self.player_num = 1
         self.verbose = verbose
 
     def play(self, board: GenericBoardTensor) -> int:
         valid_moves = self.game.get_valid_moves(board, self.player_num)
-        win_move_set = set()
-        fallback_move_set = set()
-        stop_loss_move_set = set()
+        win_move_set = set[int]()
+        fallback_move_set = set[int]()
+        stop_loss_move_set = set[int]()
         for move, valid in enumerate(valid_moves):
             if not valid:
                 continue
@@ -79,7 +79,7 @@ class OneStepLookaheadConnect4Player:
                 )
         else:
             raise Exception(
-                "No valid moves remaining: %s" % game.string_representation(board)
+                "No valid moves remaining: %s" % self.game.get_board_str(board)
             )
 
         return ret_move

@@ -4,33 +4,55 @@ pytest-3 connect4
 """
 
 import textwrap
-from collections import namedtuple
+from typing import NamedTuple, TypeAlias
 
 import numpy as np
 
-from alpha_zero_general.connect4.connect4_game import Connect4Game
+from alpha_zero_general.connect4.connect4_game import Connect4BoardTensor, Connect4Game
+
+Move: TypeAlias = int
+Moves: TypeAlias = list[Move]
 
 # Tuple of (Board, Player, Game) to simplify testing.
-BPGTuple = namedtuple("BPGTuple", "board player game")
+BPGTuple = NamedTuple(
+    "BPGTuple",
+    [("board", Connect4BoardTensor), ("player", int), ("game", Connect4Game)],
+)
 
 
-def init_board_from_moves(moves, height=None, width=None):
-    """Returns a BPGTuple based on series of specified moved."""
-    game = Connect4Game(height=height, width=width)
+def init_board_from_moves(
+    moves: Moves, height: int | None = None, width: int | None = None
+) -> BPGTuple:
+    """
+    Arg:
+        moves: List of moves to make.
+        height: Height of board. If None, default height is used.
+        width: Width of board. If None, default width is used.
+
+    Return:
+        BPGTuple based on series of specified moved.
+    """
+    if height is None:
+        game = Connect4Game()
+    elif width is None:
+        game = Connect4Game(height=height)
+    else:
+        game = Connect4Game(height=height, width=width)
+
     board, player = game.get_init_board(), 1
     for move in moves:
         board, player = game.get_next_state(board, player, move)
     return BPGTuple(board, player, game)
 
 
-def init_board_from_array(board, player):
+def init_board_from_array(board: Connect4BoardTensor, player: int) -> BPGTuple:
     """Returns a BPGTuple based on series of specified moved."""
     game = Connect4Game(height=len(board), width=len(board[0]))
     return BPGTuple(board, player, game)
 
 
 def test_simple_moves():
-    board, player, game = init_board_from_moves([4, 5, 4, 3, 0, 6])
+    board, _player, game = init_board_from_moves([4, 5, 4, 3, 0, 6])
     expected = textwrap.dedent(
         """\
         [[ 0.  0.  0.  0.  0.  0.  0.]
@@ -40,7 +62,7 @@ def test_simple_moves():
          [ 0.  0.  0.  0.  1.  0.  0.]
          [ 1.  0.  0. -1.  1. -1. -1.]]"""
     )
-    assert expected == game.string_representation(board)
+    assert expected == game.get_board_str(board)
 
 
 def test_overfull_column():
@@ -58,7 +80,7 @@ def test_overfull_column():
 
 def test_get_valid_moves():
     """Tests vector of valid moved is correct."""
-    move_valid_pairs = [
+    move_valid_pairs: list[tuple[Moves, list[bool]]] = [
         ([], [True] * 7),
         ([0, 1, 2, 3, 4, 5, 6], [True] * 7),
         ([0, 1, 2, 3, 4, 5, 6] * 5, [True] * 7),
@@ -73,9 +95,9 @@ def test_get_valid_moves():
 
 def test_symmetries():
     """Tests symetric board are produced."""
-    board, player, game = init_board_from_moves([0, 0, 1, 0, 6])
+    board, _player, game = init_board_from_moves([0, 0, 1, 0, 6])
     pi = [0.1, 0.2, 0.3]
-    (board1, pi1), (board2, pi2) = game.get_symmetries(board, pi)
+    (board1, pi1), (board2, pi2) = game.get_symmetries(board, np.array(pi))
     assert [0.1, 0.2, 0.3] == pi1 and [0.3, 0.2, 0.1] == pi2
 
     expected_board1 = textwrap.dedent(
@@ -87,7 +109,7 @@ def test_symmetries():
          [-1.  0.  0.  0.  0.  0.  0.]
          [ 1.  1.  0.  0.  0.  0.  1.]]"""
     )
-    assert expected_board1 == game.string_representation(board1)
+    assert expected_board1 == game.get_board_str(board1)
 
     expected_board2 = textwrap.dedent(
         """\
@@ -98,7 +120,7 @@ def test_symmetries():
          [ 0.  0.  0.  0.  0.  0. -1.]
          [ 1.  0.  0.  0.  0.  1.  1.]]"""
     )
-    assert expected_board2 == game.string_representation(board2)
+    assert expected_board2 == game.get_board_str(board2)
 
 
 def test_game_ended():
@@ -276,11 +298,11 @@ def test_game_ended():
 
 
 def test_immutable_move():
-    """Test original board is not mutated whtn get_next_state() called."""
-    board, player, game = init_board_from_moves([1, 2, 3, 3, 4])
-    original_board_string = game.string_representation(board)
+    """Test original board is not mutated when get_next_state() called."""
+    board, _player, game = init_board_from_moves([1, 2, 3, 3, 4])
+    original_board_string = game.get_board_str(board)
 
-    new_np_pieces, new_player = game.get_next_state(board, 3, -1)
+    new_np_pieces, _new_player = game.get_next_state(board, 3, -1)
 
-    assert original_board_string == game.string_representation(board)
-    assert original_board_string != game.string_representation(new_np_pieces)
+    assert original_board_string == game.get_board_str(board)
+    assert original_board_string != game.get_board_str(new_np_pieces)

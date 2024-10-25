@@ -1,5 +1,7 @@
 import numpy as np
 
+from alpha_zero_general.santorini import SantoriniBoardDataType
+
 
 class Board:
     """
@@ -34,30 +36,21 @@ class Board:
             action = [piece_location, move_location, build_location]
                      [(x1,y1),        (x2, y2),      (x3, y3)]
 
-
     BOARD 1: Location heights
         board shape: (self.n,self.n)
         Cannonical board shows player height of each board space.
         The height of each space ranges from 0,...,4 (this is independent of self.n)
-
-
-
     """
 
+    # #TODO/REF: think where to put this constant
+    # fmt: off
     # NOTE THESE ARE NEITHER CCW NOR CW!
-    __directions = [
-        (-1, -1),
-        (-1, 0),
-        (-1, 1),
-        (0, -1),
-        (0, 1),
-        (1, -1),
-        (1, 0),
-        (1, 1),
-    ]
-    #                  Nw,     N,     Ne,   W      E,    Sw,    S,    Se,
+    __directions = list[tuple[int, int]](
+        [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)])
+    #         NW,      N,     NE,      W,     E,     SW,     S,    SE
+    # fmt: on
 
-    def __init__(self, board_length, true_random_placement=False):
+    def __init__(self, board_length: int, true_random_placement: bool = False) -> None:
         """
         Initializes an empty board of shape (2, board_length, board_length)
                                           =  (dimension, row, column)
@@ -65,7 +58,7 @@ class Board:
         Currently there is no way to directly place one's own pieces at the game start.
         """
         self.n = board_length
-        self.pieces = np.zeros((2, self.n, self.n), dtype="int")
+        self.pieces = np.zeros((2, self.n, self.n), dtype=SantoriniBoardDataType)
         self.true_random_placement = true_random_placement
 
         chars_placed = 0
@@ -105,13 +98,13 @@ class Board:
                 self.pieces[0][board_center][board_center + 1] = -2
 
     # add [][] indexer syntax to the Board
-    def __getitem__(self, index):
+    def __getitem__(self, index: int | tuple[int, int]) -> float:
         """
         Currently unused.
         """
         return self.pieces[index]
 
-    def get_character_locations(self, player):
+    def get_character_locations(self, player: int) -> list[tuple[int, int]]:
         """
         Returns a list of both character's locations as tuples for the player
         """
@@ -127,11 +120,11 @@ class Board:
 
         return [char1_location, char2_location]
 
-    def get_legal_moves(self, color):
+    def get_legal_moves(self, color: int) -> list[list[tuple[int, int]]]:
         """Returns all the legal moves for the given color.
         (1 for white, -1 for black
         """
-        moves = []
+        moves: list[list[tuple[int, int]]] = []
 
         # Get all the squares with pieces of the given color.
         piece_locations = self.get_character_locations(color)
@@ -139,7 +132,9 @@ class Board:
             moves.extend(self.get_moves_for_location(piece_location)[0])
         return moves
 
-    def get_all_moves(self, color):
+    def get_all_moves(
+        self, color: int
+    ) -> tuple[list[list[tuple[int, int]]], list[list[tuple[int, int]]], list[int]]:
         """Returns 3 np arrays:
             all the legal moves for the given color.
             all moves for a given color
@@ -161,11 +156,11 @@ class Board:
 
         return (legal_moves, all_moves, all_moves_binary)
 
-    def get_legal_moves_binary(self, color):
+    def get_legal_moves_binary(self, color: int) -> list[int]:
         """Returns a binary vector of legal moves for the given color.
         (1 for white, -1 for black
         """
-        moves = []
+        moves = list[int]()
 
         # Get all the squares with pieces of the given color.
         piece_locations = self.get_character_locations(color)
@@ -174,7 +169,9 @@ class Board:
 
         return moves
 
-    def get_moves_for_location(self, location):
+    def get_moves_for_location(
+        self, location: tuple[int, int]
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         """
         Given a board location as an (x,y) tuple, this returns a tripple containing:
           1. an np.array of all legal actions in a vaugly human-readable format.
@@ -211,7 +208,7 @@ class Board:
             - location_height
         )
 
-        # piecs can only change height by -2,-1,0 or 1
+        # pieces can only change height by -2,-1,0 or 1
         valid_height_diff = height_diff <= 1
 
         valid_move_locations = unoccupied_locations * valid_height_diff
@@ -266,7 +263,12 @@ class Board:
             np.array(actions_all_bool).astype(int),
         )
 
-    def get_builds_for_location(self, move, offset, original_location):
+    def get_builds_for_location(
+        self,
+        move: tuple[int, int],
+        offset: list[int],
+        original_location: tuple[int, int],
+    ) -> list[list[tuple[int, int]]]:
         """
         Function gets legal builds for a given move location.
         Input: move, the location that was moved TO. Assume we are already here
@@ -333,7 +335,12 @@ class Board:
 
         return builds
 
-    def get_all_builds_for_location(self, move, offset, original_location):
+    def get_all_builds_for_location(
+        self,
+        move: tuple[int, int],
+        offset: list[int],
+        original_location: tuple[int, int],
+    ) -> tuple[list[list[tuple[int, int]]], np.ndarray]:
         """
         Function gets ALL builds for a given move location, as well as a binary rep
         of whether they are valid.
@@ -448,13 +455,13 @@ class Board:
         #   to whether the builds in all_builds are legal
         return all_builds, valid_builds
 
-    def has_legal_moves(self, color):
+    def has_legal_moves(self, color: int) -> bool:
         """
         Returns a boolean (whether player of given color has legal actions)
         """
         return len(self.get_legal_moves(color)) > 0
 
-    def execute_move(self, move, color):
+    def execute_move(self, move: list[tuple[int, int]], color: int) -> None:
         """Perform the given move on the board; color gives the color of
         the piece to play (1=white,-1=black). Assumes move is legal
         """

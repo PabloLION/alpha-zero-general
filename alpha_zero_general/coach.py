@@ -4,23 +4,26 @@ from collections import deque
 from dataclasses import dataclass
 from pickle import Pickler, Unpickler
 from random import shuffle
+from typing import Generic
 
 import numpy as np
 from numpy import random
 from tqdm import tqdm
 
 from alpha_zero_general import (
+    BoardTensor,
+    BooleanBoard,
     CheckpointFile,
-    GenericBoardTensor,
     MctsArgs,
-    RawTrainExample,
-    TrainExample,
+    PolicyTensor,
+    RawTrainingExample,
     TrainExampleHistory,
+    TrainingExample,
 )
 from alpha_zero_general.arena import Arena
 from alpha_zero_general.game import GenericGame
 from alpha_zero_general.mcts import MCTS
-from alpha_zero_general.neural_net import NeuralNet
+from alpha_zero_general.neural_net import NeuralNetInterface
 
 log = logging.getLogger(__name__)
 
@@ -49,24 +52,31 @@ class CoachArgs:
         )
 
 
-class Coach:
+class Coach(Generic[BoardTensor, BooleanBoard, PolicyTensor]):
     """
     This class executes the self-play + learning. It uses the functions defined
     in Game and NeuralNet. args are specified in main.py.
     """
 
-    def __init__(self, game: GenericGame, nn: NeuralNet, args: CoachArgs):
+    def __init__(
+        self,
+        game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor],
+        nn: NeuralNetInterface[BoardTensor, BooleanBoard, PolicyTensor],
+        args: CoachArgs,
+    ):
         self.game = game
         self.nn = nn
         self.pnet = self.nn.__class__(self.game)  # the competitor network
         self.args: CoachArgs = args
         self.mcts = MCTS(self.game, self.nn, self.args.to_mcts_args())
-        self.train_examples_history: TrainExampleHistory = (
+        self.train_examples_history: TrainExampleHistory[BoardTensor, PolicyTensor] = (
             []
         )  # history of examples from args.numItersForTrainExamplesHistory latest iterations
-        self.skip_first_self_play = False  # can be overriden in loadTrainExamples()
+        self.skip_first_self_play = False  # can be over ride in loadTrainExamples()
 
-    def execute_episode(self) -> list[TrainExample]:
+    def execute_episode(
+        self,
+    ) -> list[TrainingExample[BoardTensor, PolicyTensor]]:
         """
         Executes one episode of self-play, starting with player 1.
 
@@ -84,7 +94,7 @@ class Coach:
                         pi is the MCTS informed policy vector, v is +1 if
                         the player eventually won the game, else -1.
         """
-        raw_train_examples: list[RawTrainExample] = []
+        raw_train_examples: list[RawTrainingExample[BoardTensor, PolicyTensor]] = []
         # train_examples: board, player, policy, value
         board = self.game.get_init_board()
         self.current_player = 1
@@ -98,7 +108,9 @@ class Coach:
             pi = self.mcts.get_action_probabilities(canonical_board, temperature=temp)
             sym = self.game.get_symmetries(canonical_board, pi)
             for b, p in sym:
-                raw_train_examples.append(RawTrainExample(b, self.current_player, p, 0))
+                raw_train_examples.append(
+                    RawTrainingExample(b, self.current_player, p, 0)
+                )
 
             action = random.choice(len(pi), p=pi)
             board, self.current_player = self.game.get_next_state(
@@ -109,7 +121,7 @@ class Coach:
 
             if r != 0:  # game ended
                 return [  # filter out draws #TODO: use filter()
-                    TrainExample(
+                    TrainingExample(
                         rte.board,
                         rte.policy,
                         r * ((-1) ** (rte.current_player != self.current_player)),
@@ -131,9 +143,9 @@ class Coach:
             log.info(f"Starting Iter #{i} ...")
             # examples of the iteration
             if not self.skip_first_self_play or i > 1:
-                iteration_train_examples: deque[TrainExample] = deque(
-                    [], maxlen=self.args.max_len_of_queue
-                )
+                iteration_train_examples: deque[
+                    TrainingExample[BoardTensor, PolicyTensor]
+                ] = deque([], maxlen=self.args.max_len_of_queue)
 
                 for _ in tqdm(range(self.args.num_eps), desc="Self Play"):
                     self.mcts = MCTS(
@@ -157,7 +169,7 @@ class Coach:
             self.save_train_examples(i - 1)
 
             # shuffle examples before training
-            train_examples: list[TrainExample] = []
+            train_examples: list[TrainingExample[BoardTensor, PolicyTensor]] = []
             for e in self.train_examples_history:
                 train_examples.extend(e)
             shuffle(train_examples)
@@ -173,7 +185,7 @@ class Coach:
             # we should add a method to pass the model directly.
             pmcts = MCTS(self.game, self.pnet, self.args.to_mcts_args())
 
-            def get_p1_policy(board: GenericBoardTensor) -> int:
+            def get_p1_policy(board: BoardTensor) -> int:
                 return int(
                     np.argmax(a=pmcts.get_action_probabilities(board, temperature=0))
                 )
@@ -181,14 +193,14 @@ class Coach:
             self.nn.train(train_examples)
             nmcts = MCTS(self.game, self.nn, self.args.to_mcts_args())
 
-            def get_p2_policy(board: GenericBoardTensor) -> int:
+            def get_p2_policy(board: BoardTensor) -> int:
                 return int(
                     np.argmax(nmcts.get_action_probabilities(board, temperature=0))
                 )
 
             log.info("PITTING AGAINST PREVIOUS VERSION")
 
-            arena = Arena(
+            arena = Arena[BoardTensor, BooleanBoard, PolicyTensor](
                 get_p1_policy,
                 get_p2_policy,
                 self.game,

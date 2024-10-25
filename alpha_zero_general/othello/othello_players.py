@@ -1,25 +1,33 @@
 import subprocess
+from collections.abc import Callable
+from functools import wraps
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 import numpy as np
 
+from alpha_zero_general.othello import OthelloBoardTensor
+from alpha_zero_general.othello.othello_game import OthelloGame
+
 
 class RandomPlayer:
-    def __init__(self, game):
+    def __init__(self, game: OthelloGame):
         self.game = game
 
-    def play(self, board):
+    def play(self, board: OthelloBoardTensor):
         a = np.random.randint(self.game.get_action_size())
-        valids = self.game.get_valid_moves(board, 1)
-        while valids[a] != 1:
+        valid_moves = self.game.get_valid_moves(board, 1)
+        while valid_moves[a] != 1:
             a = np.random.randint(self.game.get_action_size())
         return a
 
 
 class HumanOthelloPlayer:
-    def __init__(self, game):
+    game: OthelloGame
+
+    def __init__(self, game: OthelloGame) -> None:
         self.game = game
 
-    def play(self, board):
+    def play(self, board: OthelloBoardTensor) -> int:
         # display(board)
         valid = self.game.get_valid_moves(board, 1)
         for i in range(len(valid)):
@@ -48,14 +56,16 @@ class HumanOthelloPlayer:
 
 
 class GreedyOthelloPlayer:
-    def __init__(self, game):
+    game: OthelloGame
+
+    def __init__(self, game: OthelloGame) -> None:
         self.game = game
 
-    def play(self, board):
-        valids = self.game.get_valid_moves(board, 1)
-        candidates = []
+    def play(self, board: OthelloBoardTensor) -> int:
+        valid_moves = self.game.get_valid_moves(board, 1)
+        candidates = list[tuple[int, int]]()
         for a in range(self.game.get_action_size()):
-            if valids[a] == 0:
+            if valid_moves[a] == 0:
                 continue
             next_board, _ = self.game.get_next_state(board, 1, a)
             score = self.game.get_score(next_board, 1)
@@ -64,18 +74,23 @@ class GreedyOthelloPlayer:
         return candidates[0][1]
 
 
+F = TypeVar("F", bound=Callable[..., Any])
+
+
 class GTPOthelloPlayer:
     """
     Player that plays with Othello programs using the Go Text Protocol.
     """
 
-    # The colours are reversed as the Othello programs seems to have the board setup with the opposite colours
+    _process: None | subprocess.Popen[bytes]
+
+    # The colors are reversed as the Othello programs seems to have the board setup with the opposite colours
     player_colors = {
         -1: "white",
         1: "black",
     }
 
-    def __init__(self, game, gtp_client):
+    def __init__(self, game: OthelloGame, gtp_client: list[str]):
         """
         Input:
             game: the game instance
@@ -84,6 +99,21 @@ class GTPOthelloPlayer:
         """
         self.game = game
         self.gtp_client = gtp_client
+        self._process = None
+
+    @staticmethod
+    def _require_subprocess(func: F) -> F:
+        """
+        A decorator to ensure that the subprocess is running before calling the decorated method.
+        """
+
+        @wraps(func)
+        def wrapper(self: "GTPOthelloPlayer", *args: Any, **kwargs: Any) -> Any:
+            if self._process is None:
+                raise RuntimeError("The subprocess is not running.")
+            return func(*args, **kwargs)
+
+        return cast(F, wrapper)
 
     def start_game(self):
         """
@@ -96,20 +126,23 @@ class GTPOthelloPlayer:
         self._send_command("boardsize " + str(self.game.n))
         self._send_command("clear_board")
 
+    @_require_subprocess
     def end_game(self):
         """
         Should be called after the game ends in order to clean-up the used resources.
         """
-        if hasattr(self, "_process") and self._process is not None:
-            self._send_command("quit")
-            # Waits for the client to terminate gracefully for 10 seconds. If it does not - kills it.
-            try:
-                self._process.wait(10)
-            except subprocessTimeoutExpired:
-                self._process.kill()
-            self._process = None
+        if TYPE_CHECKING:
+            assert self._process  # checked by @_require_subprocess
 
-    def notify(self, board, action):
+        self._send_command("quit")
+        # Waits for the client to terminate gracefully for 10 seconds. If it does not - kills it.
+        try:
+            self._process.wait(10)
+        except subprocess.TimeoutExpired:
+            self._process.kill()
+        self._process = None  # type: ignore
+
+    def notify(self, board: OthelloBoardTensor, action: int) -> None:
         """
         Should be called after the opponent turn. This way we can update the GTP client with the opponent move.
         """
@@ -118,7 +151,7 @@ class GTPOthelloPlayer:
         self._send_command("play {} {}".format(color, move))
         self._switch_players()
 
-    def play(self, board):
+    def play(self, board: OthelloBoardTensor) -> int:
         color = GTPOthelloPlayer.player_colors[self._current_player]
         move = self._send_command("genmove {}".format(color))
         action = self._convert_move_to_action(move)
@@ -128,21 +161,30 @@ class GTPOthelloPlayer:
     def _switch_players(self):
         self._current_player = -self._current_player
 
-    def _convert_action_to_move(self, action):
+    def _convert_action_to_move(self, action: int) -> str:
         if action < self.game.n**2:
             row, col = int(action / self.game.n), int(action % self.game.n)
             return "{}{}".format(chr(ord("A") + col), row + 1)
         else:
             return "PASS"
 
-    def _convert_move_to_action(self, move):
+    def _convert_move_to_action(self, move: str) -> int:
         if move != "PASS":
             col, row = ord(move[0]) - ord("A"), int(move[1:])
             return (row - 1) * self.game.n + col
         else:
             return self.game.n**2
 
-    def _send_command(self, cmd):
+    @_require_subprocess
+    def _send_command(self, cmd: str) -> str:
+        if TYPE_CHECKING:
+            assert self._process  # checked by @_require_subprocess
+
+        if not self._process.stdin:
+            raise RuntimeError("The subprocess has no stdin.")
+        if not self._process.stdout:
+            raise RuntimeError("The subprocess has no stdout.")
+
         self._process.stdin.write(cmd.encode() + b"\n")
 
         response = ""
@@ -161,7 +203,9 @@ class GTPOthelloPlayer:
             # Normalizing to uppercase in order to simplify handling.
             return response[1:].strip().upper()
         else:
-            raise Exception("Error calling GTP client: {}".format(response[1:].strip()))
+            raise subprocess.SubprocessError(
+                "Error calling GTP client: {}".format(response[1:].strip())
+            )
 
-    def __call__(self, game):
-        return self.play(game)
+    def __call__(self, board: OthelloBoardTensor) -> int:
+        return self.play(board)

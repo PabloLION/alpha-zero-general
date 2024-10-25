@@ -1,7 +1,6 @@
 import ctypes
 import os
 from math import sqrt
-from typing import List
 
 import pygame
 from pygame.rect import Rect
@@ -50,7 +49,6 @@ class HumanRTSPlayer:
         self.game = game
         self.USER_PLAYER = 1  # used by Human Player - this does not change if human pit player is 1 or -1
 
-    def play(self, board: GenericBoardTensor) -> List:
         """
         Manages input using PyGame canvas/ console input
         :param board: current board
@@ -134,7 +132,6 @@ class HumanRTSPlayer:
                     return DotDict({"x": x, "y": y})
         return DotDict({"x": -1, "y": -1})
 
-    def _manage_input(self, board: GenericBoardTensor) -> list:
         """
         Manages click and keyboard selections on PyGame canvas
         :param board: game state

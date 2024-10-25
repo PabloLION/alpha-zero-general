@@ -1,11 +1,16 @@
 # https://stackoverflow.com/questions/2267362/how-to-convert-an-integer-in-any-base-to-a-string
 
 import string
+from typing import no_type_check
+
+from alpha_zero_general.py313_backport import deprecated
 
 digs = string.digits + string.ascii_letters
 
 
-def int2base(x, base, length):
+@deprecated
+@no_type_check
+def old_int2base(x: int, base: int, length: int) -> list[int]:
     if x < 0:
         sign = -1
     elif x == 0:
@@ -14,7 +19,7 @@ def int2base(x, base, length):
         sign = 1
 
     x *= sign
-    digits = []
+    digits = list[int]()
 
     while x:
         digits.append(digs[int(x % base)])
@@ -29,9 +34,20 @@ def int2base(x, base, length):
     return list(map(lambda x: int(x), digits))
 
 
+def int2base(x: int, base: int, length: int) -> list[int]:
+    assert x >= 0
+    digits = list[int]()
+    while x:
+        digits.append(x % base)
+        x = x // base
+    while len(digits) < length:
+        digits.append(0)
+    return digits
+
+
 def test():
     size = 7
-    validmoves = [
+    valid_moves = [
         [3, 0, 1, 0],
         [3, 0, 2, 0],
         [3, 0, 4, 0],
@@ -73,10 +89,11 @@ def test():
         [5, 3, 5, 5],
         [5, 3, 5, 6],
     ]
-    print(validmoves)
-    for m in validmoves:
+    print(valid_moves)
+    for m in valid_moves:
         i = m[0] + m[1] * size + m[2] * size**2 + m[3] * size**3
         print(i, ":", int2base(i, size, 4))
 
 
-# test()
+if __name__ == "__main__":
+    test()

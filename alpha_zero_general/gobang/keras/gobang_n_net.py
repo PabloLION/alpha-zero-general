@@ -1,4 +1,4 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from tensorflow.keras.layers import (
     Activation,
@@ -10,11 +10,18 @@ from tensorflow.keras.layers import (
     Input,
     Reshape,
 )
-from tensorflow.keras.models import Model
+from tensorflow.keras.models import Model  # type: ignore # tf stub problem
 from tensorflow.keras.optimizers import Adam
+
+from alpha_zero_general.gobang import GobangBoardTensor, GobangPolicyTensor
 
 
 class GobangNNet:
+    if TYPE_CHECKING:
+        model: Model[GobangBoardTensor, tuple[list[GobangPolicyTensor], list[float]]]
+    else:
+        model: Model
+
     def __init__(self, game: Any, args: Any):
         # game params
         self.board_x, self.board_y = game.get_board_size()

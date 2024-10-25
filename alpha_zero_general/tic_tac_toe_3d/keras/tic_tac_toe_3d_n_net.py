@@ -1,7 +1,9 @@
+from typing import TYPE_CHECKING
+
 from tensorflow.keras.layers import (
     Activation,
     BatchNormalization,
-    Conv2D,
+    Conv3D,
     Dense,
     Dropout,
     Flatten,
@@ -10,6 +12,13 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
+
+from alpha_zero_general.tic_tac_toe_3d import (
+    TicTacToe3DBoardTensor,
+    TicTacToe3DNNArg,
+    TicTacToe3DPolicyTensor,
+)
+from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_3d_game import TicTacToe3DGame
 
 """
 NeuralNet for the game of TicTacToe.
@@ -21,39 +30,46 @@ Based on the OthelloNNet by SourKream and Surag Nair.
 """
 
 
-class TicTacToeNNet:
-    def __init__(self, game, args):
+class TicTacToeNN:
+    if TYPE_CHECKING:
+        model: Model[
+            TicTacToe3DBoardTensor, tuple[list[TicTacToe3DPolicyTensor], list[float]]
+        ]
+    else:
+        model: Model
+
+    def __init__(self, game: TicTacToe3DGame, args: TicTacToe3DNNArg):
         # game params
-        self.board_x, self.board_y = game.get_board_size()
+        self.board_z, self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
         self.args = args
 
         # Neural Net
         self.input_boards = Input(
-            shape=(self.board_x, self.board_y)
+            shape=(self.board_z, self.board_x, self.board_y)
         )  # s: batch_size x board_x x board_y
 
-        x_image = Reshape((self.board_x, self.board_y, 1))(
+        x_image = Reshape((self.board_z, self.board_x, self.board_y, 1))(
             self.input_boards
         )  # batch_size  x board_x x board_y x 1
         h_conv1 = Activation("relu")(
             BatchNormalization(axis=3)(
-                Conv2D(args.num_channels, 3, padding="same")(x_image)
+                Conv3D(args.num_channels, 3, padding="same")(x_image)
             )
         )  # batch_size  x board_x x board_y x num_channels
         h_conv2 = Activation("relu")(
             BatchNormalization(axis=3)(
-                Conv2D(args.num_channels, 3, padding="same")(h_conv1)
+                Conv3D(args.num_channels, 3, padding="same")(h_conv1)
             )
         )  # batch_size  x board_x x board_y x num_channels
         h_conv3 = Activation("relu")(
             BatchNormalization(axis=3)(
-                Conv2D(args.num_channels, 3, padding="same")(h_conv2)
+                Conv3D(args.num_channels, 3, padding="same")(h_conv2)
             )
         )  # batch_size  x (board_x) x (board_y) x num_channels
         h_conv4 = Activation("relu")(
             BatchNormalization(axis=3)(
-                Conv2D(args.num_channels, 3, padding="valid")(h_conv3)
+                Conv3D(args.num_channels, 3, padding="valid")(h_conv3)
             )
         )  # batch_size  x (board_x-2) x (board_y-2) x num_channels
         h_conv4_flat = Flatten()(h_conv4)
