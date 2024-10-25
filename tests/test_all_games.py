@@ -54,19 +54,21 @@ from alpha_zero_general.tic_tac_toe_3d.keras.n_net import (
 from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_3d_game import TicTacToe3DGame
 
 
-# #TODO/REF: to type this, we need a generic Player class
 def execute_game_test(
     game: GenericGame[BoardTensor, BooleanBoard, PolicyTensor],
-    neural_net: NeuralNetInterface[BoardTensor, BooleanBoard, PolicyTensor],
+    neural_net: type[NeuralNetInterface[BoardTensor, BooleanBoard, PolicyTensor]],
 ):
+    # #TODO/REF: to type this, we need a generic Player class
     random_play = RandomPlayer(game).play
     # need RandomPlayer ABC, Player ABC
 
     args = MctsArgs(num_mcts_sims=25, c_puct=1.0)
     mcts = MCTS(game, neural_net(game), args)
-    n1p = lambda x: np.argmax(mcts.get_action_probabilities(x, temperature=0))
 
-    arena = Arena(n1p, random_play, game)
+    def n1policy(x: BoardTensor) -> int:
+        return int(np.argmax(mcts.get_action_probabilities(x, temperature=0)))
+
+    arena = Arena(n1policy, random_play, game)
     print(arena.play_games(2, verbose=False))
 
 

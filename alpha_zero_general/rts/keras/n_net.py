@@ -28,7 +28,7 @@ class NNetWrapper(NeuralNetInterface):
         # default
         encoder = encoder or CONFIG.nnet_args.encoder
 
-        self.nnet = RTSNNet(game, encoder)
+        self.nn = RTSNNet(game, encoder)
         self.board_x, self.board_y, num_encoders = game.get_board_size()
         self.action_size = game.get_action_size()
 
@@ -51,7 +51,7 @@ class NNetWrapper(NeuralNetInterface):
         """
         input_boards = self.encoder.encode_multiple(input_boards)
 
-        self.nnet.model.fit(
+        self.nn.model.fit(
             x=input_boards,
             y=[target_pis, target_vs],
             batch_size=CONFIG.nnet_args.batch_size,
@@ -73,7 +73,7 @@ class NNetWrapper(NeuralNetInterface):
         board = board[np.newaxis, :, :]
 
         # run
-        pi, v = self.nnet.model.predict(board, verbose=False)
+        pi, v = self.nn.model.predict(board, verbose=False)
         return pi[0], v[0]
 
     def save_checkpoint(self, folder="checkpoint", filename="checkpoint.pth.tar"):
@@ -90,11 +90,11 @@ class NNetWrapper(NeuralNetInterface):
             os.mkdir(folder)
         else:
             print("Checkpoint Directory exists! ")
-        self.nnet.model.save_weights(filepath)
+        self.nn.model.save_weights(filepath)
 
     def load_checkpoint(self, folder="checkpoint", filename="checkpoint.pth.tar"):
         # change extension
         filename = filename.split(".")[0] + ".weights.h5"
 
         filepath = os.path.join(folder, filename)
-        self.nnet.model.load_weights(filepath)
+        self.nn.model.load_weights(filepath)

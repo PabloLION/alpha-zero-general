@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from tensorflow.keras.layers import (
     Activation,
     BatchNormalization,
@@ -11,9 +13,17 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
+from alpha_zero_general.tafl import TaflBoardTensor, TaflNNArg, TaflPolicyTensor
+from alpha_zero_general.tafl.tafl_game import TaflGame
+
 
 class TaflNNet:
-    def __init__(self, game, args):
+    if TYPE_CHECKING:
+        model: Model[TaflBoardTensor, tuple[list[TaflPolicyTensor], list[float]]]
+    else:
+        model: Model
+
+    def __init__(self, game: TaflGame, args: TaflNNArg):
         # game params
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
