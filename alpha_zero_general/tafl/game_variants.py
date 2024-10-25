@@ -1,62 +1,64 @@
 # https://en.wikipedia.org/wiki/Tafl_games
 
 
-class Tafl:
+class TaflGameVariant:
     size: int = 0
     board = []
     pieces = []
 
-    def expandeighth(self, size, eighth):
-        hs = size // 2
-        aquarter = eighth.copy()
-        for b in eighth:
+    def mirror_across_board(
+        self, board_size: int, initial_positions: list[list[int]]
+    ) -> list[list[int]]:
+        hs = board_size // 2
+        a_quarter = initial_positions.copy()
+        for b in initial_positions:
             if b[0] != b[1]:
-                aquarter.extend([[b[1], b[0], b[2]]])
-        whole = aquarter.copy()
-        for b in aquarter:
+                a_quarter.extend([[b[1], b[0], b[2]]])
+        whole = a_quarter.copy()
+        for b in a_quarter:
             if b[0] != hs:
-                whole.extend([[size - b[0] - 1, b[1], b[2]]])
+                whole.extend([[board_size - b[0] - 1, b[1], b[2]]])
             if b[1] != hs:
-                whole.extend([[b[0], size - b[1] - 1, b[2]]])
+                whole.extend([[b[0], board_size - b[1] - 1, b[2]]])
             if b[0] != hs and b[1] != hs:
-                whole.extend([[size - b[0] - 1, size - b[1] - 1, b[2]]])
+                whole.extend([[board_size - b[0] - 1, board_size - b[1] - 1, b[2]]])
         return whole
 
 
-class Brandubh(Tafl):
+class Brandubh(TaflGameVariant):
     def __init__(self):
         self.size = 7
-        self.board = self.expandeighth(self.size, [[0, 0, 1], [3, 3, 2]])
-        self.pieces = self.expandeighth(
+        self.board = self.mirror_across_board(self.size, [[0, 0, 1], [3, 3, 2]])
+        self.pieces = self.mirror_across_board(
             self.size, [[3, 0, -1], [3, 1, -1], [3, 2, 1], [3, 3, 2]]
         )
 
 
-class ArdRi(Tafl):
+class ArdRi(TaflGameVariant):
     def __init__(self):
         self.size = 7
-        self.board = self.expandeighth(self.size, [[0, 0, 1], [3, 3, 2]])
-        self.pieces = self.expandeighth(
+        self.board = self.mirror_across_board(self.size, [[0, 0, 1], [3, 3, 2]])
+        self.pieces = self.mirror_across_board(
             self.size,
             [[2, 0, -1], [3, 0, -1], [3, 1, -1], [3, 2, 1], [2, 2, 1], [3, 3, 2]],
         )
 
 
-class Tablut(Tafl):
+class Tablut(TaflGameVariant):
     def __init__(self):
         self.size = 9
-        self.board = self.expandeighth(self.size, [[0, 0, 1], [4, 4, 2]])
-        self.pieces = self.expandeighth(
+        self.board = self.mirror_across_board(self.size, [[0, 0, 1], [4, 4, 2]])
+        self.pieces = self.mirror_across_board(
             self.size,
             [[3, 0, -1], [4, 0, -1], [4, 1, -1], [4, 2, 1], [4, 3, 1], [4, 4, 2]],
         )
 
 
-class Tawlbwrdd(Tafl):
+class Tawlbwrdd(TaflGameVariant):
     def __init__(self):
         self.size = 11
-        self.board = self.expandeighth(self.size, [[0, 0, 1], [5, 5, 2]])
-        self.pieces = self.expandeighth(
+        self.board = self.mirror_across_board(self.size, [[0, 0, 1], [5, 5, 2]])
+        self.pieces = self.mirror_across_board(
             self.size,
             [
                 [4, 0, -1],
@@ -71,11 +73,11 @@ class Tawlbwrdd(Tafl):
         )
 
 
-class Hnefatafl(Tafl):
+class Hnefatafl(TaflGameVariant):
     def __init__(self):
         self.size = 11
-        self.board = self.expandeighth(self.size, [[0, 0, 1], [5, 5, 2]])
-        self.pieces = self.expandeighth(
+        self.board = self.mirror_across_board(self.size, [[0, 0, 1], [5, 5, 2]])
+        self.pieces = self.mirror_across_board(
             self.size,
             [
                 [3, 0, -1],
@@ -90,11 +92,11 @@ class Hnefatafl(Tafl):
         )
 
 
-class AleaEvangelii(Tafl):
+class AleaEvangelii(TaflGameVariant):
     def __init__(self):
         self.size = 19
-        self.board = self.expandeighth(self.size, [[0, 0, 1], [9, 9, 2]])
-        self.pieces = self.expandeighth(
+        self.board = self.mirror_across_board(self.size, [[0, 0, 1], [9, 9, 2]])
+        self.pieces = self.mirror_across_board(
             self.size,
             [
                 [2, 0, -1],
