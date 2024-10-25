@@ -4,7 +4,7 @@ from dataclasses import dataclass
 # from pathlib import Path
 from typing import Any, Generic, NamedTuple, TypeAlias, TypeVar
 
-from numpy import bool_, dtype, ndarray, random
+from numpy import bool_, dtype, float32, int8, ndarray, random
 
 # Board Tensors
 GenericBoardDataType: TypeAlias = Any  # #TODO: TBD
@@ -28,18 +28,20 @@ PolicyTensor = TypeVar("PolicyTensor", bound=GenericPolicyTensor)
 
 # Santorini Game Tensors
 SantoriniBoardShapeType: TypeAlias = Any
-SantoriniBoardDataType = int
+SantoriniBoardDataType = int8
 SantoriniBoardTensor: TypeAlias = ndarray[
     SantoriniBoardShapeType, dtype[SantoriniBoardDataType]
 ]
 SantoriniBooleanBoardTensor: TypeAlias = ndarray[SantoriniBoardDataType, dtype[bool_]]
 
 SantoriniPolicyShape: TypeAlias = Any
-SantoriniPolicyType: TypeAlias = float
+SantoriniPolicyType: TypeAlias = float32
 SantoriniPolicyTensor: TypeAlias = ndarray[
     SantoriniPolicyShape, dtype[SantoriniPolicyType]
 ]
-SantoriniValueTensor: TypeAlias = ndarray[SantoriniPolicyShape, dtype[SantoriniPolicyType]]
+SantoriniValueTensor: TypeAlias = ndarray[
+    SantoriniPolicyShape, dtype[SantoriniPolicyType]
+]
 
 PolicyMakerAsPlayer: TypeAlias = Callable[[BoardTensor], int]
 
