@@ -13,7 +13,7 @@ OthelloBoardTensor: TypeAlias = ndarray[
 OthelloBooleanBoardTensor: TypeAlias = ndarray[OthelloBoardDataType, dtype[bool_]]
 
 OthelloPolicyShape: TypeAlias = Any
-OthelloPolicyType: TypeAlias = float32
+OthelloPolicyType = float32
 OthelloPolicyTensor: TypeAlias = ndarray[OthelloPolicyShape, dtype[OthelloPolicyType]]
 OthelloValueTensor: TypeAlias = ndarray[OthelloPolicyShape, dtype[OthelloPolicyType]]
 

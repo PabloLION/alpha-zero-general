@@ -13,7 +13,7 @@ TicTacToeBoardTensor: TypeAlias = ndarray[
 TicTacToeBooleanBoardTensor: TypeAlias = ndarray[TicTacToeBoardDataType, dtype[bool_]]
 
 TicTacToePolicyShape: TypeAlias = Any
-TicTacToePolicyType: TypeAlias = float32
+TicTacToePolicyType = float32
 TicTacToePolicyTensor: TypeAlias = ndarray[
     TicTacToePolicyShape, dtype[TicTacToePolicyType]
 ]

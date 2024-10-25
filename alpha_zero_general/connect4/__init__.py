@@ -10,7 +10,7 @@ Connect4BoardTensor: TypeAlias = ndarray[
 Connect4BooleanBoardTensor: TypeAlias = ndarray[Connect4BoardDataType, dtype[bool_]]
 
 Connect4PolicyShape: TypeAlias = Any
-Connect4PolicyType: TypeAlias = float32
+Connect4PolicyType = float32
 Connect4PolicyTensor: TypeAlias = ndarray[
     Connect4PolicyShape, dtype[Connect4PolicyType]
 ]

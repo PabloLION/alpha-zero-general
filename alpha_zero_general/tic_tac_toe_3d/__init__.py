@@ -15,7 +15,7 @@ TicTacToe3DBooleanBoardTensor: TypeAlias = ndarray[
 ]
 
 TicTacToe3DPolicyShape: TypeAlias = Any
-TicTacToe3DPolicyType: TypeAlias = float32
+TicTacToe3DPolicyType = float32
 TicTacToe3DPolicyTensor: TypeAlias = ndarray[
     TicTacToe3DPolicyShape, dtype[TicTacToe3DPolicyType]
 ]

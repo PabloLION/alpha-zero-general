@@ -12,7 +12,7 @@ DotsAndBoxesBooleanBoardTensor: TypeAlias = ndarray[
 ]
 
 DotsAndBoxesPolicyShape: TypeAlias = Any
-DotsAndBoxesPolicyType: TypeAlias = float32
+DotsAndBoxesPolicyType = float32
 DotsAndBoxesPolicyTensor: TypeAlias = ndarray[
     DotsAndBoxesPolicyShape, dtype[DotsAndBoxesPolicyType]
 ]

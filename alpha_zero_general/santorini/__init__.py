@@ -10,7 +10,7 @@ SantoriniBoardTensor: TypeAlias = ndarray[
 SantoriniBooleanBoardTensor: TypeAlias = ndarray[SantoriniBoardDataType, dtype[bool_]]
 
 SantoriniPolicyShape: TypeAlias = Any
-SantoriniPolicyType: TypeAlias = float32
+SantoriniPolicyType = float32
 SantoriniPolicyTensor: TypeAlias = ndarray[
     SantoriniPolicyShape, dtype[SantoriniPolicyType]
 ]

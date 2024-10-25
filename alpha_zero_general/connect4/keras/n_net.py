@@ -55,7 +55,7 @@ class Connect4NNInterface(
 
     def __init__(self, game: Connect4Game):
         self.nn = Connect4NNet(game, args)
-        # self.nnet.model.summary()
+        # self.nn.model.summary()
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
 

@@ -8,7 +8,7 @@ TaflBoardTensor: TypeAlias = ndarray[TaflBoardShapeType, dtype[TaflBoardDataType
 TaflBooleanBoardTensor: TypeAlias = ndarray[TaflBoardDataType, dtype[bool_]]
 
 TaflPolicyShape: TypeAlias = Any
-TaflPolicyType: TypeAlias = float32
+TaflPolicyType = float32
 TaflPolicyTensor: TypeAlias = ndarray[TaflPolicyShape, dtype[TaflPolicyType]]
 TaflValueTensor: TypeAlias = ndarray[TaflPolicyShape, dtype[TaflPolicyType]]
 
