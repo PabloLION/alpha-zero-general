@@ -14,6 +14,7 @@ x is the column, y is the row.
 
 class OthelloBoard:
     # list of all 8 directions on the board, as (x,y) offsets
+    # #TODO/REF: think where to put this constant
     __directions = [
         (1, 1),
         (1, 0),

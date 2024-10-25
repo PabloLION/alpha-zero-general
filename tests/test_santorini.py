@@ -1,3 +1,8 @@
+"""
+new file by copilot workspace, not working.
+There's no SantoriniKerasNNet
+
+
 import numpy as np
 from alpha_zero_general import MctsArgs
 from alpha_zero_general.arena import Arena
@@ -20,3 +25,4 @@ def test_santorini_keras():
 
 if __name__ == "__main__":
     test_santorini_keras()
+"""

@@ -31,7 +31,7 @@ def int2base(x, base, length):
 
 def test():
     size = 7
-    validmoves = [
+    valid_moves = [
         [3, 0, 1, 0],
         [3, 0, 2, 0],
         [3, 0, 4, 0],
@@ -73,8 +73,8 @@ def test():
         [5, 3, 5, 5],
         [5, 3, 5, 6],
     ]
-    print(validmoves)
-    for m in validmoves:
+    print(valid_moves)
+    for m in valid_moves:
         i = m[0] + m[1] * size + m[2] * size**2 + m[3] * size**3
         print(i, ":", int2base(i, size, 4))
 
