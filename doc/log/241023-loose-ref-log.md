@@ -1,7 +1,7 @@
 
 ### quick fix
 
-- [ ] py313_functions  -> py313_backport
+- [x] py313_functions  -> py313_backport
 - [ ] GamePolicyType: TypeAlias = float32
 - [ ] `self.nnet.model`
 - [ ] `TicTacToeNNet as onnet`

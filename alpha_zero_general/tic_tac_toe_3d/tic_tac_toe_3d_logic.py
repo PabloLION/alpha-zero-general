@@ -2,7 +2,7 @@ from typing import no_type_check
 
 from numpy import argwhere, zeros
 
-from alpha_zero_general.py313_functions import deprecated
+from alpha_zero_general.py313_backport import deprecated
 from alpha_zero_general.tic_tac_toe_3d import (
     TicTacToe3DBoardDataType,
     TicTacToe3DBoardTensor,

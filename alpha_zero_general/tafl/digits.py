@@ -3,7 +3,7 @@
 import string
 from typing import no_type_check
 
-from alpha_zero_general.py313_functions import deprecated
+from alpha_zero_general.py313_backport import deprecated
 
 digs = string.digits + string.ascii_letters
 
