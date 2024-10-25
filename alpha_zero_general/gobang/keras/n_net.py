@@ -10,7 +10,7 @@ from alpha_zero_general.gobang import (
     GobangPolicyTensor,
     GobangTrainingExample,
 )
-from alpha_zero_general.gobang.keras.gobang_n_net import GobangNNet as onnet
+from alpha_zero_general.gobang.keras.gobang_n_net import GobangNNet
 from alpha_zero_general.neural_net import NeuralNetInterface
 
 args = GobangNNArg(
@@ -22,7 +22,7 @@ class NNetWrapper(
     NeuralNetInterface[GobangBoardTensor, GobangBooleanBoardTensor, GobangPolicyTensor]
 ):
     def __init__(self, game: Any):
-        self.nn = onnet(game, args)
+        self.nn = GobangNNet(game, args)
         self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
 

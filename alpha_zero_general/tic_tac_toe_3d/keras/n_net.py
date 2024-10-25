@@ -11,9 +11,7 @@ from alpha_zero_general.tic_tac_toe_3d import (
     TicTacToe3DPolicyTensor,
     TicTacToe3DTrainingExample,
 )
-from alpha_zero_general.tic_tac_toe_3d.keras.tic_tac_toe_3d_n_net import (
-    TicTacToeNNet as onnet,
-)
+from alpha_zero_general.tic_tac_toe_3d.keras.tic_tac_toe_3d_n_net import TicTacToeNN
 from alpha_zero_general.tic_tac_toe_3d.tic_tac_toe_3d_game import TicTacToe3DGame
 
 """
@@ -36,7 +34,7 @@ class NNetWrapper(
     ]
 ):
     def __init__(self, game: TicTacToe3DGame):
-        self.nn = onnet(game, args)
+        self.nn = TicTacToeNN(game, args)
         self.board_z, self.board_x, self.board_y = game.get_board_size()
         self.action_size = game.get_action_size()
 

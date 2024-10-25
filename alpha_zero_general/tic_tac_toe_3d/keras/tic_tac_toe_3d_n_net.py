@@ -30,7 +30,7 @@ Based on the OthelloNNet by SourKream and Surag Nair.
 """
 
 
-class TicTacToeNNet:
+class TicTacToeNN:
     if TYPE_CHECKING:
         model: Model[
             TicTacToe3DBoardTensor, tuple[list[TicTacToe3DPolicyTensor], list[float]]
