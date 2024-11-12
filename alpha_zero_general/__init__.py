@@ -22,10 +22,13 @@ GenericPolicyTensor: TypeAlias = ndarray[
 ]
 # GenericPolicyTensor: TypeAlias = list[float]
 # #TODO: GenericPolicyTensor should be tensor or list[float]? consider perf too.
+
+## TypeVars
 BoardTensor = TypeVar("BoardTensor", bound=GenericBoardTensor)
 BooleanBoard = TypeVar("BooleanBoard", bound=GenericBooleanBoardTensor)
 PolicyTensor = TypeVar("PolicyTensor", bound=GenericPolicyTensor)
 
+# #TODO/REF: move to santorini/__init__.py
 # Santorini Game Tensors
 SantoriniBoardShapeType: TypeAlias = Any
 SantoriniBoardDataType = int8

@@ -7,7 +7,7 @@ import numpy as np
 from alpha_zero_general import MctsArgs
 from alpha_zero_general.arena import Arena
 from alpha_zero_general.mcts import MCTS
-from alpha_zero_general.othello.othello_game import OthelloGame
+from alpha_zero_general.othello.othello_game import OthelloBoardTensor, OthelloGame
 from alpha_zero_general.othello.othello_players import (
     GreedyOthelloPlayer,
     HumanOthelloPlayer,
@@ -33,33 +33,32 @@ rp = RandomPlayer(g).play
 gp = GreedyOthelloPlayer(g).play
 hp = HumanOthelloPlayer(g).play
 
+FOLDER = "./pretrained_models/othello/pytorch/"
 
 # nnet players
 n1 = NNet(g)
 if MINI_OTHELLO:
-    n1.load_checkpoint("./pretrained_models/othello/pytorch/", "6x100x25_best.pth.tar")
+    n1.load_checkpoint(FOLDER, "6x100x25_best.pth.tar")
 else:
-    n1.load_checkpoint(
-        "./pretrained_models/othello/pytorch/", "8x8_100checkpoints_best.pth.tar"
-    )
+    n1.load_checkpoint(FOLDER, "8x8_100checkpoints_best.pth.tar")
 args1 = MctsArgs(num_mcts_sims=50, c_puct=1.0)
 mcts1 = MCTS(g, n1, args1)
 
 
-def n1p(x: np.ndarray) -> int:
-    return np.argmax(mcts1.get_action_probabilities(x, temperature=0))
+def n1p(x: OthelloBoardTensor) -> int:
+    return int(np.argmax(mcts1.get_action_probabilities(x, temperature=0)))
 
 
 if HUMAN_VS_CPU:
     player2 = hp
 else:
     n2 = NNet(g)
-    n2.load_checkpoint(
-        "./pretrained_models/othello/pytorch/", "8x8_100checkpoints_best.pth.tar"
-    )
+    n2.load_checkpoint(FOLDER, "8x8_100checkpoints_best.pth.tar")
     args2 = MctsArgs(num_mcts_sims=50, c_puct=1.0)
     mcts2 = MCTS(g, n2, args2)
-    n2p = lambda x: np.argmax(mcts2.get_action_probabilities(x, temperature=0))
+
+    def n2p(x: OthelloBoardTensor) -> int:
+        return int(np.argmax(mcts2.get_action_probabilities(x, temperature=0)))
 
     player2 = n2p  # Player 2 is neural network if it's cpu vs cpu.
 

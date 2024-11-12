@@ -89,7 +89,7 @@ class GenericGame(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
 
         Returns:
             r: 0 if game has not ended. 1 if player won, -1 if player lost,
-               small non-zero value for draw.
+                small non-zero value for draw.
         """
         raise NotImplementedError("get_game_ended must be implemented by the subclass")
 
@@ -153,9 +153,23 @@ class GenericGame(ABC, Generic[BoardTensor, BooleanBoard, PolicyTensor]):
 
         Returns:
             hash: a quick conversion of board to a hashable format.
-                  Required by MCTS for hashing.
+                    Required by MCTS for hashing.
         """
         raise NotImplementedError("get_board_hash must be implemented by the subclass")
+
+    # #TODO: planned
+    # @abstractmethod
+    # def move_is_valid(self, board: BoardTensor, player: int, action: int) -> bool:
+    #     """
+    #     Input:
+    #         board: current board
+    #         player: current player
+    #         action: action to be taken
+
+    #     Returns:
+    #         is_valid: whether the action is valid
+    #     """
+    #     raise NotImplementedError("move_is_valid must be implemented by the subclass")
 
     # @abstractmethod
     # def __hash__(self) -> int:
