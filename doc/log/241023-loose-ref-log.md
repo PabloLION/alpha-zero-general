@@ -1,3 +1,16 @@
+## Summary
+
+I stopped making this because I think it's better to use a more common form
+like `pyspiel` or `gym` for the game interface.
+In comparison they are:
+
+- more mature / stable
+- more widely used
+- better documented
+- supports incomplete information games
+- THO it's harder to setup the dev environment
+
+## Log
 
 ### quick fix
 
